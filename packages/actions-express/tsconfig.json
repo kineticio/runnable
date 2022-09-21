@@ -1,0 +1,9 @@
+{
+  "extends": "@kinetic-io/tsconfig/library.json",
+  "include": ["./src"],
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "./dist"
+  },
+  "exclude": ["dist", "build", "node_modules"]
+}
