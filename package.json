@@ -12,8 +12,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint:fix": "pnpm lint --fix",
     "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
-    "typecheck": "tsc --noEmit",
-    "typecheck:why": "tsc --noEmit --explainFiles > explainTypes.txt"
+    "typecheck": " pnpm -r --parallel run typecheck"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.9",

@@ -23,6 +23,7 @@ export class WorkflowManager {
     return {
       workflowId,
       ...ui,
+      breadcrumbs: workflow.breadcrumbs.asJson(),
     };
   }
 
