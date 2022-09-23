@@ -27,7 +27,7 @@ export default function ActionDetailsPage() {
   const { action, actionId } = useLoaderData() as LoaderData;
 
   return (
-    <Page title={action.title}>
+    <Page title={['Actions', action.title]}>
       <Button as={Link} colorScheme="blue" to={getUrl(`/actions/${actionId}/workflows/new`)}>
         New
       </Button>

@@ -12,10 +12,14 @@ import {
   NumberInput,
   Radio,
   RadioGroup,
+  CheckboxGroup,
+  Checkbox,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, CloseIcon } from '@chakra-ui/icons';
 import React from 'react';
 import { IOForm } from '../../types/response';
+import { CompositeFormView } from './CompositeInput';
+import { TableInput } from './TableInput';
 
 interface Props {
   name: string;
@@ -116,6 +120,65 @@ function renderFormField(name: string, field: IOForm<any>) {
         );
       }
       return null;
+    }
+    case 'multiSelect': {
+      if (field.display === 'dropdown') {
+        return (
+          <FormControl isRequired>
+            <FormLabel>{field.label}</FormLabel>
+            <select placeholder={field.placeholder} name={name} multiple>
+              {field.data.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <FormHelperText>{field.helperText}</FormHelperText>
+          </FormControl>
+        );
+      }
+      if (field.display === 'checkbox') {
+        return (
+          <FormControl isRequired>
+            <FormLabel>{field.label}</FormLabel>
+            <CheckboxGroup>
+              <Stack>
+                {field.data.map((option) => (
+                  <Checkbox name={name} key={option.value} value={option.value}>
+                    {option.label}
+                  </Checkbox>
+                ))}
+              </Stack>
+            </CheckboxGroup>
+            <FormHelperText>{field.helperText}</FormHelperText>
+          </FormControl>
+        );
+      }
+      return null;
+    }
+    case 'table': {
+      return (
+        <FormControl>
+          <FormLabel>{field.label}</FormLabel>
+          <TableInput
+            name={name}
+            headers={field.headers}
+            isMultiSelect={field.isMultiSelect}
+            initialSelection={field.initialSelection}
+            helperText={field.helperText}
+            rows={field.rows}
+          />
+        </FormControl>
+      );
+    }
+    case 'form': {
+      return (
+        <FormControl>
+          <FormLabel>{field.label}</FormLabel>
+          <CompositeFormView name={name} form={field.form} />
+          <FormHelperText>{field.helperText}</FormHelperText>
+        </FormControl>
+      );
     }
     default:
       break;

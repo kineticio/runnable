@@ -1,14 +1,16 @@
-import type { ActionRequest, ActionViewResponse } from '../../types/response';
+import type { ActionRequest, ActionViewResponse, IOForm } from '../../types/response';
 import type { DeferredPromise } from '../defer';
 import { defer } from '../defer';
 import type { UIResponder } from './ui-responder.server';
-import type { Action, ActionContext, InputOutput } from '~/api/actions';
+import { BreadCrumbs } from './bread-crumbs.server';
+import type { Action, ActionContext, InputForm, InputOutput } from '~/api/actions';
 
 export class Workflow {
   public pendingResponse: DeferredPromise<any> | undefined;
   public uiResponder!: UIResponder;
   public hasFinished = false;
   public error: Error | undefined;
+  public breadcrumbs = new BreadCrumbs();
 
   constructor(public readonly id: string, public readonly name: string, public readonly action: Action) {}
 
@@ -72,111 +74,227 @@ export class Workflow {
 
   public createIO(): InputOutput {
     return {
+      form: <T extends Record<string, any>>(form: InputForm<any>) => {
+        const payload: IOForm = {
+          $type: 'form',
+          form: mapValues(form, (promise) => promise.payload),
+        };
+
+        return {
+          payload,
+          prompt: () =>
+            this.prompt<T>(payload)
+              .then(getFirstValueAndWarn)
+              .then((values) => {
+                const displayValues: any = {};
+                for (const [key, value] of Object.entries(values)) {
+                  displayValues[form[key].payload.label ?? key] = value;
+                }
+                this.breadcrumbs.addObject(displayValues);
+                return values;
+              }),
+        };
+      },
       input: {
         text: (opts) => {
-          const deferred = defer<string>();
-          this.uiResponder.respond({
-            view: {
-              $type: 'input',
-              ...opts,
-            },
-          });
-          this.pendingResponse = deferred;
-          return deferred.promise;
+          const payload: IOForm = {
+            $type: 'input',
+            ...opts,
+          };
+          return {
+            payload,
+            prompt: () =>
+              this.prompt<string>(payload)
+                .then(getFirstValueAndWarn)
+                .then((value) => {
+                  this.breadcrumbs.add(opts.label, value);
+                  return value;
+                }),
+          };
         },
         number: (opts) => {
-          const deferred = defer<number>();
-          this.uiResponder.respond({
-            view: {
-              $type: 'input',
-              type: 'number',
-              ...opts,
-            },
-          });
-          this.pendingResponse = deferred;
-          return deferred.promise;
+          const payload: IOForm = {
+            $type: 'input',
+            type: 'number',
+            ...opts,
+          };
+          return {
+            payload,
+            prompt: () =>
+              this.prompt<string>(payload)
+                .then(getFirstValueAndWarn)
+                .then((value) => {
+                  this.breadcrumbs.add(opts.label, value);
+                  return value;
+                })
+                .then(Number.parseFloat),
+          };
         },
       },
       select: {
         dropdown: (opts) => {
-          const deferred = defer<any>();
-          this.uiResponder.respond({
-            view: {
-              $type: 'select',
-              display: 'dropdown',
-              ...opts,
-              data: toOptions(opts.data, opts),
-            },
-          });
-          this.pendingResponse = deferred;
-          return deferred.promise.then((key) => {
-            const found = opts.data.find((item) => opts.getValue(item) === key);
-            if (!found) {
-              throw new Error('Invalid selection');
-            }
-            return found;
-          });
+          const payload: IOForm = {
+            $type: 'select',
+            display: 'dropdown',
+            ...opts,
+            data: toOptions(opts.data, opts),
+          };
+          return {
+            payload,
+            prompt: () =>
+              this.prompt<string>(payload)
+                .then(getFirstValueAndWarn)
+                .then((key) => {
+                  const found = opts.data.find((item) => opts.getValue(item) === key);
+                  if (!found) {
+                    throw new Error('Invalid selection');
+                  }
+                  return found;
+                })
+                .then((value) => {
+                  this.breadcrumbs.add(opts.label, opts.getLabel(value));
+                  return value;
+                }),
+          };
         },
         radio: (opts) => {
-          const deferred = defer<any>();
-          this.uiResponder.respond({
-            view: {
-              $type: 'select',
-              display: 'radio',
-              ...opts,
-              data: toOptions(opts.data, opts),
-            },
-          });
-          this.pendingResponse = deferred;
-          return deferred.promise.then((key) => {
-            const found = opts.data.find((item) => opts.getValue(item) === key);
-            if (!found) {
-              throw new Error('Invalid selection');
-            }
-            return found;
-          });
+          const payload: IOForm = {
+            $type: 'select',
+            display: 'radio',
+            ...opts,
+            data: toOptions(opts.data, opts),
+          };
+          return {
+            payload,
+            prompt: () =>
+              this.prompt<string>(payload)
+                .then(getFirstValueAndWarn)
+                .then((key) => {
+                  const found = opts.data.find((item) => opts.getValue(item) === key);
+                  if (!found) {
+                    throw new Error('Invalid selection');
+                  }
+                  return found;
+                })
+                .then((value) => {
+                  this.breadcrumbs.add(opts.label, opts.getLabel(value));
+                  return value;
+                }),
+          };
+        },
+        table: (opts) => {
+          const payload: IOForm = {
+            $type: 'table',
+            label: opts.label,
+            rows: opts.data.map((item) => ({
+              key: opts.getValue(item),
+              cells: opts.getColumns(item),
+            })),
+            helperText: opts.helperText,
+            initialSelection: opts.initialSelection ? [opts.initialSelection] : undefined,
+            headers: opts.headers,
+            isMultiSelect: false,
+          };
+          return {
+            payload,
+            prompt: () =>
+              this.prompt<string>(payload)
+                .then(getFirstValueAndWarn)
+                .then((key) => {
+                  const found = opts.data.find((item) => opts.getValue(item) === key);
+                  if (!found) {
+                    throw new Error('Invalid selection');
+                  }
+                  return found;
+                })
+                .then((value) => {
+                  this.breadcrumbs.add(opts.label, opts.getColumns(value)[0]);
+                  return value;
+                }),
+          };
         },
       },
       multiSelect: {
         checkbox: (opts) => {
-          const deferred = defer<any[]>();
-          this.uiResponder.respond({
-            view: {
-              $type: 'multiSelect',
-              display: 'checkbox',
-              ...opts,
-              data: toOptions(opts.data, opts),
-            },
-          });
-          this.pendingResponse = deferred;
-          return deferred.promise.then((keys) => {
-            const dataByKey = keyBy(opts.data, opts.getValue);
-            const found = keys.map((key) => dataByKey[key]).filter(Boolean);
-            if (found.length !== keys.length) {
-              throw new Error('Invalid selection');
-            }
-            return found;
-          });
+          const payload: IOForm = {
+            $type: 'multiSelect',
+            display: 'checkbox',
+            ...opts,
+            data: toOptions(opts.data, opts),
+          };
+          return {
+            payload,
+            prompt: () =>
+              this.prompt<string>(payload)
+                .then((keys: string[]) => {
+                  const dataByKey = keyBy(opts.data, opts.getValue);
+                  const found = keys.map((key) => dataByKey[key]).filter(Boolean);
+                  if (found.length !== keys.length) {
+                    throw new Error('Invalid selection');
+                  }
+                  return found;
+                })
+                .then((values) => {
+                  this.breadcrumbs.add(opts.label, values.map((value) => opts.getLabel(value)).join(', '));
+                  return values;
+                }),
+          };
         },
         dropdown: (opts) => {
-          const deferred = defer<any[]>();
-          this.uiResponder.respond({
-            view: {
-              $type: 'multiSelect',
-              display: 'dropdown',
-              ...opts,
-              data: toOptions(opts.data, opts),
-            },
-          });
-          this.pendingResponse = deferred;
-          return deferred.promise.then((keys) => {
-            const dataByKey = keyBy(opts.data, opts.getValue);
-            const found = keys.map((key) => dataByKey[key]).filter(Boolean);
-            if (found.length !== keys.length) {
-              throw new Error('Invalid selection');
-            }
-            return found;
-          });
+          const payload: IOForm = {
+            $type: 'multiSelect',
+            display: 'dropdown',
+            ...opts,
+            data: toOptions(opts.data, opts),
+          };
+          return {
+            payload,
+            prompt: () =>
+              this.prompt<string>(payload)
+                .then((keys: string[]) => {
+                  const dataByKey = keyBy(opts.data, opts.getValue);
+                  const found = keys.map((key) => dataByKey[key]).filter(Boolean);
+                  if (found.length !== keys.length) {
+                    throw new Error('Invalid selection');
+                  }
+                  return found;
+                })
+                .then((values) => {
+                  this.breadcrumbs.add(opts.label, values.map((value) => opts.getLabel(value)).join(', '));
+                  return values;
+                }),
+          };
+        },
+        table: (opts) => {
+          const payload: IOForm = {
+            $type: 'table',
+            label: opts.label,
+            rows: opts.data.map((item) => ({
+              key: opts.getValue(item),
+              cells: opts.getColumns(item),
+            })),
+            helperText: opts.helperText,
+            initialSelection: opts.initialSelection,
+            headers: opts.headers,
+            isMultiSelect: true,
+          };
+          return {
+            payload,
+            prompt: () =>
+              this.prompt<string>(payload)
+                .then((keys: string[]) => {
+                  const dataByKey = keyBy(opts.data, opts.getValue);
+                  const found = keys.map((key) => dataByKey[key]).filter(Boolean);
+                  if (found.length !== keys.length) {
+                    throw new Error('Invalid selection');
+                  }
+                  return found;
+                })
+                .then((values) => {
+                  this.breadcrumbs.add(opts.label, values.map((value) => opts.getColumns(value)[0]).join(', '));
+                  return values;
+                }),
+          };
         },
       },
     };
@@ -205,6 +323,13 @@ export class Workflow {
       },
     };
   }
+
+  private prompt<T>(payload: IOForm): Promise<T[]> {
+    const deferred = defer<T[]>();
+    this.pendingResponse = deferred;
+    this.uiResponder.respond({ view: payload });
+    return deferred.promise;
+  }
 }
 
 function keyBy<T>(arr: T[], getKey: (item: T) => string): Record<string, T> {
@@ -220,4 +345,22 @@ function toOptions<T>(arr: T[], opts: { getValue: (item: T) => string; getLabel:
     label: opts.getLabel(item),
     value: opts.getValue(item),
   }));
+}
+
+function mapValues<T extends object, V>(obj: T, fn: (value: T[keyof T], key: keyof T) => V): Record<string, V> {
+  const result = {} as Record<string, any>;
+  for (const key of Object.keys(obj)) {
+    result[key] = fn(obj[key as keyof T], key as keyof T);
+  }
+  return result;
+}
+
+function getFirstValueAndWarn<T>(values: T[] | T): T {
+  if (!Array.isArray(values)) {
+    return values;
+  }
+  if (values.length > 0) {
+    console.log('Expected single value, but got ' + values.length);
+  }
+  return values[0];
 }

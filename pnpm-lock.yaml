@@ -82,7 +82,7 @@ importers:
       tsconfig-paths: ^3.10.1
       typescript: ^4.3.5
     dependencies:
-      '@kinetic-io/actions-express': link:../../packages/actions-express
+      '@kinetic-io/actions-express': 0.1.3
       '@nestjs/common': 8.4.7_j5hagqx4mwzscud4kyjdvubauy
       '@nestjs/core': 8.4.7_vfcxgjfmqg6zhc6pfncoklq5wm
       '@nestjs/platform-express': 8.4.7_7tsmhnugyerf5okgqzer2mfqme
@@ -114,6 +114,7 @@ importers:
       '@chakra-ui/react': ^2.3.4
       '@chakra-ui/styled-system': ^2.3.3
       '@chakra-ui/system': ^2.2.11
+      '@emotion/cache': ^11.10.3
       '@emotion/react': ^11
       '@emotion/server': ^11
       '@emotion/styled': ^11
@@ -146,12 +147,15 @@ importers:
       '@remix-run/node': 1.7.1_biqbaboplfbrettd7655fr4n2y
       '@remix-run/react': 1.7.1_biqbaboplfbrettd7655fr4n2y
       '@remix-run/server-runtime': 1.7.1_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       '@babel/core': 7.19.1
       '@chakra-ui/icons': 2.0.10_qyhx7yrz3t2iljwu733tbtkrie
       '@chakra-ui/react': 2.3.4_qy4j7ra7abypcwqucsmlbq3lla
       '@chakra-ui/styled-system': 2.3.3
       '@chakra-ui/system': 2.2.11_hfzxdiydbrbhhfpkwuv3jhvwmq
+      '@emotion/cache': 11.10.3
       '@emotion/react': 11.10.4_axxkdcpdr7up57umjkldobkynm
       '@emotion/server': 11.10.0
       '@emotion/styled': 11.10.4_sn4wuyy54zwps25tv4w7lbiz6i
@@ -168,8 +172,6 @@ importers:
       eslint: 8.23.1
       framer-motion: 7.3.6_biqbaboplfbrettd7655fr4n2y
       npm-run-all: 4.1.5
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
       react-remove-scroll: 2.5.5_w5j4k42lgipnm43s3brx6h3c34
       stylis: 4.1.2
       tiny-invariant: 1.2.0
@@ -180,7 +182,7 @@ importers:
 
   packages/actions-express:
     specifiers:
-      '@kinetic-io/actions-app': '*'
+      '@kinetic-io/actions-app': ^0.1.3
       '@kinetic-io/config': '*'
       '@kinetic-io/tsconfig': '*'
       '@remix-run/express': ^1.7.1
@@ -190,7 +192,7 @@ importers:
       resolve-package-path: ^4.0.3
       typescript: ^4.6.4
     dependencies:
-      '@kinetic-io/actions-app': link:../actions-app
+      '@kinetic-io/actions-app': 0.1.3
     devDependencies:
       '@kinetic-io/config': link:../config
       '@kinetic-io/tsconfig': link:../tsconfig
@@ -3203,6 +3205,22 @@ packages:
       string-argv: 0.3.1
       type-detect: 4.0.8
     dev: true
+
+  /@kinetic-io/actions-app/0.1.3:
+    resolution: {integrity: sha512-ZMUeH+FwfnGyDkgUixSdPJjkbx4WwFbkKiOP39/98nQWVb9p5Gj0vOrrEqsX4vsmIzHI2mNdCZwYGfY4f9S9uQ==}
+    dependencies:
+      '@remix-run/node': 1.7.1_biqbaboplfbrettd7655fr4n2y
+      '@remix-run/react': 1.7.1_biqbaboplfbrettd7655fr4n2y
+      '@remix-run/server-runtime': 1.7.1_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@kinetic-io/actions-express/0.1.3:
+    resolution: {integrity: sha512-z3RWwU/2iSLNF4eJj1z108t8ek54ZYQp2jlPIaSyORrsgVlFZIlsAFwx72JAmuBq7OOj3ceF7MCTwzcm+evUag==}
+    dependencies:
+      '@kinetic-io/actions-app': 0.1.3
+    dev: false
 
   /@motionone/animation/10.14.0:
     resolution: {integrity: sha512-h+1sdyBP8vbxEBW5gPFDnj+m2DCqdlAuf2g6Iafb1lcMnqjsRXWlPw1AXgvUMXmreyhqmPbJqoNfIKdytampRQ==}

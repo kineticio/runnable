@@ -1,4 +1,6 @@
-export type IOForm<T> =
+import { BreadCrumb } from '../models/workflows/bread-crumbs.server';
+
+export type IOForm<T = any> =
   | {
       $type: 'input';
       label: string;
@@ -28,12 +30,29 @@ export type IOForm<T> =
       $type: 'multiSelect';
       display: 'checkbox' | 'dropdown';
       label: string;
+      placeholder?: string;
       helperText?: string;
       data: { label: string; value: string }[];
+    }
+  | {
+      $type: 'form';
+      label?: string;
+      helperText?: string;
+      form: Record<string, IOForm>;
+    }
+  | {
+      $type: 'table';
+      label: string;
+      helperText?: string;
+      headers: string[];
+      isMultiSelect: boolean;
+      initialSelection?: string[];
+      rows: { key: string; cells: string[] }[];
     };
 
 export interface ActionResponse<T = any> extends ActionViewResponse<T> {
   workflowId: string;
+  breadcrumbs: BreadCrumb[];
 }
 
 export interface ActionViewResponse<T = any> {

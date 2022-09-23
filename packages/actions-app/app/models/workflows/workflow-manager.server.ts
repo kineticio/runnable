@@ -1,4 +1,3 @@
-import { json } from 'node:stream/consumers';
 import type { Action } from '../../api/actions';
 import type { ActionRequest, ActionResponse } from '../../types/response';
 import type { WorkflowId } from '../ids';
@@ -43,6 +42,7 @@ export class WorkflowManager {
     return {
       workflowId,
       ...response,
+      breadcrumbs: workflow.breadcrumbs.asJson(),
     };
   }
 
@@ -59,6 +59,7 @@ export class WorkflowManager {
     return {
       workflowId,
       ...ui,
+      breadcrumbs: workflow.breadcrumbs.asJson(),
     };
   }
 }
