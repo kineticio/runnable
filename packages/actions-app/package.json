@@ -13,6 +13,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "ACTIONS_BASE_URL='/' remix dev",
+    "prepublishOnly": "pnpm build",
     "format": "prettier --write .",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "typecheck": "tsc --noEmit",
