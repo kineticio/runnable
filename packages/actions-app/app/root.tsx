@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { withEmotionCache } from '@emotion/react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, GlobalStyle } from '@chakra-ui/react';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch, useLoaderData } from '@remix-run/react';
 import { MetaFunction, LinksFunction, json } from '@remix-run/node';
 
@@ -78,6 +78,7 @@ export default function App() {
   return (
     <Document>
       <ChakraProvider>
+        <GlobalStyle />
         <Outlet />
       </ChakraProvider>
     </Document>
