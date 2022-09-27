@@ -11,7 +11,7 @@ const basePath = process.env.ACTIONS_BASE_URL || '/admin';
 module.exports = {
   cacheDirectory: './node_modules/.cache/remix',
   ignoredRouteFiles: ['**/.*', '**/*.css', '**/*.test.{js,jsx,ts,tsx}'],
-  publicPath: `/${basePath}/build/`,
+  publicPath: `${basePath}/build/`,
   routes: () => {
     return mountRoutes(basePath, 'routes');
   },
