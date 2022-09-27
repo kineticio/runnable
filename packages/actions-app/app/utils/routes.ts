@@ -1,4 +1,3 @@
-import { useLocation } from '@remix-run/react';
 import { redirect } from '@remix-run/server-runtime';
 
 declare global {
@@ -22,9 +21,4 @@ export function internalRedirect(url: `/${string}`, init?: number | ResponseInit
 
 export function getUrl(url: `/${string}`): string {
   return getBaseUrl() + url;
-}
-
-export function useCurrentUrl(): string {
-  const location = useLocation();
-  return getBaseUrl() + location.pathname;
 }

@@ -6,7 +6,7 @@ import * as React from 'react';
 import { Flex, Stack, FormControl, Input, Button, Box, Checkbox, FormLabel, FormErrorMessage } from '@chakra-ui/react';
 import { defaultContext } from '../models/context';
 
-import { getUrl, internalRedirect, useCurrentUrl } from '../utils/routes';
+import { internalRedirect } from '../utils/routes';
 import { safeRedirect, validateEmail } from '~/utils/utils';
 import { createUserSession, getUserId } from '~/session.server';
 
@@ -69,7 +69,6 @@ export default function LoginPage() {
   const actionData = useActionData() as ActionData;
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
-  const location = useCurrentUrl();
 
   React.useEffect(() => {
     if (actionData?.errors?.email) {
@@ -82,7 +81,7 @@ export default function LoginPage() {
   return (
     <Flex minH={'100vh'} align={'center'} justify={'center'} bg={'gray.50'}>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-        <Form method="post" className="space-y-6" action={location}>
+        <Form method="post" className="space-y-6">
           <Box rounded={'lg'} bg={'white'} boxShadow={'lg'} p={8}>
             <Stack spacing={4}>
               <FormControl id="email" isInvalid={!!actionData?.errors?.email}>

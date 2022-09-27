@@ -12,7 +12,6 @@ import type { WorkflowId } from '../../models/ids';
 import { WORKFLOW_MANAGER } from '../../models/workflows/workflow-manager.server';
 import { Action } from '../../types';
 import type { ActionResponse } from '../../types/response';
-import { useCurrentUrl } from '../../utils/routes';
 
 const ROOT = '__root__';
 
@@ -59,9 +58,7 @@ export default function WorkflowDetailsPage() {
   const { view, workflowId, breadcrumbs, action } = useLoaderData() as LoaderData;
   const [search] = useSearchParams();
   const actionData = useActionData() as LoaderData;
-  const location = useCurrentUrl();
   const transition = useTransition();
-
 
   const currentView = actionData?.view ?? view;
   const hasNext = currentView.$type !== 'success' && currentView.$type !== 'error';
@@ -71,7 +68,7 @@ export default function WorkflowDetailsPage() {
   return (
     <Page title={['Actions', action.title, `Workflow ${workflowId.slice(0, 8)}`]}>
       <SimpleGrid columns={2} spacing={10}>
-        <Form method="post" action={location}>
+        <Form method="post">
           <VStack alignItems="flex-start" spacing={6}>
             {loading && <Spinner size='lg' />}
             {!loading && <FormView name={ROOT} view={currentView} />}

@@ -359,8 +359,11 @@ function getFirstValueAndWarn<T>(values: T[] | T): T {
   if (!Array.isArray(values)) {
     return values;
   }
-  if (values.length > 0) {
+  if (values.length > 1) {
     console.log('Expected single value, but got ' + values.length);
+  }
+  if (values.length === 0) {
+    throw new Error('Missing required field.');
   }
   return values[0];
 }
