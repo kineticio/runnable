@@ -1,7 +1,21 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, HStack, SimpleGrid, Spinner, Stack, Stat, StatHelpText, StatLabel, Table, TableContainer, Tbody, Td, Text, Tr, VStack } from '@chakra-ui/react';
-import type { ActionFunction, LoaderFunction } from '@remix-run/node';
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Button,
+  SimpleGrid,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Text,
+  Tr,
+  VStack,
+} from '@chakra-ui/react';
+import type { ActionFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useSearchParams, useTransition } from '@remix-run/react';
+import { Form, useActionData, useLoaderData, useLocation, useSearchParams, useTransition } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
 import { FormView } from '../../components/forms/FormView';
@@ -54,6 +68,12 @@ export const action: ActionFunction = async ({ request, params, context }) => {
   return json<LoaderData>({ action, ...response });
 };
 
+export const meta: MetaFunction<LoaderData> = ({ data }) => {
+  return {
+    title: `${data.action.title} | Actions`,
+  };
+};
+
 export default function WorkflowDetailsPage() {
   const { view, workflowId, breadcrumbs, action } = useLoaderData() as LoaderData;
   const [search] = useSearchParams();
@@ -66,32 +86,34 @@ export default function WorkflowDetailsPage() {
   const loading = transition.state === 'loading' || transition.state === 'submitting';
 
   return (
-    <Page title={['Actions', action.title, `Workflow ${workflowId.slice(0, 8)}`]}>
+    <Page title={['Actions', action.title, `Workflow ${workflowId.slice(0, 8)}`]} animationKey={useLocation().key}>
       <SimpleGrid columns={2} spacing={10}>
         <Form method="post">
           <VStack alignItems="flex-start" spacing={6}>
-            {loading && <Spinner size='lg' />}
-            {!loading && <FormView name={ROOT} view={currentView} />}
-            {hasNext && !loading && (
-              <Button colorScheme="teal" variant="solid" type="submit">
+            <FormView name={ROOT} view={currentView} />
+            {hasNext && (
+              <Button isLoading={loading} colorScheme="teal" variant="solid" type="submit">
                 Submit
               </Button>
             )}
           </VStack>
         </Form>
         <VStack alignItems="flex-end" spacing={6}>
-          <TableContainer backgroundColor="white" boxShadow='sm' border="1px solid" borderColor='gray.200' borderRadius='md'>
-            <Table variant='simple'>
+          <TableContainer
+            backgroundColor="white"
+            boxShadow="sm"
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="md"
+          >
+            <Table variant="simple">
               <Tbody>
                 {breadcrumbs.map((breadcrumb, idx) => (
                   <Tr key={`${breadcrumb.key}-${idx}`}>
-                    <Td >
-                      <Text fontWeight={600}>
-                        {breadcrumb.key}
-                      </Text>
+                    <Td>
+                      <Text fontWeight={600}>{breadcrumb.key}</Text>
                     </Td>
-                    <Td>{breadcrumb.value}
-                    </Td>
+                    <Td>{breadcrumb.value}</Td>
                   </Tr>
                 ))}
               </Tbody>
@@ -101,7 +123,9 @@ export default function WorkflowDetailsPage() {
             <Alert status="info" flexDirection="column" alignSelf="flex-start">
               <AlertIcon />
               <AlertTitle>Debug</AlertTitle>
-              <AlertDescription sx={{ whiteSpace: 'pre' }}>{JSON.stringify({ view, workflowId, breadcrumbs }, null, 2)}</AlertDescription>
+              <AlertDescription sx={{ whiteSpace: 'pre' }}>
+                {JSON.stringify({ view, workflowId, breadcrumbs }, null, 2)}
+              </AlertDescription>
             </Alert>
           )}
         </VStack>

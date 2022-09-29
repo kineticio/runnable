@@ -1,6 +1,7 @@
+import { AnimatePresence } from 'framer-motion';
 import React, { useContext, useEffect } from 'react';
 import { withEmotionCache } from '@emotion/react';
-import { ChakraProvider, GlobalStyle } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch, useLoaderData } from '@remix-run/react';
 import { MetaFunction, LinksFunction, json } from '@remix-run/node';
 
@@ -8,7 +9,7 @@ import { ServerStyleContext, ClientStyleContext } from './context';
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
-  title: 'ActionsZ',
+  title: 'Actions',
   viewport: 'width=device-width,initial-scale=1',
 });
 
@@ -78,8 +79,9 @@ export default function App() {
   return (
     <Document>
       <ChakraProvider>
-        <GlobalStyle />
-        <Outlet />
+        <AnimatePresence exitBeforeEnter>
+          <Outlet />
+        </AnimatePresence>
       </ChakraProvider>
     </Document>
   );

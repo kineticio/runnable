@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/react';
-import type { LoaderFunction } from '@remix-run/node';
+import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData, useLocation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
 import { Page } from '../../components/layout/Page';
@@ -13,6 +13,12 @@ import { getUrl } from '../../utils/routes';
 type LoaderData = {
   actionId: string;
   action: Action;
+};
+
+export const meta: MetaFunction<LoaderData> = ({ data }) => {
+  return {
+    title: `${data.action.title} | Actions`,
+  };
 };
 
 export const loader: LoaderFunction = async ({ params, context = DEFAULT_CONTEXT }) => {
@@ -27,7 +33,7 @@ export default function ActionDetailsPage() {
   const { action, actionId } = useLoaderData() as LoaderData;
 
   return (
-    <Page title={['Actions', action.title]}>
+    <Page title={['Actions', action.title]} animationKey={useLocation().pathname}>
       <Button as={Link} colorScheme="blue" to={getUrl(`/actions/${actionId}/workflows/new`)}>
         New
       </Button>

@@ -61,7 +61,7 @@ export const action: ActionFunction = async ({ request, context }) => {
 
 export const meta: MetaFunction = () => {
   return {
-    title: 'Login',
+    title: 'Login | Actions',
   };
 };
 

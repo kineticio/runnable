@@ -1,6 +1,6 @@
-import { Button, SimpleGrid, VStack } from '@chakra-ui/react';
-import { Link, useLoaderData } from '@remix-run/react';
-import type { LoaderFunction } from '@remix-run/server-runtime';
+import { Box, Button, Heading, HStack, HStack, SimpleGrid, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import { Link, useLoaderData, useLocation } from '@remix-run/react';
+import type { LoaderFunction, MetaFunction } from '@remix-run/server-runtime';
 import { json } from '@remix-run/server-runtime';
 import { Iconify } from '../../components/icons/Iconify';
 import { Page } from '../../components/layout/Page';
@@ -17,26 +17,54 @@ export const loader: LoaderFunction = async ({ context = DEFAULT_CONTEXT }) => {
   return json<LoaderData>({ actions: context.actions });
 };
 
+export const meta: MetaFunction<LoaderData> = () => {
+  return {
+    title: 'Actions',
+  };
+};
+
 export default function ActionsIndexPage() {
   const { actions } = useLoaderData<LoaderData>();
 
   return (
-    <Page title="Actions">
-      <SimpleGrid column={2}>
-        <VStack mx={0} gap={2} spacing="md" sx={{ alignItems: 'flex-start' }}>
-          {Object.entries(actions).map(([key, action]) => (
-            <Button
-              as={Link}
-              key={key}
-              leftIcon={action.icon ? <Iconify icon={action.icon} /> : undefined}
-              colorScheme="blue"
-              to={getUrl(`/actions/${key}`)}
-            >
-              {action.title}
-            </Button>
-          ))}
-        </VStack>
-      </SimpleGrid>
+    <Page title="Actions" animationKey={useLocation().pathname}>
+      <Wrap spacing={2} p={2}>
+        {Object.entries({ ...actions, ...actions }).map(([key, action]) => (
+          <WrapItem key={key}>
+            <ActionCard actionId={key} action={action} />
+          </WrapItem>
+        ))}
+      </Wrap>
     </Page>
+  );
+}
+
+function ActionCard({
+  actionId,
+  action,
+}: {
+  actionId: string;
+  action: { title: string; description?: string; icon?: string };
+}) {
+  return (
+    <Box
+      as={Link}
+      m={2}
+      p={5}
+      shadow="md"
+      borderWidth="1px"
+      sx={{ ':hover': { shadow: 'lg' } }}
+      to={getUrl(`/actions/${actionId}`)}
+      borderRadius="md"
+      backgroundColor="white"
+    >
+      <HStack spacing={2}>
+        {action.icon ? <Iconify color="teal.700" icon={action.icon} /> : undefined}
+        <Heading color="teal.700" fontSize="xl">
+          {action.title}
+        </Heading>
+      </HStack>
+      <Text mt={4}>{action.description}</Text>
+    </Box>
   );
 }

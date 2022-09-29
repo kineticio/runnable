@@ -118,6 +118,7 @@ importers:
       '@emotion/react': ^11
       '@emotion/server': ^11
       '@emotion/styled': ^11
+      '@iconify-json/fa': ^1.1.2
       '@iconify/react': ^4.0.0
       '@remix-run/dev': ^1.7.1
       '@remix-run/eslint-config': ^1.7.1
@@ -160,6 +161,7 @@ importers:
       '@emotion/react': 11.10.4_axxkdcpdr7up57umjkldobkynm
       '@emotion/server': 11.10.0
       '@emotion/styled': 11.10.4_sn4wuyy54zwps25tv4w7lbiz6i
+      '@iconify-json/fa': 1.1.2
       '@iconify/react': 4.0.0_react@18.2.0
       '@remix-run/dev': 1.7.1_dmkalgmjfluropgshi7qkdeohm
       '@remix-run/eslint-config': 1.7.1_j37t4rqwl7h3nhuecgvzwhcgii
@@ -2927,6 +2929,12 @@ packages:
 
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+
+  /@iconify-json/fa/1.1.2:
+    resolution: {integrity: sha512-+hqbFjYVfC5BenzET5iKilIGLnL0XtNdPDqXwu1CvyxX84R4DVPBveB+dvvurzUZpxS0nCgSGua8iYhCc+/Dag==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
 
   /@iconify/react/4.0.0_react@18.2.0:
     resolution: {integrity: sha512-YE+z5PCegYyuJtLR6KBbJNlssmuVgRyFyRxcgxSPVkN3Gsm7npSzrUh+gWlBxrNb5g4Q6Nnb1gczPBNcwtUpng==}
