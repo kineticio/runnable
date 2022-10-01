@@ -7,7 +7,7 @@ declare global {
 }
 
 export function getBaseUrl(): string {
-  const envUrl = typeof window === 'undefined' ? process.env['ACTIONS_BASE_URL'] : window.ENV['ACTIONS_BASE_URL'];
+  const envUrl = typeof window === 'undefined' ? process.env['ACTIONS_BASE_URL'] : window.ENV?.['ACTIONS_BASE_URL'];
   const base = envUrl || '/admin';
   if (base === '/') {
     return '';

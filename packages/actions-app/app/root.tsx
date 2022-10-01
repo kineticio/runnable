@@ -1,11 +1,12 @@
 import { AnimatePresence } from 'framer-motion';
 import React, { useContext, useEffect } from 'react';
 import { withEmotionCache } from '@emotion/react';
-import { ChakraProvider } from '@chakra-ui/react';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch, useLoaderData } from '@remix-run/react';
+import { Box, Button, ChakraProvider, Heading, Text, VStack } from '@chakra-ui/react';
+import { Link, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch, useLoaderData } from '@remix-run/react';
 import { MetaFunction, LinksFunction, json } from '@remix-run/node';
 
 import { ServerStyleContext, ClientStyleContext } from './context';
+import { getBaseUrl } from './utils/routes';
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -33,13 +34,14 @@ export const links: LinksFunction = () => {
 };
 
 interface DocumentProps {
+  head?: React.ReactNode;
   children: React.ReactNode;
 }
 
-const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) => {
+const Document = withEmotionCache(({ children, head }: DocumentProps, emotionCache) => {
+  const data = useLoaderData();
   const serverStyleData = useContext(ServerStyleContext);
   const clientStyleData = useContext(ClientStyleContext);
-  const data = useLoaderData();
 
   // Only executed on client
   useEffect(() => {
@@ -58,6 +60,7 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
   return (
     <html lang="en">
       <head>
+        {head}
         <Meta />
         <Links />
         {serverStyleData?.map(({ key, ids, css }) => (
@@ -65,11 +68,13 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
         ))}
       </head>
       <body>
-        {children}
-        <script dangerouslySetInnerHTML={{ __html: `window.ENV = ${JSON.stringify(data.ENV)}` }} />
+        <ChakraProvider>
+          {children}
+        </ChakraProvider>
+        <script dangerouslySetInnerHTML={{ __html: `window.ENV = ${JSON.stringify(data?.ENV)}` }} />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
+        {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
       </body>
     </html>
   );
@@ -78,11 +83,9 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
 export default function App() {
   return (
     <Document>
-      <ChakraProvider>
-        <AnimatePresence exitBeforeEnter>
-          <Outlet />
-        </AnimatePresence>
-      </ChakraProvider>
+      <AnimatePresence exitBeforeEnter>
+        <Outlet />
+      </AnimatePresence>
     </Document>
   );
 }
@@ -90,35 +93,92 @@ export default function App() {
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
   return (
-    <html>
-      <head>
-        <title>Oh no!</title>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <div>An unexpected error occurred: {error.message}</div>
-        <Scripts />
-      </body>
-    </html>
+    <Document>
+      <VStack h="100vh" justify="center">
+        <Heading>There was an error</Heading>
+        <Text>{error.message}</Text>
+        <hr />
+        <Text>
+          <div>An unexpected error occurred: {error.message}</div>
+        </Text>
+      </VStack>
+    </Document>
   );
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
+  let message;
+  switch (caught.status) {
+    case 401: {
+      message = (
+        <Box textAlign="center" py={10} px={6}>
+          <Heading
+            display="inline-block"
+            as="h2"
+            size="2xl"
+            bgGradient="linear(to-r, purple.400, purple.600)"
+            backgroundClip="text">
+            No Access
+          </Heading>
+          <Text color={'gray.500'} mb={6}>
+            The page you are looking for does not seem to exist
+          </Text>
+
+          <Button
+            colorScheme="purple"
+            bgGradient="linear(to-r, purple.400, purple.500, purple.600)"
+            color="white"
+            variant="solid">
+            Go to Home
+          </Button>
+        </Box>
+      );
+      break;
+    }
+    case 404: {
+      message = (
+        <Box textAlign="center" py={10} px={6}>
+          <Heading
+            display="inline-block"
+            as="h1"
+            size="4xl"
+            bgGradient="linear(to-r, purple.400, purple.600)"
+            backgroundClip="text">
+            404
+          </Heading>
+          <Text fontSize="24px" mt={3} mb={2}>
+            Page Not Found
+          </Text>
+          <Text color={'gray.500'} mb={6}>
+            The page you are looking for does not seem to exist
+          </Text>
+
+          <Button
+            as={Link}
+            colorScheme="purple"
+            bgGradient="linear(to-r, purple.400, purple.500, purple.600)"
+            color="white"
+            variant="solid"
+            to={getBaseUrl()}
+          >
+            Go to Home
+          </Button>
+        </Box>
+      );
+      break;
+    }
+
+    default: {
+      throw new Error(caught.data || caught.statusText);
+    }
+  }
+
   return (
-    <html>
-      <head>
-        <title>Oops!</title>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <h1>
-          {caught.status} {caught.statusText}
-        </h1>
-        <Scripts />
-      </body>
-    </html>
+    <Document>
+      <VStack h="100vh" justify="center">
+        {message}
+      </VStack>
+    </Document>
   );
 }
