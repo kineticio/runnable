@@ -50,7 +50,7 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts,tsx,md}": [
+    "*.{js,ts,tsx}": [
       "eslint --fix"
     ]
   }
