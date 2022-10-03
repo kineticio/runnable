@@ -1,27 +1,27 @@
-import type { ActionRequest, ActionViewResponse, IOForm } from '../../types/response';
-import type { DeferredPromise } from '../defer';
-import { defer } from '../defer';
-import type { UIResponder } from './ui-responder.server';
+import type { ActionRequest, ActionViewResponse } from '../../types/response';
+import { mapValues, keyBy } from '../../utils/objects';
+import { toOptions } from '../../utils/options';
+import { ValidationError } from '../errors';
+import { createInput, Input } from './InputBuilder';
 import { BreadCrumbs } from './bread-crumbs.server';
+import { ClientBridge } from './client-bridge.server';
+import { validatorForMappedInput } from './validators.server';
 import type { Action, ActionContext, InputForm, InputOutput } from '~/api/actions';
 
 export class Workflow {
-  public pendingResponse: DeferredPromise<any> | undefined;
-  public uiResponder!: UIResponder;
+  public bridge = new ClientBridge();
   public hasFinished = false;
-  public error: Error | undefined;
   public breadcrumbs = new BreadCrumbs();
 
   constructor(public readonly id: string, public readonly name: string, public readonly action: Action) {}
 
-  public start(uiResponder: UIResponder): void {
-    this.uiResponder = uiResponder;
+  public start(): Promise<ActionViewResponse> {
     // start action in the background
     this.action
       .execute(this.createIO(), this.createContext())
       .then(() => {
-        this.hasFinished = true;
-        this.uiResponder.respond({
+        this.bridge.askClientQuestion({
+          error: null,
           view: {
             $type: 'success',
             label: 'Workflow Complete',
@@ -29,244 +29,200 @@ export class Workflow {
         });
       })
       .catch((error) => {
-        this.hasFinished = true;
-        this.error = error;
-        this.uiResponder.respond({
+        this.bridge.askClientQuestion({
+          error: error.message,
           view: {
             $type: 'error',
             label: 'Workflow Failed',
             description: error.message,
           },
         });
+      })
+      .finally(() => {
+        this.hasFinished = true;
       });
+
+    return this.bridge.waitForWorkflowToAskAQuestion();
   }
 
-  public getLastResponse(): ActionViewResponse | undefined {
-    if (this.hasFinished) {
-      if (this.error) {
-        return {
-          view: {
-            $type: 'error',
-            label: 'Workflow Failed',
-            description: this.error.message,
-          },
-        };
-      }
-
-      return {
-        view: {
-          $type: 'success',
-          label: 'Workflow Complete',
-        },
-      };
-    }
-
-    return this.uiResponder.getLastResponse();
+  public getLastResponse(): Promise<ActionViewResponse | undefined> {
+    return this.bridge.waitForWorkflowToAskAQuestion();
   }
 
-  public continue(uiResponder: UIResponder, request: ActionRequest): void {
-    if (!this.pendingResponse) {
-      throw new Error('No pending response');
-    }
-    this.uiResponder = uiResponder;
-    this.pendingResponse.resolve(request.ioResponse);
+  public async continue(request: ActionRequest): Promise<ActionViewResponse> {
+    this.bridge.consumeResponseFromClient(request.ioResponse);
+    return await this.bridge.waitForWorkflowToAskAQuestion();
   }
 
-  public createIO(): InputOutput {
+  private createIO(): InputOutput {
     return {
       form: <T extends Record<string, any>>(form: InputForm<any>) => {
-        const payload: IOForm = {
-          $type: 'form',
-          form: mapValues(form, (promise) => promise.payload),
-        };
+        const input = createInput({ $type: 'form', form: mapValues(form, (promise) => promise.payload) })
+          .normalizeAsSingleton<T>()
+          .validate(validatorForMappedInput(form))
+          .formatBreadcrumbs((values) => {
+            return Object.entries(values).map(([key, value]) => ({
+              key: form[key].payload.label ?? key,
+              value,
+            }));
+          })
+          .build();
 
         return {
-          payload,
-          prompt: () =>
-            this.prompt<T>(payload)
-              .then(getFirstValueAndWarn)
-              .then((values) => {
-                const displayValues: any = {};
-                for (const [key, value] of Object.entries(values)) {
-                  displayValues[form[key].payload.label ?? key] = value;
-                }
-                this.breadcrumbs.addObject(displayValues);
-                return values;
-              }),
+          payload: input.form,
+          prompt: () => this.handle(input),
         };
       },
       input: {
         text: (opts) => {
-          const payload: IOForm = {
-            $type: 'input',
-            ...opts,
-          };
+          const input = createInput({ $type: 'input', ...opts })
+            .normalizeAsString()
+            .validate(opts.validation)
+            .formatBreadcrumbs((value) => [{ key: opts.label, value }])
+            .build();
+
           return {
-            payload,
-            prompt: () =>
-              this.prompt<string>(payload)
-                .then(getFirstValueAndWarn)
-                .then((value) => {
-                  this.breadcrumbs.add(opts.label, value);
-                  return value;
-                }),
+            payload: input.form,
+            prompt: () => this.handle(input),
           };
         },
         number: (opts) => {
-          const payload: IOForm = {
-            $type: 'input',
-            type: 'number',
-            ...opts,
-          };
+          const input = createInput({ $type: 'input', type: 'number', ...opts })
+            .normalizeAsNumber()
+            .validate(opts.validation)
+            .formatBreadcrumbs((value) => [{ key: opts.label, value }])
+            .build();
+
           return {
-            payload,
-            prompt: () =>
-              this.prompt<string>(payload)
-                .then(getFirstValueAndWarn)
-                .then((value) => {
-                  this.breadcrumbs.add(opts.label, value);
-                  return value;
-                })
-                .then(Number.parseFloat),
+            payload: input.form,
+            prompt: () => this.handle(input),
           };
         },
       },
       select: {
         dropdown: (opts) => {
-          const payload: IOForm = {
-            $type: 'select',
-            display: 'dropdown',
-            ...opts,
-            data: toOptions(opts.data, opts),
-          };
+          const input = createInput({ $type: 'select', display: 'dropdown', ...opts, data: toOptions(opts.data, opts) })
+            .normalizeAsString()
+            .thenMap((key) => {
+              const found = opts.data.find((item) => opts.getValue(item) === key);
+              if (!found) {
+                throw new ValidationError('Invalid selection');
+              }
+              return found;
+            })
+            .validate(opts.validation)
+            .formatBreadcrumbs((value) => [{ key: opts.label, value: opts.getLabel(value) }])
+            .build();
+
           return {
-            payload,
-            prompt: () =>
-              this.prompt<string>(payload)
-                .then(getFirstValueAndWarn)
-                .then((key) => {
-                  const found = opts.data.find((item) => opts.getValue(item) === key);
-                  if (!found) {
-                    throw new Error('Invalid selection');
-                  }
-                  return found;
-                })
-                .then((value) => {
-                  this.breadcrumbs.add(opts.label, opts.getLabel(value));
-                  return value;
-                }),
+            payload: input.form,
+            prompt: () => this.handle(input),
           };
         },
         radio: (opts) => {
-          const payload: IOForm = {
-            $type: 'select',
-            display: 'radio',
-            ...opts,
-            data: toOptions(opts.data, opts),
-          };
+          const input = createInput({ $type: 'select', display: 'radio', ...opts, data: toOptions(opts.data, opts) })
+            .normalizeAsString()
+            .thenMap((key) => {
+              const found = opts.data.find((item) => opts.getValue(item) === key);
+              if (!found) {
+                throw new ValidationError('Invalid selection');
+              }
+              return found;
+            })
+            .validate(opts.validation)
+            .formatBreadcrumbs((value) => [{ key: opts.label, value: opts.getLabel(value) }])
+            .build();
+
           return {
-            payload,
-            prompt: () =>
-              this.prompt<string>(payload)
-                .then(getFirstValueAndWarn)
-                .then((key) => {
-                  const found = opts.data.find((item) => opts.getValue(item) === key);
-                  if (!found) {
-                    throw new Error('Invalid selection');
-                  }
-                  return found;
-                })
-                .then((value) => {
-                  this.breadcrumbs.add(opts.label, opts.getLabel(value));
-                  return value;
-                }),
+            payload: input.form,
+            prompt: () => this.handle(input),
           };
         },
         table: (opts) => {
-          const payload: IOForm = {
+          const input = createInput({
             $type: 'table',
             label: opts.label,
-            rows: opts.data.map((item) => ({
-              key: opts.getValue(item),
-              cells: opts.getColumns(item),
-            })),
+            rows: opts.data.map((item) => ({ key: opts.getValue(item), cells: opts.getColumns(item) })),
             helperText: opts.helperText,
             initialSelection: opts.initialSelection ? [opts.initialSelection] : undefined,
             headers: opts.headers,
             isMultiSelect: false,
-          };
+          })
+            .normalizeAsString()
+            .thenMap((key) => {
+              const found = opts.data.find((item) => opts.getValue(item) === key);
+              if (!found) {
+                throw new ValidationError('Invalid selection');
+              }
+              return found;
+            })
+            .validate(opts.validation)
+            .formatBreadcrumbs((value) => [{ key: opts.label, value: opts.getColumns(value)[0] }])
+            .build();
+
           return {
-            payload,
-            prompt: () =>
-              this.prompt<string>(payload)
-                .then(getFirstValueAndWarn)
-                .then((key) => {
-                  const found = opts.data.find((item) => opts.getValue(item) === key);
-                  if (!found) {
-                    throw new Error('Invalid selection');
-                  }
-                  return found;
-                })
-                .then((value) => {
-                  this.breadcrumbs.add(opts.label, opts.getColumns(value)[0]);
-                  return value;
-                }),
+            payload: input.form,
+            prompt: () => this.handle(input),
           };
         },
       },
       multiSelect: {
         checkbox: (opts) => {
-          const payload: IOForm = {
+          const input = createInput({
             $type: 'multiSelect',
             display: 'checkbox',
             ...opts,
             data: toOptions(opts.data, opts),
-          };
+          })
+            .normalizeAsArray<string>()
+            .thenMap((keys: string[]) => {
+              const dataByKey = keyBy(opts.data, opts.getValue);
+              const found = keys.map((key) => dataByKey[key]).filter(Boolean);
+              if (found.length !== keys.length) {
+                throw new ValidationError('Invalid selection');
+              }
+              return found;
+            })
+            .validate(opts.validation)
+            .formatBreadcrumbs((values) => [
+              { key: opts.label, value: values.map((value) => opts.getLabel(value)).join(', ') },
+            ])
+            .build();
+
           return {
-            payload,
-            prompt: () =>
-              this.prompt<string>(payload)
-                .then((keys: string[]) => {
-                  const dataByKey = keyBy(opts.data, opts.getValue);
-                  const found = keys.map((key) => dataByKey[key]).filter(Boolean);
-                  if (found.length !== keys.length) {
-                    throw new Error('Invalid selection');
-                  }
-                  return found;
-                })
-                .then((values) => {
-                  this.breadcrumbs.add(opts.label, values.map((value) => opts.getLabel(value)).join(', '));
-                  return values;
-                }),
+            payload: input.form,
+            prompt: () => this.handle(input),
           };
         },
         dropdown: (opts) => {
-          const payload: IOForm = {
+          const input = createInput({
             $type: 'multiSelect',
             display: 'dropdown',
             ...opts,
             data: toOptions(opts.data, opts),
-          };
+          })
+            .normalizeAsArray<string>()
+            .thenMap((keys: string[]) => {
+              const dataByKey = keyBy(opts.data, opts.getValue);
+              const found = keys.map((key) => dataByKey[key]).filter(Boolean);
+              if (found.length !== keys.length) {
+                throw new ValidationError('Invalid selection');
+              }
+              return found;
+            })
+            .validate(opts.validation)
+            .formatBreadcrumbs((values) => [
+              { key: opts.label, value: values.map((value) => opts.getLabel(value)).join(', ') },
+            ])
+            .build();
+
           return {
-            payload,
-            prompt: () =>
-              this.prompt<string>(payload)
-                .then((keys: string[]) => {
-                  const dataByKey = keyBy(opts.data, opts.getValue);
-                  const found = keys.map((key) => dataByKey[key]).filter(Boolean);
-                  if (found.length !== keys.length) {
-                    throw new Error('Invalid selection');
-                  }
-                  return found;
-                })
-                .then((values) => {
-                  this.breadcrumbs.add(opts.label, values.map((value) => opts.getLabel(value)).join(', '));
-                  return values;
-                }),
+            payload: input.form,
+            prompt: () => this.handle(input),
           };
         },
         table: (opts) => {
-          const payload: IOForm = {
+          const input = createInput({
             $type: 'table',
             label: opts.label,
             rows: opts.data.map((item) => ({
@@ -277,30 +233,32 @@ export class Workflow {
             initialSelection: opts.initialSelection,
             headers: opts.headers,
             isMultiSelect: true,
-          };
+          })
+            .normalizeAsArray<string>()
+            .thenMap((keys: string[]) => {
+              const dataByKey = keyBy(opts.data, opts.getValue);
+              const found = keys.map((key) => dataByKey[key]).filter(Boolean);
+              if (found.length !== keys.length) {
+                throw new ValidationError('Invalid selection');
+              }
+              return found;
+            })
+            .validate(opts.validation)
+            .formatBreadcrumbs((values) => [
+              { key: opts.label, value: values.map((value) => opts.getColumns(value)[0]).join(', ') },
+            ])
+            .build();
+
           return {
-            payload,
-            prompt: () =>
-              this.prompt<string>(payload)
-                .then((keys: string[]) => {
-                  const dataByKey = keyBy(opts.data, opts.getValue);
-                  const found = keys.map((key) => dataByKey[key]).filter(Boolean);
-                  if (found.length !== keys.length) {
-                    throw new Error('Invalid selection');
-                  }
-                  return found;
-                })
-                .then((values) => {
-                  this.breadcrumbs.add(opts.label, values.map((value) => opts.getColumns(value)[0]).join(', '));
-                  return values;
-                }),
+            payload: input.form,
+            prompt: () => this.handle(input),
           };
         },
       },
     };
   }
 
-  public createContext(): ActionContext {
+  private createContext(): ActionContext {
     return {
       loading: {
         start(opts: { label: string; length: number }): void {
@@ -324,46 +282,22 @@ export class Workflow {
     };
   }
 
-  private prompt<T>(payload: IOForm): Promise<T[]> {
-    const deferred = defer<T[]>();
-    this.pendingResponse = deferred;
-    this.uiResponder.respond({ view: payload });
-    return deferred.promise;
-  }
-}
+  private async handle<T>(input: Input<T>, error: string | null = null): Promise<T> {
+    this.bridge.askClientQuestion({ error: error, view: input.form });
 
-function keyBy<T>(arr: T[], getKey: (item: T) => string): Record<string, T> {
-  const result = {} as Record<string, T>;
-  for (const item of arr) {
-    result[getKey(item)] = item;
-  }
-  return result;
-}
+    // wait for, and normalize response
+    const response = await this.bridge.waitForResponseFromClient().then(input.normalize);
 
-function toOptions<T>(arr: T[], opts: { getValue: (item: T) => string; getLabel: (item: T) => string }) {
-  return arr.map((item) => ({
-    label: opts.getLabel(item),
-    value: opts.getValue(item),
-  }));
-}
+    // validate
+    const validationResponse = input.validator(response);
+    if (typeof validationResponse === 'string') {
+      // validation failed, try again
+      return this.handle(input, validationResponse);
+    }
 
-function mapValues<T extends object, V>(obj: T, fn: (value: T[keyof T], key: keyof T) => V): Record<string, V> {
-  const result = {} as Record<string, any>;
-  for (const key of Object.keys(obj)) {
-    result[key] = fn(obj[key as keyof T], key as keyof T);
-  }
-  return result;
-}
+    // add to breadcrumbs
+    this.breadcrumbs.addAll(input.format(response));
 
-function getFirstValueAndWarn<T>(values: T[] | T): T {
-  if (!Array.isArray(values)) {
-    return values;
+    return response;
   }
-  if (values.length > 1) {
-    console.log('Expected single value, but got ' + values.length);
-  }
-  if (values.length === 0) {
-    throw new Error('Missing required field.');
-  }
-  return values[0];
 }

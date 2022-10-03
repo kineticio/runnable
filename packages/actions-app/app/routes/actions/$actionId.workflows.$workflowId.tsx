@@ -81,6 +81,7 @@ export default function WorkflowDetailsPage() {
   const transition = useTransition();
 
   const currentView = actionData?.view ?? view;
+  const currentError = actionData?.error;
   const hasNext = currentView.$type !== 'success' && currentView.$type !== 'error';
   const hasDebug = search.get('debug') === 'true';
   const loading = transition.state === 'loading' || transition.state === 'submitting';
@@ -91,6 +92,21 @@ export default function WorkflowDetailsPage() {
         <Form method="post">
           <VStack alignItems="flex-start" spacing={6}>
             <FormView name={ROOT} view={currentView} />
+            {currentError && (
+              <Alert status="error">
+                <AlertIcon />
+                <VStack alignItems="flex-start" spacing={2}>
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription
+                    sx={{
+                      whiteSpace: 'pre-wrap',
+                    }}
+                  >
+                    {currentError}
+                  </AlertDescription>
+                </VStack>
+              </Alert>
+            )}
             {hasNext && (
               <Button isLoading={loading} colorScheme="teal" variant="solid" type="submit">
                 Submit

@@ -10,6 +10,7 @@ export interface Action {
 }
 
 export type ValidationResponse = string | true;
+export type Validator<T> = (value: T) => ValidationResponse;
 
 export type InputForm<T extends object> = {
   [P in keyof T]: FormPromise<T[P]>;
@@ -28,19 +29,15 @@ export interface InputOutput {
       helperText?: string;
       placeholder?: string;
       type?: 'text' | 'password' | 'email';
-      validation?: (value: string) => ValidationResponse;
+      validation?: Validator<string>;
     }): FormPromise<string>;
-    number(opts: {
-      label: string;
-      helperText?: string;
-      validation?: (value: number) => ValidationResponse;
-    }): FormPromise<number>;
+    number(opts: { label: string; helperText?: string; validation?: Validator<number> }): FormPromise<number>;
   };
   select: {
     radio<T>(opts: {
       label: string;
       helperText?: string;
-      validation?: (value: string) => ValidationResponse;
+      validation?: Validator<T>;
       data: T[];
       getLabel: (item: T) => string;
       getValue: (item: T) => string;
@@ -48,7 +45,7 @@ export interface InputOutput {
     dropdown<T>(opts: {
       label: string;
       helperText?: string;
-      validation?: (value: string) => ValidationResponse;
+      validation?: Validator<T>;
       data: T[];
       getLabel: (item: T) => string;
       getValue: (item: T) => string;
@@ -56,7 +53,7 @@ export interface InputOutput {
     table<T>(opts: {
       label: string;
       helperText?: string;
-      validation?: (value: string) => ValidationResponse;
+      validation?: Validator<T>;
       data: T[];
       headers: string[];
       initialSelection?: string;
@@ -68,7 +65,7 @@ export interface InputOutput {
     checkbox<T>(opts: {
       label: string;
       helperText?: string;
-      validation?: (value: string) => ValidationResponse;
+      validation?: Validator<T[]>;
       data: T[];
       getLabel: (item: T) => string;
       getValue: (item: T) => string;
@@ -76,7 +73,7 @@ export interface InputOutput {
     dropdown<T>(opts: {
       label: string;
       helperText?: string;
-      validation?: (value: string) => ValidationResponse;
+      validation?: Validator<T[]>;
       data: T[];
       getLabel: (item: T) => string;
       getValue: (item: T) => string;
@@ -84,7 +81,7 @@ export interface InputOutput {
     table<T>(opts: {
       label: string;
       helperText?: string;
-      validation?: (value: string) => ValidationResponse;
+      validation?: Validator<T[]>;
       data: T[];
       headers: string[];
       initialSelection?: string[];

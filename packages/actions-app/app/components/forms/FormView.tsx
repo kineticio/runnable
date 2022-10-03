@@ -91,7 +91,7 @@ function renderFormField(name: string, field: IOForm<any>) {
         return (
           <FormControl isRequired>
             <FormLabel>{field.label}</FormLabel>
-            <Select backgroundColor="white" placeholder={field.placeholder} name={name}>
+            <Select backgroundColor="white" placeholder={field.placeholder} name={name} required>
               {field.data.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -126,7 +126,7 @@ function renderFormField(name: string, field: IOForm<any>) {
         return (
           <FormControl isRequired>
             <FormLabel>{field.label}</FormLabel>
-            <select placeholder={field.placeholder} name={name} multiple>
+            <select placeholder={field.placeholder} name={name} multiple required>
               {field.data.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -144,7 +144,7 @@ function renderFormField(name: string, field: IOForm<any>) {
             <CheckboxGroup>
               <Stack>
                 {field.data.map((option) => (
-                  <Checkbox name={name} key={option.value} value={option.value}>
+                  <Checkbox required name={name} key={option.value} value={option.value}>
                     {option.label}
                   </Checkbox>
                 ))}
@@ -180,7 +180,8 @@ function renderFormField(name: string, field: IOForm<any>) {
         </FormControl>
       );
     }
-    default:
+    default: {
       break;
+    }
   }
 }

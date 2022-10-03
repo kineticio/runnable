@@ -1,6 +1,6 @@
 export interface BreadCrumb {
   key: string;
-  value: string;
+  value: string | number;
 }
 
 export class BreadCrumbs {
@@ -8,6 +8,14 @@ export class BreadCrumbs {
 
   public add(key: string, value: string): void {
     this.breadcrumbs.push({ key, value });
+  }
+
+  public addAll(breadcrumbs: BreadCrumb[] | BreadCrumb): void {
+    if (Array.isArray(breadcrumbs)) {
+      this.breadcrumbs.push(...breadcrumbs);
+    } else {
+      this.breadcrumbs.push(breadcrumbs);
+    }
   }
 
   public addList(key: string, value: string[]): void {

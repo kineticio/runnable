@@ -14,7 +14,7 @@ export const DEFAULT_ACTIONS: Actions = {
             type: 'text',
             validation: (value) => {
               if (value.length < 3) {
-                return 'Name must be at least 3 characters';
+                return 'Name must be at least 3 characters. Got: ' + value.length;
               }
               return true;
             },
@@ -24,8 +24,8 @@ export const DEFAULT_ACTIONS: Actions = {
             helperText: 'Enter the email of the user',
             type: 'email',
             validation: (value) => {
-              if (value.length < 3) {
-                return 'Email must be at least 3 characters';
+              if (value.length < 5) {
+                return 'Email must be at least 5 characters. Got: ' + value.length;
               }
               return true;
             },
@@ -102,6 +102,6 @@ export const DEFAULT_ACTIONS: Actions = {
   },
 };
 
-function sleep(ms = 2000) {
+function sleep(ms = 10) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }

@@ -2,7 +2,17 @@ import { AnimatePresence } from 'framer-motion';
 import React, { useContext, useEffect } from 'react';
 import { withEmotionCache } from '@emotion/react';
 import { Box, Button, ChakraProvider, Heading, Text, VStack } from '@chakra-ui/react';
-import { Link, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch, useLoaderData } from '@remix-run/react';
+import {
+  Link,
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useCatch,
+  useLoaderData,
+} from '@remix-run/react';
 import { MetaFunction, LinksFunction, json } from '@remix-run/node';
 
 import { ServerStyleContext, ClientStyleContext } from './context';
@@ -68,9 +78,7 @@ const Document = withEmotionCache(({ children, head }: DocumentProps, emotionCac
         ))}
       </head>
       <body>
-        <ChakraProvider>
-          {children}
-        </ChakraProvider>
+        <ChakraProvider>{children}</ChakraProvider>
         <script dangerouslySetInnerHTML={{ __html: `window.ENV = ${JSON.stringify(data?.ENV)}` }} />
         <ScrollRestoration />
         <Scripts />
@@ -118,7 +126,8 @@ export function CatchBoundary() {
             as="h2"
             size="2xl"
             bgGradient="linear(to-r, purple.400, purple.600)"
-            backgroundClip="text">
+            backgroundClip="text"
+          >
             No Access
           </Heading>
           <Text color={'gray.500'} mb={6}>
@@ -129,7 +138,8 @@ export function CatchBoundary() {
             colorScheme="purple"
             bgGradient="linear(to-r, purple.400, purple.500, purple.600)"
             color="white"
-            variant="solid">
+            variant="solid"
+          >
             Go to Home
           </Button>
         </Box>
@@ -144,7 +154,8 @@ export function CatchBoundary() {
             as="h1"
             size="4xl"
             bgGradient="linear(to-r, purple.400, purple.600)"
-            backgroundClip="text">
+            backgroundClip="text"
+          >
             404
           </Heading>
           <Text fontSize="24px" mt={3} mb={2}>

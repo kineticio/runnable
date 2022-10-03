@@ -26,6 +26,6 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@kinetic-io/actions-app": "^0.2.5"
+    "@kinetic-io/actions-app": "^0.3.0"
   }
 }

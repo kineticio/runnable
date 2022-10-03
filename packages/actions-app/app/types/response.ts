@@ -56,6 +56,7 @@ export interface ActionResponse<T = any> extends ActionViewResponse<T> {
 }
 
 export interface ActionViewResponse<T = any> {
+  error: string | null;
   view: IOForm<T>;
 }
 
