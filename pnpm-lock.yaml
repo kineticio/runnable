@@ -62,7 +62,7 @@ importers:
 
   examples/nestjs:
     specifiers:
-      '@kinetic-io/actions-express': ^0.2.5
+      '@kinetic-io/actions-express': ^0.3.0
       '@nestjs/cli': ^9.1.4
       '@nestjs/common': ^9.1.2
       '@nestjs/core': ^9.1.2
@@ -190,7 +190,7 @@ importers:
 
   packages/actions-express:
     specifiers:
-      '@kinetic-io/actions-app': ^0.2.5
+      '@kinetic-io/actions-app': ^0.3.0
       '@kinetic-io/config': '*'
       '@kinetic-io/tsconfig': '*'
       '@remix-run/express': ^1.7.2
