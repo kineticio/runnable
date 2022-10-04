@@ -7,10 +7,22 @@ import {
   normalizeAsNumber,
   normalizeAsArray,
   normalizeAsSingleton,
+  normalizeAsBoolean,
 } from './normalizers.server';
 
 export function createInput(payload: IOForm) {
   return new InputBuilder<unknown>(payload);
+}
+
+export function createMessage(payload: IOForm): Input<never> {
+  return {
+    form: payload,
+    validator: () => true,
+    normalize: () => {
+      return '' as never;
+    },
+    format: () => [],
+  };
 }
 
 export interface Input<T> {
@@ -34,6 +46,11 @@ export class InputBuilder<T> {
 
   public normalizeAsNumber(): InputBuilder<number> {
     this.normalize = normalizeAsNumber as any;
+    return this as any;
+  }
+
+  public normalizeAsBoolean(): InputBuilder<boolean> {
+    this.normalize = normalizeAsBoolean as any;
     return this as any;
   }
 

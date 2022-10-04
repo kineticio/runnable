@@ -14,12 +14,18 @@ import {
   RadioGroup,
   CheckboxGroup,
   Checkbox,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, CloseIcon } from '@chakra-ui/icons';
 import React from 'react';
 import { IOForm } from '../../types/response';
 import { CompositeFormView } from './CompositeInput';
 import { TableInput } from './TableInput';
+import { ImageInput } from './ImageInput';
+import { TableView } from './TableView';
 
 interface Props {
   name: string;
@@ -32,39 +38,90 @@ export const FormView: React.FC<Props> = ({ name, view }) => {
 
 function renderFormField(name: string, field: IOForm<any>) {
   switch (field.$type) {
-    case 'success': {
+    case 'terminal': {
+      if (field.variant === 'error') {
+        return (
+          <Box textAlign="center" py={10} px={6}>
+            <Box display="inline-block">
+              <Flex
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                bg={'red.500'}
+                rounded={'50px'}
+                w={'55px'}
+                h={'55px'}
+                textAlign="center"
+              >
+                <CloseIcon boxSize={'20px'} color={'white'} />
+              </Flex>
+            </Box>
+            <Heading as="h2" size="xl" mt={6} mb={2}>
+              {field.label}
+            </Heading>
+            <Text color={'gray.500'}>{field.description}</Text>
+          </Box>
+        );
+      }
+      if (field.variant === 'success') {
+        return (
+          <Box textAlign="center" py={10} px={6}>
+            <CheckCircleIcon boxSize={'50px'} color={'green.500'} />
+            <Heading as="h2" size="xl" mt={6} mb={2}>
+              {field.label}
+            </Heading>
+            <Text color={'gray.500'}>{field.description}</Text>
+          </Box>
+        );
+      }
+      return null;
+    }
+    case 'message': {
       return (
         <Box textAlign="center" py={10} px={6}>
-          <CheckCircleIcon boxSize={'50px'} color={'green.500'} />
-          <Heading as="h2" size="xl" mt={6} mb={2}>
-            {field.label}
-          </Heading>
-          <Text color={'gray.500'}>{field.description}</Text>
+          {field.title && (
+            <Heading as="h2" size="l" mt={6} mb={2}>
+              {field.title}
+            </Heading>
+          )}
+          {field.description && <Text color={'gray.500'}>{field.description}</Text>}
+          {field.dangerouslySetInnerHTML && (
+            <Text>
+              <div dangerouslySetInnerHTML={{ __html: field.dangerouslySetInnerHTML }} />
+            </Text>
+          )}
         </Box>
       );
     }
-    case 'error': {
+    case 'message-table': {
+      return <TableView title={field.title} headers={field.headers} rows={field.rows} />;
+    }
+    case 'boolean': {
       return (
-        <Box textAlign="center" py={10} px={6}>
-          <Box display="inline-block">
-            <Flex
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="center"
-              bg={'red.500'}
-              rounded={'50px'}
-              w={'55px'}
-              h={'55px'}
-              textAlign="center"
-            >
-              <CloseIcon boxSize={'20px'} color={'white'} />
-            </Flex>
-          </Box>
-          <Heading as="h2" size="xl" mt={6} mb={2}>
+        <FormControl>
+          <Checkbox name={name} defaultChecked={field.defaultValue}>
             {field.label}
-          </Heading>
-          <Text color={'gray.500'}>{field.description}</Text>
-        </Box>
+          </Checkbox>
+          <FormHelperText>{field.helperText}</FormHelperText>
+        </FormControl>
+      );
+    }
+    case 'color': {
+      return (
+        <FormControl>
+          <FormLabel>{field.label}</FormLabel>
+          <Input name={name} type="color" defaultValue={field.defaultValue} />
+          <FormHelperText>{field.helperText}</FormHelperText>
+        </FormControl>
+      );
+    }
+    case 'imageURL': {
+      return (
+        <FormControl>
+          <FormLabel>{field.label}</FormLabel>
+          <ImageInput name={name} initialValue={field.defaultValue} />
+          <FormHelperText>{field.helperText}</FormHelperText>
+        </FormControl>
       );
     }
     case 'input': {
@@ -72,7 +129,13 @@ function renderFormField(name: string, field: IOForm<any>) {
         return (
           <FormControl isRequired>
             <FormLabel>{field.label}</FormLabel>
-            <NumberInput backgroundColor="white" placeholder={field.placeholder || field.label} name={name} />
+            <NumberInput backgroundColor="white" placeholder={field.placeholder || field.label} name={name}>
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
             <FormHelperText>{field.helperText}</FormHelperText>
           </FormControl>
         );
@@ -139,12 +202,12 @@ function renderFormField(name: string, field: IOForm<any>) {
       }
       if (field.display === 'checkbox') {
         return (
-          <FormControl isRequired>
+          <FormControl>
             <FormLabel>{field.label}</FormLabel>
             <CheckboxGroup>
               <Stack>
                 {field.data.map((option) => (
-                  <Checkbox required name={name} key={option.value} value={option.value}>
+                  <Checkbox name={name} key={option.value} value={option.value}>
                     {option.label}
                   </Checkbox>
                 ))}
@@ -181,7 +244,12 @@ function renderFormField(name: string, field: IOForm<any>) {
       );
     }
     default: {
+      logNever(field);
       break;
     }
   }
+}
+
+function logNever(type: never): void {
+  console.log(`Unexpected type: ${type}`);
 }

@@ -2,6 +2,8 @@ export interface Actions {
   [key: string]: Action;
 }
 
+export type Primitive = string | number | boolean | null | undefined;
+
 export interface Action {
   title: string;
   description?: string;
@@ -28,10 +30,20 @@ export interface InputOutput {
       label: string;
       helperText?: string;
       placeholder?: string;
+      defaultValue?: boolean;
       type?: 'text' | 'password' | 'email';
       validation?: Validator<string>;
     }): FormPromise<string>;
-    number(opts: { label: string; helperText?: string; validation?: Validator<number> }): FormPromise<number>;
+    number(opts: {
+      label: string;
+      helperText?: string;
+      placeholder?: string;
+      defaultValue?: number;
+      validation?: Validator<number>;
+    }): FormPromise<number>;
+    boolean(opts: { label: string; helperText?: string; defaultValue?: boolean }): FormPromise<boolean>;
+    color(opts: { label: string; helperText?: string; defaultValue?: string }): FormPromise<string>;
+    imageURL(opts: { label: string; helperText?: string; defaultValue?: string }): FormPromise<string>;
   };
   select: {
     radio<T>(opts: {
@@ -98,7 +110,9 @@ export interface ActionContext {
     complete(number: string): void;
   };
   message: {
-    info(opts: { message: string }): Promise<void>;
-    success(opts: { message: string }): Promise<void>;
+    html(opts: { dangerouslySetInnerHTML: string }): void;
+    info(opts: { title: string; description: string }): Promise<void>;
+    table(opts: { title: string; headers: string[]; rows: Primitive[][] }): Promise<void>;
+    success(opts: { title: string; description: string }): Promise<void>;
   };
 }

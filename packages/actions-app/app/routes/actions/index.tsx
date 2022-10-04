@@ -50,9 +50,11 @@ function ActionCard({
     <Box
       as={Link}
       m={2}
-      p={5}
+      p={4}
       shadow="md"
       borderWidth="1px"
+      width={300}
+      minHeight={150}
       sx={{ ':hover': { shadow: 'lg' } }}
       to={getUrl(`/actions/${actionId}`)}
       borderRadius="md"
@@ -64,7 +66,7 @@ function ActionCard({
           {action.title}
         </Heading>
       </HStack>
-      <Text mt={4}>{action.description}</Text>
+      <Text mt={3}>{action.description}</Text>
     </Box>
   );
 }

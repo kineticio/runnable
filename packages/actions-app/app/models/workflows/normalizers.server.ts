@@ -11,6 +11,20 @@ export const normalizeAsString: Normalizer<string> = (value) => {
   return normalizeAsSingleton(value);
 };
 
+export const normalizeAsBoolean: Normalizer<boolean> = (value) => {
+  if (typeof value === 'boolean') {
+    return value;
+  }
+  const normalized = normalizeAsSingleton(value);
+  if (normalized === 'true' || normalized === '') {
+    return true;
+  }
+  if (normalized === 'false') {
+    return false;
+  }
+  throw new ValidationError('Expected a boolean');
+};
+
 export const normalizeAsNumber: Normalizer<number> = (value) => {
   const str = normalizeAsString(value);
   const num = Number(str);

@@ -82,7 +82,7 @@ export default function WorkflowDetailsPage() {
 
   const currentView = actionData?.view ?? view;
   const currentError = actionData?.error;
-  const hasNext = currentView.$type !== 'success' && currentView.$type !== 'error';
+  const hasNext = currentView.$type !== 'terminal';
   const hasDebug = search.get('debug') === 'true';
   const loading = transition.state === 'loading' || transition.state === 'submitting';
 
@@ -109,7 +109,7 @@ export default function WorkflowDetailsPage() {
             )}
             {hasNext && (
               <Button isLoading={loading} colorScheme="teal" variant="solid" type="submit">
-                Submit
+                Continue
               </Button>
             )}
           </VStack>

@@ -100,6 +100,50 @@ export const DEFAULT_ACTIONS: Actions = {
       });
     },
   },
+  kitchen_sink_inputs: {
+    title: 'Kitchen Sink Inputs',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies',
+    icon: 'fa6-solid:utensils',
+    execute: async (io, context) => {
+      const data = await io
+        .form({
+          text: io.input.text({ label: 'Text' }),
+          number: io.input.number({ label: 'Number' }),
+          select: io.select.radio({
+            label: 'Select',
+            data: ['One', 'Two', 'Three'],
+            getLabel: (r) => r,
+            getValue: (r) => r,
+          }),
+          checkbox: io.input.boolean({ label: 'Checkbox' }),
+          color: io.input.color({ label: 'Color' }),
+          multiCheckbox: io.multiSelect.checkbox({
+            label: 'Multi Checkbox',
+            data: ['Red', 'Green', 'Blue'],
+            getLabel: (r) => r,
+            getValue: (r) => r,
+          }),
+        })
+        .prompt();
+
+      await context.message.info({
+        title: 'Data',
+        description: JSON.stringify(data, null, 2),
+      });
+
+      await context.message.html({
+        dangerouslySetInnerHTML: `<pre style="text-align: left;">${JSON.stringify(data, null, 2)}</pre>`,
+      });
+
+      await context.message.table({
+        title: 'Data',
+        rows: Object.entries(data).map(([key, value]) => [key, JSON.stringify(value)]),
+        headers: ['Key', 'Value'],
+      });
+
+      console.log('data', data);
+    },
+  },
 };
 
 function sleep(ms = 10) {

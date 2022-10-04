@@ -2,11 +2,11 @@ import type { ActionRequest, ActionViewResponse } from '../../types/response';
 import { mapValues, keyBy } from '../../utils/objects';
 import { toOptions } from '../../utils/options';
 import { ValidationError } from '../errors';
-import { createInput, Input } from './InputBuilder';
+import { createInput, createMessage, Input } from './InputBuilder';
 import { BreadCrumbs } from './bread-crumbs.server';
 import { ClientBridge } from './client-bridge.server';
 import { validatorForMappedInput } from './validators.server';
-import type { Action, ActionContext, InputForm, InputOutput } from '~/api/actions';
+import type { Action, ActionContext, InputForm, InputOutput, Primitive } from '~/api/actions';
 
 export class Workflow {
   public bridge = new ClientBridge();
@@ -23,7 +23,8 @@ export class Workflow {
         this.bridge.askClientQuestion({
           error: null,
           view: {
-            $type: 'success',
+            $type: 'terminal',
+            variant: 'success',
             label: 'Workflow Complete',
           },
         });
@@ -32,7 +33,8 @@ export class Workflow {
         this.bridge.askClientQuestion({
           error: error.message,
           view: {
-            $type: 'error',
+            $type: 'terminal',
+            variant: 'error',
             label: 'Workflow Failed',
             description: error.message,
           },
@@ -57,19 +59,34 @@ export class Workflow {
   private createIO(): InputOutput {
     return {
       form: <T extends Record<string, any>>(form: InputForm<any>) => {
-        const input = createInput({ $type: 'form', form: mapValues(form, (promise) => promise.payload) })
+        const input = createInput({
+          $type: 'form',
+          form: mapValues(form, (promise) => (promise.payload as Input<any>).form),
+        })
           .normalizeAsSingleton<T>()
+          .thenMap((response) => {
+            return mapValues(response, (value, key) => {
+              const subInput = form[key];
+              if (!subInput) {
+                throw new ValidationError(`Unexpected key ${key.toString()} in response`);
+              }
+              return (subInput.payload as Input<any>).normalize(value);
+            });
+          })
           .validate(validatorForMappedInput(form))
           .formatBreadcrumbs((values) => {
-            return Object.entries(values).map(([key, value]) => ({
-              key: form[key].payload.label ?? key,
-              value,
-            }));
+            return Object.entries(values).flatMap(([key, value]) => {
+              const subInput = form[key];
+              if (!subInput) {
+                throw new ValidationError(`Unexpected key ${key} in response`);
+              }
+              return (subInput.payload as Input<any>).format(value);
+            });
           })
           .build();
 
         return {
-          payload: input.form,
+          payload: input,
           prompt: () => this.handle(input),
         };
       },
@@ -82,7 +99,7 @@ export class Workflow {
             .build();
 
           return {
-            payload: input.form,
+            payload: input,
             prompt: () => this.handle(input),
           };
         },
@@ -94,7 +111,40 @@ export class Workflow {
             .build();
 
           return {
-            payload: input.form,
+            payload: input,
+            prompt: () => this.handle(input),
+          };
+        },
+        boolean: (opts) => {
+          const input = createInput({ $type: 'boolean', ...opts })
+            .normalizeAsBoolean()
+            .formatBreadcrumbs((value) => [{ key: opts.label, value: value.toString() }])
+            .build();
+
+          return {
+            payload: input,
+            prompt: () => this.handle(input),
+          };
+        },
+        color: (opts) => {
+          const input = createInput({ $type: 'color', ...opts })
+            .normalizeAsString()
+            .formatBreadcrumbs((value) => [{ key: opts.label, value }])
+            .build();
+
+          return {
+            payload: input,
+            prompt: () => this.handle(input),
+          };
+        },
+        imageURL: (opts) => {
+          const input = createInput({ $type: 'imageURL', ...opts })
+            .normalizeAsString()
+            .formatBreadcrumbs((value) => [{ key: opts.label, value }])
+            .build();
+
+          return {
+            payload: input,
             prompt: () => this.handle(input),
           };
         },
@@ -115,7 +165,7 @@ export class Workflow {
             .build();
 
           return {
-            payload: input.form,
+            payload: input,
             prompt: () => this.handle(input),
           };
         },
@@ -134,7 +184,7 @@ export class Workflow {
             .build();
 
           return {
-            payload: input.form,
+            payload: input,
             prompt: () => this.handle(input),
           };
         },
@@ -161,7 +211,7 @@ export class Workflow {
             .build();
 
           return {
-            payload: input.form,
+            payload: input,
             prompt: () => this.handle(input),
           };
         },
@@ -190,7 +240,7 @@ export class Workflow {
             .build();
 
           return {
-            payload: input.form,
+            payload: input,
             prompt: () => this.handle(input),
           };
         },
@@ -217,7 +267,7 @@ export class Workflow {
             .build();
 
           return {
-            payload: input.form,
+            payload: input,
             prompt: () => this.handle(input),
           };
         },
@@ -250,7 +300,7 @@ export class Workflow {
             .build();
 
           return {
-            payload: input.form,
+            payload: input,
             prompt: () => this.handle(input),
           };
         },
@@ -272,11 +322,44 @@ export class Workflow {
         },
       },
       message: {
-        info(opts: { message: string }): Promise<void> {
-          return Promise.resolve();
+        html: (opts: { dangerouslySetInnerHTML: string }): Promise<void> => {
+          return this.handle(
+            createMessage({
+              $type: 'message',
+              variant: 'info',
+              dangerouslySetInnerHTML: opts.dangerouslySetInnerHTML,
+            })
+          );
         },
-        success(opts: { message: string }): Promise<void> {
-          return Promise.resolve();
+        info: (opts: { title: string; description: string }): Promise<void> => {
+          return this.handle(
+            createMessage({
+              $type: 'message',
+              variant: 'info',
+              title: opts.title,
+              description: opts.description,
+            })
+          );
+        },
+        success: (opts: { title: string; description: string }): Promise<void> => {
+          return this.handle(
+            createMessage({
+              $type: 'message',
+              variant: 'success',
+              title: opts.title,
+              description: opts.description,
+            })
+          );
+        },
+        table: (opts: { title: string; rows: Primitive[][]; headers: string[] }): Promise<void> => {
+          return this.handle(
+            createMessage({
+              $type: 'message-table',
+              title: opts.title,
+              headers: opts.headers,
+              rows: opts.rows,
+            })
+          );
         },
       },
     };

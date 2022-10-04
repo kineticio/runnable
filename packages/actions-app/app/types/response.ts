@@ -1,3 +1,4 @@
+import { Primitive } from '../api/actions';
 import { BreadCrumb } from '../models/workflows/bread-crumbs.server';
 
 export type IOForm<T = any> =
@@ -9,14 +10,41 @@ export type IOForm<T = any> =
       helperText?: string;
     }
   | {
-      $type: 'success';
+      $type: 'boolean';
+      label: string;
+      defaultValue?: boolean;
+      helperText?: string;
+    }
+  | {
+      $type: 'color';
+      label: string;
+      defaultValue?: string;
+      helperText?: string;
+    }
+  | {
+      $type: 'imageURL';
+      label: string;
+      defaultValue?: string;
+      helperText?: string;
+    }
+  | {
+      $type: 'terminal';
+      variant: 'success' | 'error';
       label: string;
       description?: string;
     }
   | {
-      $type: 'error';
-      label: string;
+      $type: 'message';
+      variant: 'success' | 'info' | 'warning' | 'error';
+      title?: string;
       description?: string;
+      dangerouslySetInnerHTML?: string;
+    }
+  | {
+      $type: 'message-table';
+      title: string;
+      headers: string[];
+      rows: Primitive[][];
     }
   | {
       $type: 'select';
