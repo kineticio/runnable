@@ -53,7 +53,7 @@ function ActionCard({
       p={4}
       shadow="md"
       borderWidth="1px"
-      width={300}
+      width={350}
       minHeight={150}
       sx={{ ':hover': { shadow: 'lg' } }}
       to={getUrl(`/actions/${actionId}`)}

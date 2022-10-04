@@ -110,7 +110,7 @@ function renderFormField(name: string, field: IOForm<any>) {
       return (
         <FormControl>
           <FormLabel>{field.label}</FormLabel>
-          <Input name={name} type="color" defaultValue={field.defaultValue} />
+          <Input backgroundColor="white" name={name} type="color" defaultValue={field.defaultValue} />
           <FormHelperText>{field.helperText}</FormHelperText>
         </FormControl>
       );

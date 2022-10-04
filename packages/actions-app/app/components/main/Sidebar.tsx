@@ -46,7 +46,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
       </Drawer>
       {/* mobilenav */}
       <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }}>{children}</Box>
+      <Box ml={{ base: 0, md: 48 }}>{children}</Box>
     </Box>
   );
 }
@@ -61,7 +61,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={{ base: 'full', md: 60 }}
+      w={{ base: 'full', md: 48 }}
       pos="fixed"
       h="full"
       zIndex={2}
@@ -126,7 +126,7 @@ interface MobileProps extends FlexProps {
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   return (
     <Flex
-      ml={{ base: 0, md: 60 }}
+      ml={{ base: 0, md: 48 }}
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"

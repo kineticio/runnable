@@ -13,6 +13,7 @@ export const ImageInput: React.FC<Props> = ({ name, initialValue }) => {
     <Stack>
       <Image src={value} maxHeight={200} maxWidth={400} />
       <Input
+        backgroundColor="white"
         name={name}
         value={value}
         onChange={(e) => setValue(e.target.value)}
