@@ -29,6 +29,7 @@ export const Page: React.FC<React.PropsWithChildren<Props>> = ({ title, children
       <Flex flex={1} backgroundColor="gray.50" p={10}>
         <motion.main
           key={animationKey}
+          style={{ width: '100%' }}
           initial={{ x: '-10%', opacity: 0 }}
           animate={{ x: '0', opacity: 1 }}
           exit={{ y: '-10%', opacity: 0 }}

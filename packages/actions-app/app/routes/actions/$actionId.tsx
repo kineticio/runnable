@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react';
+import { Button, Heading, Stack, Text, VStack } from '@chakra-ui/react';
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Link, useLoaderData, useLocation } from '@remix-run/react';
@@ -34,9 +34,25 @@ export default function ActionDetailsPage() {
 
   return (
     <Page title={['Actions', action.title]} animationKey={useLocation().pathname}>
-      <Button as={Link} colorScheme="blue" to={getUrl(`/actions/${actionId}/workflows/new`)}>
-        New
-      </Button>
+      <VStack spacing={6} alignItems="flex-start">
+        <Heading as="h2" size="xl">
+          {action.title}
+        </Heading>
+        <Text>{action.description}</Text>
+        <Button
+          size="md"
+          height="48px"
+          width="200px"
+          variant="ghost"
+          border="2px"
+          borderColor="teal.500"
+          as={Link}
+          colorScheme="teal"
+          to={getUrl(`/actions/${actionId}/workflows/new`)}
+        >
+          New
+        </Button>
+      </VStack>
     </Page>
   );
 }

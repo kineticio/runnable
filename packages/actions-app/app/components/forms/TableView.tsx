@@ -10,7 +10,14 @@ interface Props {
 
 export const TableView: React.FC<Props> = ({ headers, title, rows }) => {
   return (
-    <TableContainer backgroundColor="white" boxShadow="sm" border="1px solid" borderColor="gray.200" borderRadius="md">
+    <TableContainer
+      overflowX="auto"
+      backgroundColor="white"
+      boxShadow="sm"
+      border="1px solid"
+      borderColor="gray.200"
+      borderRadius="md"
+    >
       <Table variant="simple">
         <TableCaption placement="top">{title}</TableCaption>
         <Thead>

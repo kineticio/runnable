@@ -4,7 +4,8 @@ import {
   AlertIcon,
   AlertTitle,
   Button,
-  SimpleGrid,
+  Grid,
+  GridItem,
   Table,
   TableContainer,
   Tbody,
@@ -15,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import type { ActionFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useLocation, useSearchParams, useTransition } from '@remix-run/react';
+import { Form, useActionData, useLoaderData, useLocation, useTransition } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
 import { FormView } from '../../components/forms/FormView';
@@ -76,76 +77,69 @@ export const meta: MetaFunction<LoaderData> = ({ data }) => {
 
 export default function WorkflowDetailsPage() {
   const { view, workflowId, breadcrumbs, action } = useLoaderData() as LoaderData;
-  const [search] = useSearchParams();
   const actionData = useActionData() as LoaderData;
   const transition = useTransition();
 
   const currentView = actionData?.view ?? view;
   const currentError = actionData?.error;
   const hasNext = currentView.$type !== 'terminal';
-  const hasDebug = search.get('debug') === 'true';
   const loading = transition.state === 'loading' || transition.state === 'submitting';
 
   return (
     <Page title={['Actions', action.title, `Workflow ${workflowId.slice(0, 8)}`]} animationKey={useLocation().key}>
-      <SimpleGrid columns={2} spacing={10}>
-        <Form method="post">
-          <VStack alignItems="flex-start" spacing={6}>
-            <FormView name={ROOT} view={currentView} />
-            {currentError && (
-              <Alert status="error">
-                <AlertIcon />
-                <VStack alignItems="flex-start" spacing={2}>
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription
-                    sx={{
-                      whiteSpace: 'pre-wrap',
-                    }}
-                  >
-                    {currentError}
-                  </AlertDescription>
-                </VStack>
-              </Alert>
-            )}
-            {hasNext && (
-              <Button isLoading={loading} colorScheme="teal" variant="solid" type="submit">
-                Continue
-              </Button>
-            )}
-          </VStack>
-        </Form>
-        <VStack alignItems="flex-end" spacing={6}>
-          <TableContainer
-            backgroundColor="white"
-            boxShadow="sm"
-            border="1px solid"
-            borderColor="gray.200"
-            borderRadius="md"
-          >
-            <Table variant="simple">
-              <Tbody>
-                {breadcrumbs.map((breadcrumb, idx) => (
-                  <Tr key={`${breadcrumb.key}-${idx}`}>
-                    <Td>
-                      <Text fontWeight={600}>{breadcrumb.key}</Text>
-                    </Td>
-                    <Td>{breadcrumb.value}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-          {hasDebug && (
-            <Alert status="info" flexDirection="column" alignSelf="flex-start">
-              <AlertIcon />
-              <AlertTitle>Debug</AlertTitle>
-              <AlertDescription sx={{ whiteSpace: 'pre' }}>
-                {JSON.stringify({ view, workflowId, breadcrumbs }, null, 2)}
-              </AlertDescription>
-            </Alert>
+      <Grid templateColumns="repeat(5, 1fr)" width="100%" gap={2}>
+        <GridItem colSpan={4}>
+          <Form method="post">
+            <VStack alignItems="flex-start" spacing={6}>
+              <FormView name={ROOT} view={currentView} />
+              {currentError && (
+                <Alert status="error">
+                  <AlertIcon />
+                  <VStack alignItems="flex-start" spacing={2}>
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription
+                      sx={{
+                        whiteSpace: 'pre-wrap',
+                      }}
+                    >
+                      {currentError}
+                    </AlertDescription>
+                  </VStack>
+                </Alert>
+              )}
+              {hasNext && (
+                <Button isLoading={loading} colorScheme="teal" variant="solid" type="submit">
+                  Continue
+                </Button>
+              )}
+            </VStack>
+          </Form>
+        </GridItem>
+        <GridItem colSpan={1}>
+          {breadcrumbs.length > 0 && (
+            <TableContainer
+              backgroundColor="white"
+              boxShadow="sm"
+              border="1px solid"
+              borderColor="gray.200"
+              borderRadius="md"
+            >
+              <Table variant="simple">
+                <Tbody>
+                  {breadcrumbs.map((breadcrumb, idx) => (
+                    <Tr key={`${breadcrumb.key}-${idx}`}>
+                      <Td>
+                        <Text fontWeight={600}>{breadcrumb.key}</Text>
+                      </Td>
+                      <Td>{breadcrumb.value}</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
           )}
-        </VStack>
-      </SimpleGrid>
+        </GridItem>
+      </Grid>
     </Page>
   );
 }

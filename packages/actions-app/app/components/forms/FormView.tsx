@@ -33,7 +33,7 @@ interface Props {
 }
 
 export const FormView: React.FC<Props> = ({ name, view }) => {
-  return <Stack>{renderFormField(name, view)}</Stack>;
+  return <Stack maxWidth="100%">{renderFormField(name, view)}</Stack>;
 };
 
 function renderFormField(name: string, field: IOForm<any>) {
