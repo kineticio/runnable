@@ -1,6 +1,6 @@
 {
   "name": "@kinetic-io/actions-app",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "sideEffects": false,
   "main": "build/index.js",
   "types": "app/types.ts",
