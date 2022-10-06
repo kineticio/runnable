@@ -46,4 +46,4 @@ export function installActions(app: ExpressApplication, actions: Actions, contex
   });
 }
 
-export { type Actions, type ActionsAppContext } from '@kinetic-io/actions-app';
+export { type Actions, type ActionsAppContext, type Action, type InputOutput } from '@kinetic-io/actions-app';

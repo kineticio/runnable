@@ -1,4 +1,4 @@
-import { Primitive } from '../api/actions';
+import { Primitive } from '../api/io';
 import { BreadCrumb } from '../models/workflows/bread-crumbs.server';
 
 export type IOForm<T = any> =

@@ -11,7 +11,7 @@ export interface Action {
   title: string;
   description?: string;
   icon?: string;
-  execute: (io: InputOutput, context: ActionContext) => Promise<void>;
+  execute: (io: InputOutput) => Promise<void>;
 }
 ```
 

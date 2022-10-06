@@ -6,7 +6,8 @@ import { createInput, createMessage, Input } from './InputBuilder';
 import { BreadCrumbs } from './bread-crumbs.server';
 import { ClientBridge } from './client-bridge.server';
 import { validatorForMappedInput } from './validators.server';
-import type { Action, ActionContext, InputForm, InputOutput, Primitive } from '~/api/actions';
+import type { Action } from '~/api/actions';
+import { FormPromise, InputForm, InputOutput, Primitive } from '~/api/io';
 
 export class Workflow {
   public bridge = new ClientBridge();
@@ -18,7 +19,7 @@ export class Workflow {
   public start(): Promise<ActionViewResponse> {
     // start action in the background
     this.action
-      .execute(this.createIO(), this.createContext())
+      .execute(this.createIO())
       .then(() => {
         this.bridge.askClientQuestion({
           error: null,
@@ -51,27 +52,33 @@ export class Workflow {
     return this.bridge.waitForWorkflowToAskAQuestion();
   }
 
-  public async continue(request: ActionRequest): Promise<ActionViewResponse> {
+  public continue(request: ActionRequest): Promise<ActionViewResponse> {
     this.bridge.consumeResponseFromClient(request.ioResponse);
-    return await this.bridge.waitForWorkflowToAskAQuestion();
+    return this.bridge.waitForWorkflowToAskAQuestion();
   }
 
   private createIO(): InputOutput {
     return {
       form: <T extends Record<string, any>>(form: InputForm<any>) => {
+        // cancel all previous form promises
+        for (const value of Object.values(form)) {
+          value.cancel();
+          console.log(value.payload);
+        }
+
         const input = createInput({
           $type: 'form',
           form: mapValues(form, (promise) => (promise.payload as Input<any>).form),
         })
           .normalizeAsSingleton<T>()
-          .thenMap((response) => {
+          .thenMap<T>((response) => {
             return mapValues(response, (value, key) => {
               const subInput = form[key];
               if (!subInput) {
                 throw new ValidationError(`Unexpected key ${key.toString()} in response`);
               }
               return (subInput.payload as Input<any>).normalize(value);
-            });
+            }) as T;
           })
           .validate(validatorForMappedInput(form))
           .formatBreadcrumbs((values) => {
@@ -85,10 +92,7 @@ export class Workflow {
           })
           .build();
 
-        return {
-          payload: input,
-          prompt: () => this.handle(input),
-        };
+        return this.asFormPromise<T>(input);
       },
       input: {
         text: (opts) => {
@@ -98,10 +102,7 @@ export class Workflow {
             .formatBreadcrumbs((value) => [{ key: opts.label, value }])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
+          return this.asFormPromise(input);
         },
         number: (opts) => {
           const input = createInput({ $type: 'input', type: 'number', ...opts })
@@ -110,10 +111,7 @@ export class Workflow {
             .formatBreadcrumbs((value) => [{ key: opts.label, value }])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
+          return this.asFormPromise(input);
         },
         boolean: (opts) => {
           const input = createInput({ $type: 'boolean', ...opts })
@@ -121,10 +119,7 @@ export class Workflow {
             .formatBreadcrumbs((value) => [{ key: opts.label, value: value.toString() }])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
+          return this.asFormPromise(input);
         },
         color: (opts) => {
           const input = createInput({ $type: 'color', ...opts })
@@ -132,10 +127,7 @@ export class Workflow {
             .formatBreadcrumbs((value) => [{ key: opts.label, value }])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
+          return this.asFormPromise(input);
         },
         imageURL: (opts) => {
           const input = createInput({ $type: 'imageURL', ...opts })
@@ -143,10 +135,7 @@ export class Workflow {
             .formatBreadcrumbs((value) => [{ key: opts.label, value }])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
+          return this.asFormPromise(input);
         },
       },
       select: {
@@ -164,10 +153,7 @@ export class Workflow {
             .formatBreadcrumbs((value) => [{ key: opts.label, value: opts.getLabel(value) }])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
+          return this.asFormPromise(input);
         },
         radio: (opts) => {
           const input = createInput({ $type: 'select', display: 'radio', ...opts, data: toOptions(opts.data, opts) })
@@ -183,10 +169,7 @@ export class Workflow {
             .formatBreadcrumbs((value) => [{ key: opts.label, value: opts.getLabel(value) }])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
+          return this.asFormPromise(input);
         },
         table: (opts) => {
           const input = createInput({
@@ -210,10 +193,7 @@ export class Workflow {
             .formatBreadcrumbs((value) => [{ key: opts.label, value: opts.getColumns(value)[0] }])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
+          return this.asFormPromise(input);
         },
       },
       multiSelect: {
@@ -239,10 +219,7 @@ export class Workflow {
             ])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
+          return this.asFormPromise(input);
         },
         dropdown: (opts) => {
           const input = createInput({
@@ -266,10 +243,7 @@ export class Workflow {
             ])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
+          return this.asFormPromise(input);
         },
         table: (opts) => {
           const input = createInput({
@@ -299,26 +273,7 @@ export class Workflow {
             ])
             .build();
 
-          return {
-            payload: input,
-            prompt: () => this.handle(input),
-          };
-        },
-      },
-    };
-  }
-
-  private createContext(): ActionContext {
-    return {
-      loading: {
-        start(opts: { label: string; length: number }): void {
-          return;
-        },
-        completeOne(): void {
-          return;
-        },
-        complete(number: string): void {
-          return;
+          return this.asFormPromise(input);
         },
       },
       message: {
@@ -365,22 +320,54 @@ export class Workflow {
     };
   }
 
+  private asFormPromise<T>(input: Input<T>): FormPromise<T> {
+    let cancelled = false;
+
+    // wait 1 tick to allow form wrappers to cancel the inner form's promise
+    const promise = wait(1).then(() => {
+      if (cancelled) {
+        return undefined! as T;
+      }
+      return this.handle(input);
+    }) as FormPromise<T>;
+
+    promise.payload = input;
+    promise.cancel = () => {
+      cancelled = true;
+    };
+
+    return promise;
+  }
+
   private async handle<T>(input: Input<T>, error: string | null = null): Promise<T> {
     this.bridge.askClientQuestion({ error: error, view: input.form });
 
-    // wait for, and normalize response
-    const response = await this.bridge.waitForResponseFromClient().then(input.normalize);
+    try {
+      // wait for, and normalize response
+      const response = await this.bridge.waitForResponseFromClient().then(input.normalize);
 
-    // validate
-    const validationResponse = input.validator(response);
-    if (typeof validationResponse === 'string') {
-      // validation failed, try again
-      return this.handle(input, validationResponse);
+      // validate
+      const validationResponse = input.validator(response);
+      if (typeof validationResponse === 'string') {
+        // validation failed, try again
+        return this.handle(input, validationResponse);
+      }
+
+      // add to breadcrumbs
+      this.breadcrumbs.addAll(input.format(response));
+
+      return response;
+    } catch (error: any) {
+      // catch ValidationErrors thrown by normalize or validate
+      // and try again
+      if (ValidationError.is(error)) {
+        return this.handle(input, error.message);
+      }
+      throw error;
     }
-
-    // add to breadcrumbs
-    this.breadcrumbs.addAll(input.format(response));
-
-    return response;
   }
+}
+
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

@@ -22,8 +22,8 @@ interface LinkItemProps {
   to: `/${string}`;
 }
 const LinkItems: LinkItemProps[] = [
-  // { name: 'Actions', icon: 'fa:home', to: '/actions' },
-  // { name: "Settings", icon: "fa:cog", to: "/settings" },
+  // { name: 'Actions', icon: 'fa6-solid:house', to: '/actions' },
+  // { name: "Settings", icon: "fa6-solid:gear", to: "/settings" },
 ];
 
 export function Sidebar({ children }: { children: ReactNode }) {

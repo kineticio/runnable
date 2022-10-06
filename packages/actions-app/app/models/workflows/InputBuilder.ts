@@ -1,4 +1,4 @@
-import { Validator } from '../../api/actions';
+import { Validator } from '../../api/validator';
 import { IOForm } from '../../types/response';
 import { BreadCrumb } from './bread-crumbs.server';
 import {

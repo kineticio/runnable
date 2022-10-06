@@ -1,4 +1,4 @@
-import { Box, Button, Heading, HStack, HStack, SimpleGrid, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import { Box, Heading, HStack, Text, Wrap, WrapItem } from '@chakra-ui/react';
 import { Link, useLoaderData, useLocation } from '@remix-run/react';
 import type { LoaderFunction, MetaFunction } from '@remix-run/server-runtime';
 import { json } from '@remix-run/server-runtime';

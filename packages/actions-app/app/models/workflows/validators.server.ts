@@ -1,4 +1,5 @@
-import { InputForm, Validator } from '../../api/actions';
+import { InputForm } from '../../api/io';
+import { Validator } from '../../api/validator';
 import { Input } from './InputBuilder';
 
 export function validatorForMappedInput<T extends object>(form: InputForm<T>): Validator<T> {

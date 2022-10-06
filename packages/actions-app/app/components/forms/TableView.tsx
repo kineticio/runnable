@@ -1,6 +1,6 @@
 import { TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
 import React from 'react';
-import { Primitive } from '../../api/actions';
+import { Primitive } from '../../api/io';
 
 interface Props {
   title?: string;
