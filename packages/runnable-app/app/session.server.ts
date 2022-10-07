@@ -1,5 +1,5 @@
 import { createCookieSessionStorage } from '@remix-run/node';
-import type { ActionsAppContext } from './api/context';
+import type { RunnableAppContext } from './api/context';
 import { internalRedirect } from './utils/routes';
 
 export const sessionStorage = createCookieSessionStorage({
@@ -26,7 +26,7 @@ export async function getUserId(request: Request): Promise<string | undefined> {
   return userId;
 }
 
-export async function getUser(request: Request, authContext: ActionsAppContext) {
+export async function getUser(request: Request, authContext: RunnableAppContext) {
   const userId = await getUserId(request);
   if (userId === undefined) return null;
 
@@ -45,7 +45,7 @@ export async function requireUserId(request: Request, redirectTo: string = new U
   return userId;
 }
 
-export async function requireUser(request: Request, authContext: ActionsAppContext) {
+export async function requireUser(request: Request, authContext: RunnableAppContext) {
   const userId = await requireUserId(request);
 
   const user = await authContext.auth.getUserById({ id: userId });

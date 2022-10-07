@@ -1,4 +1,4 @@
-export interface ActionsAppContext {
+export interface RunnableAppContext {
   /**
    * Authentication
    */

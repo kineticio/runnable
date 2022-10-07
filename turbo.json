@@ -13,7 +13,7 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "@kinetic-io/kinetic-app#dev": {
+    "@runnablejs/app#dev": {
       "dependsOn": ["^build"],
       "cache": false
     },

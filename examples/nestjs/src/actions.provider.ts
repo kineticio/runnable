@@ -1,5 +1,5 @@
 import { FactoryProvider, Provider } from '@nestjs/common';
-import { Actions, ActionsAppContext } from '@kinetic-io/actions-express';
+import { Actions, RunnableAppContext } from '@runnablejs/express';
 import { AppService } from './app.service';
 
 export const ActionsProvider: FactoryProvider<Actions> = {
@@ -108,20 +108,20 @@ export const ActionsProvider: FactoryProvider<Actions> = {
   },
 };
 
-export const ActionsAppContextProvider: Provider<ActionsAppContext> = {
+export const RunnableAppContextProvider: Provider<RunnableAppContext> = {
   provide: 'ACTIONS_APP_CONTEXT',
   useValue: {
     auth: {
       verifyLogin: async () => {
         return {
           id: '123',
-          email: 'user@kinetic-io.com',
+          email: 'user@getrunnable.com',
         };
       },
       getUserById: async ({ id }) => {
         return {
           id: '123',
-          email: 'user@kinetic-io.com',
+          email: 'user@getrunnable.com',
         };
       },
     },

@@ -1,14 +1,14 @@
-import { installActions } from '@kinetic-io/actions-express';
+import { installRunnable } from '@runnablejs/express';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // kinetic
+  // Runnable
   const actions = app.get('ACTIONS');
   const context = app.get('ACTIONS_APP_CONTEXT');
-  installActions(app.getHttpServer()._events.request, actions, context);
+  installRunnable(app.getHttpServer()._events.request, actions, context);
 
   await app.listen(3000);
 }

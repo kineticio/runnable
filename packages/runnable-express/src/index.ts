@@ -1,5 +1,5 @@
 import path from 'node:path';
-import type { Actions, ActionsAppContext } from '@kinetic-io/actions-app';
+import type { Actions, RunnableAppContext } from '@runnablejs/app';
 
 import { createRequestHandler, RequestHandler } from '@remix-run/express';
 import express from 'express';
@@ -10,7 +10,7 @@ export interface ExpressApplication {
   use(path: string, handler?: RequestHandler): void;
 }
 
-export function installActions(app: ExpressApplication, actions: Actions, context: ActionsAppContext): void {
+export function installRunnable(app: ExpressApplication, actions: Actions, context: RunnableAppContext): void {
   // Remix fingerprints its assets so we can cache forever.
   // app.use('/build', express.static('public/build', { immutable: true, maxAge: '1y' }));
 
@@ -19,13 +19,13 @@ export function installActions(app: ExpressApplication, actions: Actions, contex
   // app.use(express.static('public', { maxAge: '1h' }));
 
   const prefix = process.env['ACTIONS_BASE_URL'] || 'admin';
-  console.log(`Installing Kinetic at /${prefix}`);
+  console.log(`Installing Runnable at /${prefix}`);
 
-  const { publicPath, assetsBuildDirectory } = require('@kinetic-io/actions-app/build');
-  const basePath = resolvePackagePath('@kinetic-io/actions-app', __dirname);
+  const { publicPath, assetsBuildDirectory } = require('@runnablejs/app/build');
+  const basePath = resolvePackagePath('@runnablejs/app', __dirname);
 
   if (!basePath) {
-    console.error('Unable to resolve @kinetic-io/actions-app');
+    console.error('Unable to resolve @runnablejs/app');
     return;
   }
 
@@ -36,7 +36,7 @@ export function installActions(app: ExpressApplication, actions: Actions, contex
 
   app.all(`/${prefix}*`, (req: any, res, next) => {
     return createRequestHandler({
-      build: require('@kinetic-io/actions-app/build'),
+      build: require('@runnablejs/app/build'),
       mode: process.env['NODE_ENV'],
       getLoadContext: () => ({
         actions,
@@ -46,4 +46,4 @@ export function installActions(app: ExpressApplication, actions: Actions, contex
   });
 }
 
-export { type Actions, type ActionsAppContext, type Action, type InputOutput } from '@kinetic-io/actions-app';
+export { type Actions, type RunnableAppContext, type Action, type InputOutput } from '@runnablejs/app';

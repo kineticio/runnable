@@ -1,5 +1,5 @@
 {
-  "name": "@kinetic-io/actions-app",
+  "name": "@runnablejs/app",
   "version": "0.3.2",
   "sideEffects": false,
   "main": "build/index.js",

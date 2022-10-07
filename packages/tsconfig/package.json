@@ -1,5 +1,5 @@
 {
-  "name": "@kinetic-io/tsconfig",
+  "name": "@runnablejs/tsconfig",
   "version": "0.3.2",
   "private": true,
   "main": "index.js",

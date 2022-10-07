@@ -6,44 +6,44 @@ title: Getting Started | Guide
 
 ## Overview
 
-Kinetic is a framework to build admin applications, with little code and no maintenance.
+Runnable is a framework to build admin applications, with little code and no maintenance.
 
 You don't need to write any UI code or deploy another frontend.
 
 ## Checkout the demo
 
-You can play around with the demo application [here](https://demo.kinetic.io).
+You can play around with the demo application [here](https://demo.getrunnable.com).
 
-## Installing Kinetic
+## Installing Runnable
 
 With npm
 
 ```bash
-npm install -D @kinetic-io/actions-express
+npm install -D @runnablejs/express
 ```
 
 or with yarn
 
 ```bash
-yarn add -D @kinetic-io/actions-express
+yarn add -D @runnablejs/express
 ```
 
 or with pnpm
 
 ```bash
-pnpm add -D @kinetic-io/actions-express
+pnpm add -D @runnablejs/express
 ```
 
-## Setting up Kinetic
+## Setting up Runnable
 
-Kinetic integrates directly with your Next.js or Express application.
+Runnable integrates directly with your Next.js or Express application.
 
 ### Setting up with Express
 
 ```ts
 // index.ts
 import express from 'express';
-import { installActions } from '@kinetic-io/actions-express';
+import { installRunnable } from '@runnablejs/express';
 import { getUsers, getTeams, assignTeam } from './db';
 import { auth } from './auth';
 
@@ -51,7 +51,7 @@ const app = express();
 
 // ... normal express setup
 
-installActions(
+installRunnable(
   app,
   {
     assign_user_to_team: {
@@ -93,7 +93,7 @@ Create the providers for the `Actions` and `ActionsContext`.
 // actions.provider.ts
 
 import { FactoryProvider, Provider } from '@nestjs/common';
-import { Actions, ActionsAppContext } from '@kinetic-io/actions-express';
+import { Actions, RunnableAppContext } from '@runnablejs/express';
 import { AppService } from './app.service';
 
 export const ActionsProvider: FactoryProvider<Actions> = {
@@ -109,7 +109,7 @@ export const ActionsProvider: FactoryProvider<Actions> = {
   }),
 };
 
-export const ActionsAppContextProvider: Provider<ActionsAppContext> = {
+export const RunnableAppContextProvider: Provider<RunnableAppContext> = {
   provide: 'ACTIONS_APP_CONTEXT',
   useFactory: (authService: AuthService) => ({
     auth: {
@@ -125,7 +125,7 @@ Create the module for the `Actions` and `ActionsContext`.
 ```ts
 // actions.module.ts
 import { Module } from '@nestjs/common';
-import { ActionsProvider, ActionsAppContextProvider } from './actions.provider';
+import { ActionsProvider, RunnableAppContextProvider } from './actions.provider';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -140,17 +140,17 @@ Start your Next.js application with `Actions`.
 
 ```ts
 // main.ts
-import { installActions } from '@kinetic-io/actions-express';
+import { installRunnable } from '@runnablejs/express';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // kinetic
+  // Runnable
   const actions = app.get('ACTIONS');
   const context = app.get('ACTIONS_APP_CONTEXT');
-  installActions(app.getHttpServer()._events.request, actions, context);
+  installRunnable(app.getHttpServer()._events.request, actions, context);
 
   await app.listen(3000);
 }

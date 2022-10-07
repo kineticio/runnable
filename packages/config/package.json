@@ -1,5 +1,5 @@
 {
-  "name": "@kinetic-io/config",
+  "name": "@runnablejs/config",
   "version": "0.3.2",
   "private": true,
   "main": "index.js",

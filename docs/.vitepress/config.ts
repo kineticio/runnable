@@ -14,7 +14,7 @@ export default defineConfig({
       'meta',
       {
         name: 'keywords',
-        content: 'kinetic, workflow, admin',
+        content: 'runnable, workflow, admin',
       },
     ],
     ['meta', { property: 'og:title', content: name }],

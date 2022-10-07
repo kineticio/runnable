@@ -63,7 +63,7 @@ module.exports = {
           {
             name: '@mui/material',
             importNames: ['colors'],
-            message: 'Please use colors from @kinetic-io/ui instead.',
+            message: 'Please use colors from @runnablejs/ui instead.',
           },
         ],
       },
