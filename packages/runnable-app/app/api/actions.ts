@@ -1,3 +1,4 @@
+import { RunnableContext } from './context';
 import { InputOutput } from './io';
 
 /**
@@ -30,5 +31,5 @@ export interface Action {
   /**
    * Execute the action
    */
-  execute: (io: InputOutput) => Promise<void>;
+  execute: (io: InputOutput, context: RunnableContext) => Promise<void>;
 }

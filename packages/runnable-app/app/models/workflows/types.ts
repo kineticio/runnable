@@ -1,3 +1,4 @@
+import { RunnableContext } from '../../api/context';
 import { Action } from '../../types';
 import { ActionResponse, ActionRequest } from '../../types/response';
 import { WorkflowId } from '../ids';
@@ -18,9 +19,10 @@ export interface WorkflowManager {
   /**
    * Start a workflow.
    * @param action The action to start the workflow with.
+   * @param context The context to start the workflow with.
    * @returns The response to the action.
    */
-  startWorkflow(action: Action): Promise<ActionResponse>;
+  startWorkflow(action: Action, context: RunnableContext): Promise<ActionResponse>;
   /**
    * Pick up a workflow.
    * @param workflowId The ID of the workflow to pick up.

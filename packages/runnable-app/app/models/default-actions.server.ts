@@ -94,7 +94,7 @@ export const DEFAULT_ACTIONS: Actions = {
     title: 'Kitchen Sink Inputs',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies',
     icon: 'fa6-solid:utensils',
-    execute: async (io) => {
+    execute: async (io, context) => {
       const data = await io.form({
         text: io.input.text({ label: 'Text' }),
         number: io.input.number({ label: 'Number' }),
@@ -117,6 +117,11 @@ export const DEFAULT_ACTIONS: Actions = {
       await io.message.info({
         title: 'Data',
         description: JSON.stringify(data, null, 2),
+      });
+
+      await io.message.info({
+        title: 'User',
+        description: JSON.stringify(context.user, null, 2),
       });
 
       await io.message.html({

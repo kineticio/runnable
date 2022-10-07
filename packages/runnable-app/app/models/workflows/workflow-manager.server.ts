@@ -1,4 +1,5 @@
 import type { Action } from '../../api/actions';
+import { RunnableContext } from '../../api/context';
 import type { ActionRequest, ActionResponse } from '../../types/response';
 import { assertExists } from '../../utils/assertExists.server';
 import type { WorkflowId } from '../ids';
@@ -14,7 +15,7 @@ export class InMemoryWorkflowManager implements WorkflowManager {
     return this.mapWorkflows.get(workflowId);
   }
 
-  public async startWorkflow(action: Action): Promise<ActionResponse> {
+  public async startWorkflow(action: Action, context: RunnableContext): Promise<ActionResponse> {
     // create workflow
     const workflowId = createWorkflowId();
     const workflow = new Workflow(workflowId, action.title, action);
@@ -23,7 +24,7 @@ export class InMemoryWorkflowManager implements WorkflowManager {
     this.mapWorkflows.set(workflowId, workflow);
 
     // start workflow
-    const view = await workflow.start();
+    const view = await workflow.start(context);
 
     return {
       ...view,

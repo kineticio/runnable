@@ -2,6 +2,7 @@ import type { ActionRequest, ActionViewResponse } from '../../types/response';
 import { mapValues, keyBy } from '../../utils/objects';
 import { toOptions } from '../../utils/options';
 import { ValidationError } from '../errors';
+import { RunnableContext } from '../../api/context';
 import { createInput, createMessage, Input } from './InputBuilder';
 import { BreadCrumbs } from './bread-crumbs.server';
 import { ClientBridge } from './client-bridge.server';
@@ -16,10 +17,10 @@ export class Workflow {
 
   constructor(public readonly id: string, public readonly name: string, public readonly action: Action) {}
 
-  public start(): Promise<ActionViewResponse> {
+  public start(context: RunnableContext): Promise<ActionViewResponse> {
     // start action in the background
     this.action
-      .execute(this.createIO())
+      .execute(this.createIO(), context)
       .then(() => {
         this.bridge.askClientQuestion({
           error: null,
