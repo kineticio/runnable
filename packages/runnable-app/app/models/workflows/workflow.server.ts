@@ -8,7 +8,7 @@ import { BreadCrumbs } from './bread-crumbs.server';
 import { ClientBridge } from './client-bridge.server';
 import { validatorForMappedInput } from './validators.server';
 import type { Action } from '~/api/actions';
-import { FormPromise, InputForm, InputOutput, Primitive } from '~/api/io';
+import { FormPromise, InputForm, InputOutput, TableCellValue } from '~/api/io';
 
 export class Workflow {
   public bridge = new ClientBridge();
@@ -307,7 +307,27 @@ export class Workflow {
             })
           );
         },
-        table: (opts: { title: string; rows: Primitive[][]; headers: string[] }): Promise<void> => {
+        warning: (opts: { title: string; description: string }): Promise<void> => {
+          return this.handle(
+            createMessage({
+              $type: 'message',
+              variant: 'warning',
+              title: opts.title,
+              description: opts.description,
+            })
+          );
+        },
+        error: (opts: { title: string; description: string }): Promise<void> => {
+          return this.handle(
+            createMessage({
+              $type: 'message',
+              variant: 'error',
+              title: opts.title,
+              description: opts.description,
+            })
+          );
+        },
+        table: (opts: { title: string; rows: TableCellValue[][]; headers: string[] }): Promise<void> => {
           return this.handle(
             createMessage({
               $type: 'message-table',

@@ -96,7 +96,7 @@ export const DEFAULT_ACTIONS: Actions = {
     icon: 'fa6-solid:utensils',
     execute: async (io, context) => {
       const data = await io.form({
-        text: io.input.text({ label: 'Text' }),
+        text: io.input.text({ label: 'Text', optional: true }),
         number: io.input.number({ label: 'Number' }),
         select: io.select.radio({
           label: 'Select',
@@ -119,7 +119,12 @@ export const DEFAULT_ACTIONS: Actions = {
         description: JSON.stringify(data, null, 2),
       });
 
-      await io.message.info({
+      await io.message.success({
+        title: 'User',
+        description: JSON.stringify(context.user, null, 2),
+      });
+
+      await io.message.warning({
         title: 'User',
         description: JSON.stringify(context.user, null, 2),
       });
@@ -130,8 +135,19 @@ export const DEFAULT_ACTIONS: Actions = {
 
       await io.message.table({
         title: 'Data',
-        rows: Object.entries(data).map(([key, value]) => [key, JSON.stringify(value)]),
-        headers: ['Key', 'Value'],
+        rows: Object.entries(data).map(([key, value]) => [
+          key,
+          JSON.stringify(value),
+          new Date(),
+          { type: 'link', href: 'https://google.com', text: 'Google' },
+          { type: 'image', src: 'https://picsum.photos/200/300', alt: 'Random image' },
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies'.repeat(2),
+          123_456_789,
+          null,
+          true,
+          false,
+        ]),
+        headers: ['Key', 'Value', 'Date', 'Link', 'Image', 'Lorem', 'Number', 'Null', 'True', 'False'],
       });
 
       console.log('data', data);

@@ -8,7 +8,7 @@ import { Page } from '../../components/layout/Page';
 
 import { defaultContext, DEFAULT_CONTEXT } from '../../models/context';
 import type { Action } from '../../api/actions';
-import { getUrl } from '../../utils/routes';
+import { getUrl, internalRedirect } from '../../utils/routes';
 
 type LoaderData = {
   actionId: string;
@@ -25,6 +25,10 @@ export const loader: LoaderFunction = async ({ params, context = DEFAULT_CONTEXT
   context = defaultContext(context);
   invariant(params.actionId, 'actionId not found');
   const action = context.actions[params.actionId];
+
+  if (!action) {
+    throw internalRedirect(`/`);
+  }
 
   return json<LoaderData>({ actionId: params.actionId, action });
 };

@@ -18,6 +18,10 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, CloseIcon } from '@chakra-ui/icons';
 import React from 'react';
@@ -77,20 +81,32 @@ function renderFormField(name: string, field: IOForm<any>) {
       return null;
     }
     case 'message': {
+      if (field.dangerouslySetInnerHTML) {
+        return (
+          <Text>
+            <div dangerouslySetInnerHTML={{ __html: field.dangerouslySetInnerHTML }} />
+          </Text>
+        );
+      }
+
       return (
-        <Box textAlign="center" py={10} px={6}>
-          {field.title && (
-            <Heading as="h2" size="l" mt={6} mb={2}>
-              {field.title}
-            </Heading>
-          )}
-          {field.description && <Text color={'gray.500'}>{field.description}</Text>}
-          {field.dangerouslySetInnerHTML && (
-            <Text>
-              <div dangerouslySetInnerHTML={{ __html: field.dangerouslySetInnerHTML }} />
-            </Text>
-          )}
-        </Box>
+        <Alert
+          status={field.variant}
+          variant="subtle"
+          borderRadius="md"
+          boxShadow="sm"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          height="200px"
+        >
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            {field.title}
+          </AlertTitle>
+          <AlertDescription maxWidth="sm">{field.description}</AlertDescription>
+        </Alert>
       );
     }
     case 'message-table': {
@@ -125,9 +141,10 @@ function renderFormField(name: string, field: IOForm<any>) {
       );
     }
     case 'input': {
+      const isRequired = !field.optional;
       if (field.type === 'number') {
         return (
-          <FormControl isRequired>
+          <FormControl isRequired={isRequired}>
             <FormLabel>{field.label}</FormLabel>
             <NumberInput backgroundColor="white" placeholder={field.placeholder || field.label} name={name}>
               <NumberInputField />
@@ -142,7 +159,7 @@ function renderFormField(name: string, field: IOForm<any>) {
       }
 
       return (
-        <FormControl isRequired>
+        <FormControl isRequired={isRequired}>
           <FormLabel>{field.label}</FormLabel>
           <Input backgroundColor="white" placeholder={field.placeholder || field.label} type={field.type} name={name} />
           <FormHelperText>{field.helperText}</FormHelperText>

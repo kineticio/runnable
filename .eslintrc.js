@@ -6,7 +6,6 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     // 'plugin:nestjs/recommended',
-    // 'next',
     'prettier',
   ],
   env: {
@@ -15,9 +14,6 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js', '*.generated.tsx', '**/generated/*.ts', 'CssBaseline.ts'],
   settings: {
-    next: {
-      rootDir: ['apps/*/', 'packages/*/'],
-    },
     react: {
       version: 'detect',
     },
@@ -25,7 +21,6 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
   rules: {
-    '@next/next/no-html-link-for-pages': 'off',
     '@typescript-eslint/no-var-requires': 'warn',
     '@typescript-eslint/no-confusing-non-null-assertion': 'error',
     '@typescript-eslint/no-dynamic-delete': 'error',
@@ -58,17 +53,6 @@ module.exports = {
     'react/prop-types': 'off',
     'unicorn/prevent-abbreviations': 'off',
     'no-var': 'warn',
-    'no-restricted-imports': [
-      'error',
-      {
-        paths: [
-          {
-            name: '@mui/material',
-            importNames: ['colors'],
-            message: 'Please use colors from @runnablejs/ui instead.',
-          },
-        ],
-      },
-    ],
+    'no-restricted-imports': ['error'],
   },
 };

@@ -8,7 +8,7 @@ export const normalizeAsString: Normalizer<string> = (value) => {
     return value;
   }
 
-  return normalizeAsSingleton(value);
+  return normalizeAsSingleton<string>(value) ?? '';
 };
 
 export const normalizeAsBoolean: Normalizer<boolean> = (value) => {
@@ -44,7 +44,7 @@ export const normalizeAsArray: Normalizer<any> = <T>(value: T | T[] | undefined 
   return [value];
 };
 
-export const normalizeAsSingleton: Normalizer<any> = <T>(value: T | T[] | undefined | null): T => {
+export function normalizeAsSingleton<T>(value: T | T[] | undefined | null): T | undefined {
   if (value === undefined || value === null) {
     throw new ValidationError('Missing required field.');
   }
@@ -60,4 +60,4 @@ export const normalizeAsSingleton: Normalizer<any> = <T>(value: T | T[] | undefi
   }
 
   return value;
-};
+}

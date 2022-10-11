@@ -1,4 +1,4 @@
-import { Primitive } from '../api/io';
+import { TableCellValue } from '../api/io';
 import { BreadCrumb } from '../models/workflows/bread-crumbs.server';
 
 export type IOForm<T = any> =
@@ -7,6 +7,7 @@ export type IOForm<T = any> =
       label: string;
       placeholder?: string;
       type?: 'text' | 'password' | 'email' | 'number';
+      optional?: boolean;
       helperText?: string;
     }
   | {
@@ -29,7 +30,7 @@ export type IOForm<T = any> =
     }
   | {
       $type: 'terminal';
-      variant: 'success' | 'error';
+      variant: 'success' | 'error' | 'info' | 'warning';
       label: string;
       description?: string;
     }
@@ -44,7 +45,7 @@ export type IOForm<T = any> =
       $type: 'message-table';
       title: string;
       headers: string[];
-      rows: Primitive[][];
+      rows: TableCellValue[][];
     }
   | {
       $type: 'select';

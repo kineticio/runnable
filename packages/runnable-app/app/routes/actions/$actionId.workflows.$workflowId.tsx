@@ -14,12 +14,12 @@ import {
   Tr,
   VStack,
 } from '@chakra-ui/react';
-import type { ActionFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { ActionFunction, LoaderFunction, MetaFunction, redirect , json } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useLocation, useTransition } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
 import { FormView } from '../../components/forms/FormView';
+import { TableCell } from '../../components/forms/TableCell';
 import { Page } from '../../components/layout/Page';
 import { defaultContext } from '../../models/context';
 
@@ -27,6 +27,7 @@ import type { WorkflowId } from '../../models/ids';
 import { WORKFLOW_MANAGER } from '../../models/workflows/workflow-manager.server';
 import { Action } from '../../types';
 import type { ActionResponse } from '../../types/response';
+import { internalRedirect } from '../../utils/routes';
 
 const ROOT = '__root__';
 
@@ -40,6 +41,10 @@ export const loader: LoaderFunction = async ({ params, context }) => {
   invariant(params.actionId, 'actionId not found');
   const response = await WORKFLOW_MANAGER.pickUpWorkflow(params.workflowId as WorkflowId);
   const action = context.actions[params.actionId];
+
+  if (!action) {
+    throw internalRedirect(`/`);
+  }
 
   return json<LoaderData>({ action, ...response });
 };
@@ -131,7 +136,7 @@ export default function WorkflowDetailsPage() {
                       <Td>
                         <Text fontWeight={600}>{breadcrumb.key}</Text>
                       </Td>
-                      <Td>{breadcrumb.value}</Td>
+                      <TableCell value={breadcrumb.value} />
                     </Tr>
                   ))}
                 </Tbody>

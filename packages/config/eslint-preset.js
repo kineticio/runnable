@@ -56,17 +56,6 @@ module.exports = {
     'react/prop-types': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'unicorn/prevent-abbreviations': 'off',
-    'no-restricted-imports': [
-      'error',
-      {
-        paths: [
-          {
-            name: '@mui/material',
-            importNames: ['colors'],
-            message: 'Please use colors from @runnablejs/ui instead.',
-          },
-        ],
-      },
-    ],
+    'no-restricted-imports': ['error'],
   },
 };

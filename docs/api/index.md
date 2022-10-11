@@ -29,7 +29,7 @@ export interface Action {
 
 ### io.input.text
 
-- **Type:** `(opts: { label: string; helperText?: string; placeholder?: string; type?: 'text' | 'password' | 'email'; validation?: (value: string) => ValidationResponse; }): FormPromise<string>;`
+- **Type:** `(opts: { label: string; helperText?: string; placeholder?: string; type?: 'text' | 'password' | 'email'; validation?: Validator<string>; }): FormPromise<string>;`
 
   Send a text input to the client, and wait for a response.
 
@@ -52,7 +52,7 @@ export interface Action {
 
 ### io.input.number
 
-- **Type:** `(opts: { label: string; helperText?: string; placeholder?: string; validation?: (value: number) => ValidationResponse; }): FormPromise<string>;`
+- **Type:** `(opts: { label: string; helperText?: string; placeholder?: string; validation?: Validator<number>; }): FormPromise<number>;`
 
   Send a number input to the client, and wait for a response.
 
@@ -60,6 +60,51 @@ export interface Action {
   const execute = (io: InputOutput) => {
     const age = await io.input.text({
       label: 'Enter your age',
+    });
+  };
+  ```
+
+### io.input.boolean
+
+- **Type:** `(opts: { label: string; helperText?: string; placeholder?: string; validation?: Validator<boolean>; }): FormPromise<boolean>;`
+
+  Send a boolean input to the client, and wait for a response.
+
+  ```ts
+  const execute = (io: InputOutput) => {
+    const shouldSendEmail = await io.input.boolean({
+      label: 'Should the user receive an email notification of the change?',
+    });
+  };
+  ```
+
+### io.input.color
+
+- **Type:** `(opts: { label: string; helperText?: string; placeholder?: string }): FormPromise<string>;`
+
+  Send a color input to the client, and wait for a response.
+
+  ```ts
+  const execute = (io: InputOutput) => {
+    const color = await io.input.color({
+      label: 'Select a color',
+    });
+  };
+  ```
+
+### io.select.radio / io.select.dropdown
+
+- **Type:** `radio<T>(opts: { label: string; helperText?: string; validation?: Validator<T>; data: T[]; getLabel: (item: T) => string; getValue: (item: T) => string; }): FormPromise<T>`
+
+  Send a select input to the client, and wait for a response.
+
+  ```ts
+  const execute = (io: InputOutput) => {
+    const color = await io.input.select({
+      label: 'Select a color',
+      data: ['red', 'green', 'blue'],
+      getLabel: (color) => color.toUpperCase(),
+      getValue: (color) => color,
     });
   };
   ```

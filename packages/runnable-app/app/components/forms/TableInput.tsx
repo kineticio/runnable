@@ -12,6 +12,7 @@ import {
   RadioGroup,
 } from '@chakra-ui/react';
 import React from 'react';
+import { TableCell } from './TableCell';
 
 interface Props {
   helperText?: string;
@@ -56,8 +57,8 @@ export const TableInput: React.FC<Props> = ({ name, headers, isMultiSelect, init
               <Tr key={row.key}>
                 {/* checkbox */}
                 <Td>{renderCheckbox(row.key)}</Td>
-                {row.cells.map((cell) => (
-                  <Td key={cell}>{cell}</Td>
+                {row.cells.map((value, idx) => (
+                  <TableCell key={idx} value={value} />
                 ))}
               </Tr>
             ))}

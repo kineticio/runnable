@@ -22,7 +22,7 @@ interface LinkItemProps {
   to: `/${string}`;
 }
 const LinkItems: LinkItemProps[] = [
-  // { name: 'Actions', icon: 'fa6-solid:house', to: '/actions' },
+  { name: 'Actions', icon: 'fa6-solid:code', to: '/actions' },
   // { name: "Settings", icon: "fa6-solid:gear", to: "/settings" },
 ];
 
@@ -68,8 +68,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text as={RemixLink} fontSize="2xl" fontFamily="monospace" fontWeight="bold" to={getUrl('/actions')}>
-          Actions
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+          Runnable
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
