@@ -64,7 +64,6 @@ export class Workflow {
         // cancel all previous form promises
         for (const value of Object.values(form)) {
           value.cancel();
-          console.log(value.payload);
         }
 
         const input = createInput({
