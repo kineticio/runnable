@@ -14,7 +14,7 @@ import {
   Tr,
   VStack,
 } from '@chakra-ui/react';
-import { ActionFunction, LoaderFunction, MetaFunction, redirect , json } from '@remix-run/node';
+import { ActionFunction, LoaderFunction, MetaFunction, json } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useLocation, useTransition } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 

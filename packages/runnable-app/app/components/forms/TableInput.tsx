@@ -12,6 +12,7 @@ import {
   RadioGroup,
 } from '@chakra-ui/react';
 import React from 'react';
+import { TableCellValue } from '../../api/io';
 import { TableCell } from './TableCell';
 
 interface Props {
@@ -20,7 +21,7 @@ interface Props {
   headers: string[];
   isMultiSelect: boolean;
   initialSelection?: string[];
-  rows: { key: string; cells: string[] }[];
+  rows: { key: string; cells: TableCellValue[] }[];
 }
 
 export const TableInput: React.FC<Props> = ({ name, headers, isMultiSelect, initialSelection, helperText, rows }) => {

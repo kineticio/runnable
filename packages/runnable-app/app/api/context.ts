@@ -1,5 +1,3 @@
-import { User } from '../models/user';
-
 export interface RunnableAppContext {
   /**
    * Authentication
@@ -12,4 +10,10 @@ export interface RunnableAppContext {
 
 export interface RunnableContext {
   user: User;
+}
+
+export interface User {
+  id: string;
+  name?: string;
+  email: string;
 }

@@ -191,7 +191,18 @@ export class Workflow {
               return found;
             })
             .validate(opts.validation)
-            .formatBreadcrumbs((value) => [{ key: opts.label, value: opts.getColumns(value)[0] }])
+            .formatBreadcrumbs((value) => [
+              {
+                key: opts.label,
+                value:
+                  opts
+                    .getColumns(value)
+                    .find((v) => typeof v === 'string')
+                    ?.toString() ||
+                  opts.getColumns(value)[0]?.toString() ||
+                  '',
+              },
+            ])
             .build();
 
           return this.asFormPromise(input);

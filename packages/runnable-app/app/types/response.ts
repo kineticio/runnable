@@ -76,7 +76,7 @@ export type IOForm<T = any> =
       headers: string[];
       isMultiSelect: boolean;
       initialSelection?: string[];
-      rows: { key: string; cells: string[] }[];
+      rows: { key: string; cells: TableCellValue[] }[];
     };
 
 export interface ActionResponse<T = any> extends ActionViewResponse<T> {
