@@ -3,12 +3,12 @@ layout: home
 sidebar: false
 
 title: Runnable
-titleTemplate: Build internal applications with ease
+titleTemplate: Build internal workflows with ease
 
 hero:
   name: Runnable
-  text: Build Internal Applications With Ease
-  tagline: A framework for building internal applications with no UI code.
+  text: Build Internal Workflows With Ease
+  tagline: A framework for building internal workflows with no UI code.
   image:
     src: /logo_transparent.png
     alt: Runnable

@@ -6,13 +6,16 @@ title: Getting Started | Guide
 
 ## Overview
 
-Runnable is a framework to build admin applications, with little code and no maintenance.
+Runnable is a framework to build admin workflows, with little code and no maintenance.
 
-You don't need to write any UI code or deploy another frontend.
+- You don't need to write any UI code or deploy another frontend.
+- Your internal operations stay _internal_.
+- You don't need to build REST or GraphQL endpoints.
+- Opinionated UI lets you focus on the business logic.
 
 ## Checkout the demo
 
-You can play around with the demo application [here](https://demo.getrunnable.com).
+You can play around with the [demo Runnable](https://demo.getrunnable.com)!
 
 ## Installing Runnable
 

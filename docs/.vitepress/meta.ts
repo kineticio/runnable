@@ -1,7 +1,7 @@
 /* Texts */
 export const name = 'Runnable';
 export const shortName = 'Runnable';
-export const description = 'Build internal applications with ease';
+export const description = 'Build internal workflows with ease';
 
 /* CDN fonts and styles */
 export const googleapis = 'https://fonts.googleapis.com';
