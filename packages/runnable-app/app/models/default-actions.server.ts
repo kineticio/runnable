@@ -134,6 +134,14 @@ export const DEFAULT_ACTIONS: Actions = {
         select: io.select.radio({
           label: 'Select',
           data: ['One', 'Two', 'Three'],
+          initialSelection: 'Two',
+          getLabel: (r) => r,
+          getValue: (r) => r,
+        }),
+        dropdown: io.select.dropdown({
+          label: 'Select',
+          data: ['Red', 'Green', 'Blue'],
+          initialSelection: 'Green',
           getLabel: (r) => r,
           getValue: (r) => r,
         }),
@@ -142,6 +150,7 @@ export const DEFAULT_ACTIONS: Actions = {
         multiCheckbox: io.multiSelect.checkbox({
           label: 'Multi Checkbox',
           data: ['Red', 'Green', 'Blue'],
+          initialSelection: ['Red', 'Blue'],
           getLabel: (r) => r,
           getValue: (r) => r,
         }),

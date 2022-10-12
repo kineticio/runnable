@@ -186,10 +186,10 @@ function renderFormField(name: string, field: IOForm<any>) {
         return (
           <FormControl isRequired>
             <FormLabel>{field.label}</FormLabel>
-            <RadioGroup name={name}>
+            <RadioGroup name={name} defaultValue={field.initialSelection}>
               <Stack>
                 {field.data.map((option) => (
-                  <Radio key={option.value} value={option.value} defaultChecked={option.value === field.initialSelection}>
+                  <Radio key={option.value} value={option.value}>
                     {option.label}
                   </Radio>
                 ))}
@@ -221,10 +221,10 @@ function renderFormField(name: string, field: IOForm<any>) {
         return (
           <FormControl>
             <FormLabel>{field.label}</FormLabel>
-            <CheckboxGroup>
+            <CheckboxGroup defaultValue={field.initialSelection}>
               <Stack>
                 {field.data.map((option) => (
-                  <Checkbox name={name} key={option.value} value={option.value} defaultChecked={field.initialSelection?.includes(option.value)}>
+                  <Checkbox name={name} key={option.value} value={option.value}>
                     {option.label}
                   </Checkbox>
                 ))}
