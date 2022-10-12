@@ -55,11 +55,11 @@ installRunnable(
   app,
   {
     assign_user_to_team: {
-      title: 'Assign user to team',
+      title: 'Assign a user to a team',
       execute: async (io) => {
         const users = await getUsers();
         const user = await io.select.dropdown({
-          title: 'Select user',
+          label: 'Select a user',
           data: users,
           getLabel: (user) => user.name,
           getValue: (user) => user.id,
@@ -67,7 +67,7 @@ installRunnable(
 
         const teams = await getTeams();
         const team = await io.select.table({
-          title: 'Select team',
+          label: 'Select a team',
           data: teams,
           headers: ['Name', 'Team size'],
           initialSelection: user.teamId,

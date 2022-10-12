@@ -1,6 +1,37 @@
 import type { Actions } from '~/api/actions';
 
 export const DEFAULT_ACTIONS: Actions = {
+  assign_user_to_team: {
+    title: 'Assign a user to a team',
+    description: 'Assign a user to a new team',
+    icon: 'fa6-solid:users',
+    execute: async (io) => {
+      const users = await getUsers();
+      const user = await io.select.table({
+        label: 'Select a user',
+        data: users,
+        headers: ['Full Name', 'Email'],
+        getValue: (user) => user.id,
+        getColumns: (user) => [user.name, user.email],
+      });
+
+      const teams = await getTeams();
+      const team = await io.select.table({
+        label: 'Select a team',
+        data: teams,
+        headers: ['Name', 'Manager'],
+        getValue: (team) => team.id,
+        getColumns: (team) => [team.name, team.manager],
+      });
+
+      await assignTeam(user.id, team.id);
+
+      await io.message.success({
+        title: 'Success',
+        description: `User ${user.name} was assigned to the ${team.name} team.`,
+      });
+    },
+  },
   create_user: {
     title: 'Create User',
     description: 'Create a new user',
@@ -91,7 +122,7 @@ export const DEFAULT_ACTIONS: Actions = {
     },
   },
   kitchen_sink_inputs: {
-    title: 'Kitchen Sink Inputs',
+    title: 'Kitchen Sink',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies',
     icon: 'fa6-solid:utensils',
     execute: async (io, context) => {
@@ -157,4 +188,51 @@ export const DEFAULT_ACTIONS: Actions = {
 
 function sleep(ms = 10) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function getUsers() {
+  return [
+    {
+      id: '1',
+      name: 'Michael Scott',
+      email: 'michael@dundermifflin.com',
+    },
+    {
+      id: '2',
+      name: 'Dwight Schrute',
+      email: 'dwight@dundermifflin.com',
+    },
+    {
+      id: '3',
+      name: 'Jim Halpert',
+      email: 'jim@dundermifflin.com',
+    },
+  ];
+}
+
+function getTeams() {
+  return [
+    {
+      id: '1',
+      name: 'Accounting',
+      manager: 'Oscar Martinez',
+      members: 5,
+    },
+    {
+      id: '2',
+      name: 'HR',
+      manager: 'Toby Flenderson',
+      members: 3,
+    },
+    {
+      id: '3',
+      name: 'Sales',
+      manager: 'Jim Halpert',
+      members: 2,
+    },
+  ];
+}
+
+async function assignTeam(userId: string, teamId: string) {
+  console.log('assignTeam', userId, teamId);
 }

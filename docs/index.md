@@ -23,6 +23,6 @@ hero:
 features:
   - title: No UI Code
     details: Just write the business logic and let Runnable handle the UI.
-  - title: Works with Next.js and Express
+  - title: Works with Nest.js and Express
     details: Use the framework you're already familiar with.
 ---
