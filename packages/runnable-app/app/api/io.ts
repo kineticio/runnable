@@ -1,4 +1,4 @@
-import { Validator } from './validator';
+import type { Validator } from './validator';
 
 export type TableCellValue =
   | string

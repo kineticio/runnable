@@ -1,5 +1,5 @@
-import { RunnableContext } from './context';
-import { InputOutput } from './io';
+import type { RunnableContext } from './context';
+import type { InputOutput } from './io';
 
 /**
  * Mapped actions
