@@ -19,9 +19,16 @@ Build internal workflows with ease
 - 📦 Works with Nest.js and Express
 - ⭐️ Looks great out of the box
 
-**Runnable** is a framework for building internal workflows and applications. It's built on top of Remix to allow you to build internal facing workflows without UI code and a developer experience that allows you to only write server code. Using the `io` object, you can prompt the users at any point in the workflow.
+**Runnable** is a framework for building user-facing internal workflows and applications. It's built on top of Remix to allow you to build workflows without UI code and a developer experience that allows you to only write server code. Using the `io` object, you can prompt the users at any point in the workflow.
+
+<div style="display: flex">
+<div style="width: 50%">
 
 ![Runnable](https://github.com/kineticio/runnable/blob/main/assets/assign_user_to_team.gif)
+
+</div>
+
+<div style="width: 50%">
 
 ```ts
 // index.ts
@@ -54,6 +61,9 @@ installRunnable(app, {
 
 app.listen(3000);
 ```
+
+</div>
+</div>
 
 [Read the Docs to Learn More](https://getrunnable.com/).
 

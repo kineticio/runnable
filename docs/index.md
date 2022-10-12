@@ -8,7 +8,7 @@ titleTemplate: Build internal workflows with ease
 hero:
   name: Runnable
   text: Build Internal Workflows With Ease
-  tagline: A framework for building internal workflows with no UI code.
+  tagline: A framework for building user-facing internal workflows with no UI code.
   image:
     src: /logo_transparent.png
     alt: Runnable
