@@ -16,7 +16,6 @@ importers:
       cross-env: ^7.0.3
       esbuild: 0.15.7
       eslint: ^8.24.0
-      eslint-config-next: ^12.3.1
       eslint-config-prettier: ^8.5.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-react: ^7.31.8
@@ -46,7 +45,6 @@ importers:
       cross-env: 7.0.3
       esbuild: 0.15.7
       eslint: 8.24.0
-      eslint-config-next: 12.3.1_ypn2ylkkyfa5i233caldtndbqa
       eslint-config-prettier: 8.5.0_eslint@8.24.0
       eslint-plugin-import: 2.26.0_gofx6msuqd4luqedfouzks2s4u
       eslint-plugin-react: 7.31.8_eslint@8.24.0
@@ -3499,6 +3497,7 @@ packages:
     resolution: {integrity: sha512-sw+lTf6r6P0j+g/n9y4qdWWI2syPqZx+uc0+B/fRENqfR3KpSid6MIKqc9gNwGhJASazEQ5b3w8h4cAET213jw==}
     dependencies:
       glob: 7.1.7
+    dev: false
 
   /@nicolo-ribaudo/eslint-scope-5-internals/5.1.1-v1:
     resolution: {integrity: sha512-54/JRvkLIzzDWshCWfuhadfrfZVPiElY8Fcgmg1HroEly/EDSszzhBAsarCux+D/kOslTRquNzuyGSmUSTTHGg==}
@@ -6723,6 +6722,7 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
+    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@8.24.0:
     resolution: {integrity: sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==}
@@ -6756,6 +6756,7 @@ packages:
       tsconfig-paths: 3.14.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /eslint-import-resolver-typescript/3.5.1_dg2pe6kqkrddxbf2funb723kue:
     resolution: {integrity: sha512-U7LUjNJPYjNsHvAUAkt/RU3fcTSpbllA0//35B4eLYTX74frmOepbt7F7J3D1IGtj9k21buOpaqtDd4ZlS/BYQ==}
@@ -6863,6 +6864,7 @@ packages:
       eslint-import-resolver-typescript: 2.7.1_dg2pe6kqkrddxbf2funb723kue
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /eslint-plugin-es/3.0.1_eslint@8.24.0:
     resolution: {integrity: sha512-GUmAsJaN4Fc7Gbtl8uOBlayo2DqhwWvEzykMHSCZHU3XdJ+NSzzZcVhXh3VxX5icqQ+oQdIEawXX8xkR3mIFmQ==}
@@ -6965,6 +6967,7 @@ packages:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - supports-color
+    dev: false
 
   /eslint-plugin-jest-dom/4.0.2_eslint@8.24.0:
     resolution: {integrity: sha512-Jo51Atwyo2TdcUncjmU+UQeSTKh3sc2LF/M5i/R3nTU0Djw9V65KGJisdm/RtuKhy2KH/r7eQ1n6kwYFPNdHlA==}
@@ -7817,6 +7820,7 @@ packages:
       minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
+    dev: false
 
   /glob/7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
