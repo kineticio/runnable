@@ -21,14 +21,15 @@ Build internal workflows with ease
 
 **Runnable** is a framework for building user-facing internal workflows and applications. It's built on top of Remix to allow you to build workflows without UI code and a developer experience that allows you to only write server code. Using the `io` object, you can prompt the users at any point in the workflow.
 
-<div style="display: flex">
-<div style="width: 50%">
+<table border="0">
+<tr>
+<td>
 
 ![Runnable](https://github.com/kineticio/runnable/blob/main/assets/assign_user_to_team.gif)
 
-</div>
+</td>
 
-<div style="width: 50%">
+<td style="width: 50%">
 
 ```ts
 // index.ts
@@ -62,8 +63,9 @@ installRunnable(app, {
 app.listen(3000);
 ```
 
-</div>
-</div>
+</td>
+</tr>
+</table>
 
 [Read the Docs to Learn More](https://getrunnable.com/).
 
