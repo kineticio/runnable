@@ -25,7 +25,7 @@ Build internal workflows with ease
 <tr>
 <td>
 
-![Runnable](https://github.com/kineticio/runnable/blob/main/assets/assign_user_to_team.gif)
+![Runnable](https://github.com/kineticio/runnable/blob/main/assets/assign_user.gif)
 
 </td>
 
