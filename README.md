@@ -23,13 +23,13 @@ Build internal workflows with ease
 
 <table border="0">
 <tr>
-<td>
+<td width="50%">
 
 ![Runnable](https://github.com/kineticio/runnable/blob/main/assets/assign_user.gif)
 
 </td>
 
-<td style="width: 50%">
+<td width="50%" font-size="smaller">
 
 ```ts
 // index.ts
