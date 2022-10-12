@@ -53,6 +53,7 @@ export type IOForm<T = any> =
       label: string;
       helperText?: string;
       placeholder?: string;
+      initialSelection?: string;
       data: { label: string; value: string }[];
     }
   | {
@@ -61,6 +62,7 @@ export type IOForm<T = any> =
       label: string;
       placeholder?: string;
       helperText?: string;
+      initialSelection?: string[];
       data: { label: string; value: string }[];
     }
   | {

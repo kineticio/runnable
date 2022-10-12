@@ -5,6 +5,7 @@ export const DEFAULT_ACTIONS: Actions = {
     title: 'Assign a user to a team',
     description: 'Assign a user to a new team',
     icon: 'fa6-solid:users',
+    category: 'Users',
     execute: async (io) => {
       const users = await getUsers();
       const user = await io.select.table({
@@ -36,6 +37,7 @@ export const DEFAULT_ACTIONS: Actions = {
     title: 'Create User',
     description: 'Create a new user',
     icon: 'fa6-solid:user-plus',
+    category: 'Users',
     execute: async (io) => {
       const { name, email } = await io.form({
         name: io.input.text({

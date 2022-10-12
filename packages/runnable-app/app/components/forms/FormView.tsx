@@ -171,7 +171,7 @@ function renderFormField(name: string, field: IOForm<any>) {
         return (
           <FormControl isRequired>
             <FormLabel>{field.label}</FormLabel>
-            <Select backgroundColor="white" placeholder={field.placeholder} name={name} required>
+            <Select backgroundColor="white" placeholder={field.placeholder} name={name} required defaultValue={field.initialSelection}>
               {field.data.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -189,7 +189,7 @@ function renderFormField(name: string, field: IOForm<any>) {
             <RadioGroup name={name}>
               <Stack>
                 {field.data.map((option) => (
-                  <Radio key={option.value} value={option.value}>
+                  <Radio key={option.value} value={option.value} defaultChecked={option.value === field.initialSelection}>
                     {option.label}
                   </Radio>
                 ))}
@@ -206,7 +206,7 @@ function renderFormField(name: string, field: IOForm<any>) {
         return (
           <FormControl isRequired>
             <FormLabel>{field.label}</FormLabel>
-            <select placeholder={field.placeholder} name={name} multiple required>
+            <select placeholder={field.placeholder} name={name} multiple required defaultValue={field.initialSelection}>
               {field.data.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -224,7 +224,7 @@ function renderFormField(name: string, field: IOForm<any>) {
             <CheckboxGroup>
               <Stack>
                 {field.data.map((option) => (
-                  <Checkbox name={name} key={option.value} value={option.value}>
+                  <Checkbox name={name} key={option.value} value={option.value} defaultChecked={field.initialSelection?.includes(option.value)}>
                     {option.label}
                   </Checkbox>
                 ))}

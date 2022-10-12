@@ -1,10 +1,11 @@
-import { Box, Heading, HStack, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { Box, Heading, HStack, Stack, Text, Wrap, WrapItem } from '@chakra-ui/react';
 import { Link, useLoaderData, useLocation } from '@remix-run/react';
 import type { LoaderFunction, MetaFunction } from '@remix-run/server-runtime';
 import { json } from '@remix-run/server-runtime';
 import { Iconify } from '../../components/icons/Iconify';
 import { Page } from '../../components/layout/Page';
 import { getUrl } from '../../utils/routes';
+import { groupBy } from '../../utils/objects';
 import type { Actions } from '~/api/actions';
 import { defaultContext, DEFAULT_CONTEXT } from '~/models/context';
 
@@ -26,15 +27,32 @@ export const meta: MetaFunction<LoaderData> = () => {
 export default function ActionsIndexPage() {
   const { actions } = useLoaderData<LoaderData>();
 
+  const categories = groupBy(Object.entries(actions), ([, action]) => action.category ?? 'Other');
+  // sort, but 'Other' comes last
+  const sortedCategories = Object.entries(categories).sort(([a], [b]) => {
+    if (a === 'Other') return 1;
+    if (b === 'Other') return -1;
+    return a.localeCompare(b);
+  });
+
   return (
     <Page title="Actions" animationKey={useLocation().pathname}>
-      <Wrap spacing={2} p={2}>
-        {Object.entries({ ...actions, ...actions }).map(([key, action]) => (
-          <WrapItem key={key}>
-            <ActionCard actionId={key} action={action} />
-          </WrapItem>
+      <Stack direction="column" spacing={10}>
+        {sortedCategories.map(([category, actionGroup]) => (
+          <Stack key={category} direction="column">
+            <Heading as="h2" size='lg' color='teal.900'>
+              {category}
+            </Heading>
+            <Wrap spacing={4} py={2}>
+              {actionGroup.map(([key, action]) => (
+                <WrapItem key={key}>
+                  <ActionCard actionId={key} action={action} />
+                </WrapItem>
+              ))}
+            </Wrap>
+          </Stack>
         ))}
-      </Wrap>
+      </Stack>
     </Page>
   );
 }
@@ -49,7 +67,6 @@ function ActionCard({
   return (
     <Box
       as={Link}
-      m={2}
       p={4}
       shadow="md"
       borderWidth="1px"

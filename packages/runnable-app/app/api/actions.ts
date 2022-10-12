@@ -28,6 +28,13 @@ export interface Action {
    * You can find more icons here: https://iconify.design/icon-sets/
    */
   icon?: string;
+
+  /**
+   * Category to display in the UI
+   * @example 'Users'
+   * @default 'Other'
+   */
+  category?: string;
   /**
    * Execute the action
    */

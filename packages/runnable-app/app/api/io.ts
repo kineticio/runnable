@@ -23,6 +23,7 @@ export interface FormPromise<T> extends Promise<T> {
 interface MultiSelectOptions<T> {
   label: string;
   helperText?: string;
+  initialSelection?: string[];
   validation?: Validator<T[]>;
   data: T[];
   getLabel: (item: T) => string;
@@ -32,6 +33,7 @@ interface MultiSelectOptions<T> {
 interface SelectOptions<T> {
   label: string;
   helperText?: string;
+  initialSelection?: string;
   validation?: Validator<T>;
   data: T[];
   getLabel: (item: T) => string;
