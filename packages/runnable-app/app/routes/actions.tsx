@@ -11,7 +11,7 @@ type LoaderData = {
 
 export const meta: MetaFunction = () => {
   return {
-    title: 'Actions',
+    title: 'Runnable',
   };
 };
 

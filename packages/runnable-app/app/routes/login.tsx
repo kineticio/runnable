@@ -61,7 +61,7 @@ export const action: ActionFunction = async ({ request, context }) => {
 
 export const meta: MetaFunction = () => {
   return {
-    title: 'Login | Actions',
+    title: 'Login | Runnable',
   };
 };
 
@@ -82,7 +82,7 @@ export default function LoginPage() {
     <Flex minH={'100vh'} align={'center'} justify={'center'} bg={'gray.50'}>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Form method="post" className="space-y-6">
-          <Box rounded={'lg'} bg={'white'} boxShadow={'lg'} p={8}>
+          <Box rounded={'lg'} bg={'white'} boxShadow={'lg'} p={8} width="340px">
             <Stack spacing={4}>
               <FormControl id="email" isInvalid={!!actionData?.errors?.email}>
                 <FormLabel>Email address</FormLabel>

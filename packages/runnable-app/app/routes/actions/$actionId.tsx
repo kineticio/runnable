@@ -1,4 +1,4 @@
-import { Button, Heading, Stack, Text, VStack } from '@chakra-ui/react';
+import { Button, Heading, Text, VStack } from '@chakra-ui/react';
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Link, useLoaderData, useLocation } from '@remix-run/react';
@@ -17,7 +17,7 @@ type LoaderData = {
 
 export const meta: MetaFunction<LoaderData> = ({ data }) => {
   return {
-    title: `${data.action.title} | Actions`,
+    title: `${data.action.title} | Runnable`,
   };
 };
 

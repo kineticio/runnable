@@ -1,6 +1,5 @@
-import type { ReactNode, ReactText } from 'react';
-import type { BoxProps, FlexProps } from '@chakra-ui/react';
-import {
+import type { ReactNode } from 'react';
+import { BoxProps, FlexProps ,
   IconButton,
   Box,
   CloseButton,
@@ -12,7 +11,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Link as RemixLink } from '@remix-run/react';
+import { Form, Link as RemixLink } from '@remix-run/react';
 import { Iconify } from '../icons/Iconify';
 import { getUrl } from '../../utils/routes';
 
@@ -30,7 +29,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-      <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
+      <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'flex' }} />
       <Drawer
         autoFocus={false}
         isOpen={isOpen}
@@ -57,17 +56,20 @@ interface SidebarProps extends BoxProps {
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
-    <Box
+    <Flex
       bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
+      flexDirection={'column'}
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 48 }}
       pos="fixed"
       h="full"
+      py={4}
       zIndex={2}
+      gap={4}
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+      <Flex alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Runnable
         </Text>
@@ -78,28 +80,48 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           {link.name}
         </NavItem>
       ))}
-    </Box>
+      <Flex flex={1} />
+      <Form action={getUrl("/logout")} method="post">
+        <Flex
+          as="button"
+          flex={1}
+          align="center"
+          p="2"
+          px="5"
+          mx="4"
+          borderRadius="lg"
+          role="group"
+          cursor="pointer"
+          _hover={{
+            bg: 'cyan.100',
+          }}
+          type="submit"
+        >
+          Logout
+        </Flex>
+      </Form>
+    </Flex>
   );
 };
 
 interface NavItemProps extends FlexProps {
-  icon: string;
+  icon?: string;
   to: `/${string}`;
-  children: ReactText;
+  children: React.ReactNode;
 }
 const NavItem = ({ icon, children, to, ...rest }: NavItemProps) => {
   return (
     <Link as={RemixLink} to={getUrl(to)} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
-        p="4"
+        p="2"
+        px="5"
         mx="4"
         borderRadius="lg"
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.800',
-          color: 'white',
+          bg: 'cyan.100',
         }}
         {...rest}
       >
@@ -108,9 +130,6 @@ const NavItem = ({ icon, children, to, ...rest }: NavItemProps) => {
             mr="4"
             fontSize="16"
             minWidth="20px"
-            _groupHover={{
-              color: 'white',
-            }}
             icon={icon}
           />
         )}
@@ -144,7 +163,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       />
 
       <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Actions
+        Runnable
       </Text>
     </Flex>
   );

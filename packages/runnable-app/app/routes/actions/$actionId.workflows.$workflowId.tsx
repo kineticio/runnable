@@ -76,7 +76,7 @@ export const action: ActionFunction = async ({ request, params, context }) => {
 
 export const meta: MetaFunction<LoaderData> = ({ data }) => {
   return {
-    title: `${data.action.title} | Actions`,
+    title: `${data.action.title} | Runnable`,
   };
 };
 

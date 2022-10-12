@@ -19,7 +19,7 @@ export const loader: LoaderFunction = async ({ context = DEFAULT_CONTEXT }) => {
 
 export const meta: MetaFunction<LoaderData> = () => {
   return {
-    title: 'Actions',
+    title: 'Runnable',
   };
 };
 
