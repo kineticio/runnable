@@ -20,3 +20,5 @@ cypress/downloads
 cypress/screenshots
 docs/public/user-avatars
 docs/public/sponsors
+
+tsdoc-metadata.json
