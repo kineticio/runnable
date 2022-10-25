@@ -156,6 +156,11 @@ export const DEFAULT_ACTIONS: Actions = {
         }),
       });
 
+      const shouldContinue = await io.input.boolean({ label: 'Should continue', defaultValue: true });
+      if (!shouldContinue) {
+        return;
+      }
+
       await io.message.info({
         title: 'Data',
         description: JSON.stringify(data, null, 2),

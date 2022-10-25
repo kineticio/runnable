@@ -15,6 +15,9 @@ export const normalizeAsBoolean: Normalizer<boolean> = (value) => {
   if (typeof value === 'boolean') {
     return value;
   }
+  if (isEmptyObject(value)) {
+    return false;
+  }
   const normalized = normalizeAsSingleton(value);
   if (normalized === 'true' || normalized === '') {
     return true;
@@ -60,4 +63,8 @@ export function normalizeAsSingleton<T>(value: T | T[] | undefined | null): T | 
   }
 
   return value;
+}
+
+function isEmptyObject(obj: any) {
+  return JSON.stringify(obj) === '{}';
 }
