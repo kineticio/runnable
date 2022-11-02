@@ -44,7 +44,7 @@ interface TextOptions {
   label: string;
   helperText?: string;
   placeholder?: string;
-  defaultValue?: boolean;
+  defaultValue?: string;
   optional?: boolean;
   type?: 'text' | 'password' | 'email';
   validation?: Validator<string>;
