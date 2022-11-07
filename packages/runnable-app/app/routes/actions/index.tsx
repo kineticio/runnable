@@ -40,7 +40,7 @@ export default function ActionsIndexPage() {
       <Stack direction="column" spacing={10}>
         {sortedCategories.map(([category, actionGroup]) => (
           <Stack key={category} direction="column">
-            <Heading as="h2" size='lg' color='teal.900'>
+            <Heading as="h2" size="lg" color="teal.900">
               {category}
             </Heading>
             <Wrap spacing={4} py={2}>

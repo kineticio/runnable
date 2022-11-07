@@ -1,4 +1,5 @@
 export interface RunnableAppContext {
+  logger?: typeof console;
   /**
    * Authentication
    */
@@ -9,6 +10,7 @@ export interface RunnableAppContext {
 }
 
 export interface RunnableContext {
+  logger: typeof console;
   user: User;
 }
 

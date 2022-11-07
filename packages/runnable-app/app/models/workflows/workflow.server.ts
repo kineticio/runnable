@@ -94,6 +94,76 @@ export class Workflow {
 
         return this.asFormPromise<T>(input);
       },
+      hstack: <T extends any[]>(...forms: FormPromise<T>[]) => {
+        // cancel all previous form promises
+        for (const form of forms) {
+          form.cancel();
+        }
+
+        const input = createInput({
+          $type: 'stack',
+          direction: 'horizontal',
+          forms: forms.map((form) => (form.payload as Input<any>).form),
+        })
+          .normalizeAsArray<T>()
+          .thenMap<T>((response) => {
+            return response.map((value, index) => {
+              const subInput = forms[index];
+              if (!subInput) {
+                throw new ValidationError(`Unexpected index ${index} in response`);
+              }
+              return (subInput.payload as Input<any>).normalize(value);
+            }) as T;
+          })
+          .validate(validatorForMappedInput(keyBy(forms, (_, index) => index) as any as T))
+          .formatBreadcrumbs((values) => {
+            return values.flatMap((value, index) => {
+              const subInput = forms[index];
+              if (!subInput) {
+                throw new ValidationError(`Unexpected index ${index} in response`);
+              }
+              return (subInput.payload as Input<any>).format(value);
+            });
+          })
+          .build();
+
+        return this.asFormPromise<T>(input);
+      },
+      vstack: <T extends any[]>(...forms: FormPromise<T>[]) => {
+        // cancel all previous form promises
+        for (const form of forms) {
+          form.cancel();
+        }
+
+        const input = createInput({
+          $type: 'stack',
+          direction: 'vertical',
+          forms: forms.map((form) => (form.payload as Input<any>).form),
+        })
+          .normalizeAsArray<T>()
+          .thenMap<T>((response) => {
+            return response.map((value, index) => {
+              const subInput = forms[index];
+              if (!subInput) {
+                throw new ValidationError(`Unexpected index ${index} in response`);
+              }
+              return (subInput.payload as Input<any>).normalize(value);
+            }) as T;
+          })
+          .validate(validatorForMappedInput(keyBy(forms, (_, index) => index) as any as T))
+          .formatBreadcrumbs((values) => {
+            return values.flatMap((value, index) => {
+              const subInput = forms[index];
+              if (!subInput) {
+                throw new ValidationError(`Unexpected index ${index} in response`);
+              }
+              return (subInput.payload as Input<any>).format(value);
+            });
+          })
+          .build();
+
+        return this.asFormPromise<T>(input);
+      },
       input: {
         text: (opts) => {
           const input = createInput({ $type: 'input', ...opts })
@@ -288,8 +358,8 @@ export class Workflow {
         },
       },
       message: {
-        html: (opts: { dangerouslySetInnerHTML: string }): Promise<void> => {
-          return this.handle(
+        html: (opts: { dangerouslySetInnerHTML: string }): FormPromise<void> => {
+          return this.asFormPromise(
             createMessage({
               $type: 'message',
               variant: 'info',
@@ -297,8 +367,8 @@ export class Workflow {
             })
           );
         },
-        info: (opts: { title: string; description: string }): Promise<void> => {
-          return this.handle(
+        info: (opts: { title: string; description: string }): FormPromise<void> => {
+          return this.asFormPromise(
             createMessage({
               $type: 'message',
               variant: 'info',
@@ -307,8 +377,8 @@ export class Workflow {
             })
           );
         },
-        success: (opts: { title: string; description: string }): Promise<void> => {
-          return this.handle(
+        success: (opts: { title: string; description: string }): FormPromise<void> => {
+          return this.asFormPromise(
             createMessage({
               $type: 'message',
               variant: 'success',
@@ -317,8 +387,8 @@ export class Workflow {
             })
           );
         },
-        warning: (opts: { title: string; description: string }): Promise<void> => {
-          return this.handle(
+        warning: (opts: { title: string; description: string }): FormPromise<void> => {
+          return this.asFormPromise(
             createMessage({
               $type: 'message',
               variant: 'warning',
@@ -327,8 +397,8 @@ export class Workflow {
             })
           );
         },
-        error: (opts: { title: string; description: string }): Promise<void> => {
-          return this.handle(
+        error: (opts: { title: string; description: string }): FormPromise<void> => {
+          return this.asFormPromise(
             createMessage({
               $type: 'message',
               variant: 'error',
@@ -337,8 +407,8 @@ export class Workflow {
             })
           );
         },
-        table: (opts: { title: string; rows: TableCellValue[][]; headers: string[] }): Promise<void> => {
-          return this.handle(
+        table: (opts: { title: string; rows: TableCellValue[][]; headers: string[] }): FormPromise<void> => {
+          return this.asFormPromise(
             createMessage({
               $type: 'message-table',
               title: opts.title,

@@ -12,6 +12,7 @@ export const loader: LoaderFunction = async ({ request, params, context }) => {
   const action = context.actions[params.actionId];
   const response = await WORKFLOW_MANAGER.startWorkflow(action, {
     user,
+    logger: context.logger || console,
   });
 
   return internalRedirect(`/actions/${params.actionId}/workflows/${response.workflowId}`);

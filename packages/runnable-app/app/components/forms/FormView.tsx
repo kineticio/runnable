@@ -22,6 +22,8 @@ import {
   AlertDescription,
   AlertIcon,
   AlertTitle,
+  VStack,
+  HStack,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, CloseIcon } from '@chakra-ui/icons';
 import React from 'react';
@@ -171,7 +173,13 @@ function renderFormField(name: string, field: IOForm<any>) {
         return (
           <FormControl isRequired>
             <FormLabel>{field.label}</FormLabel>
-            <Select backgroundColor="white" placeholder={field.placeholder} name={name} required defaultValue={field.initialSelection}>
+            <Select
+              backgroundColor="white"
+              placeholder={field.placeholder}
+              name={name}
+              required
+              defaultValue={field.initialSelection}
+            >
               {field.data.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -260,6 +268,17 @@ function renderFormField(name: string, field: IOForm<any>) {
         </FormControl>
       );
     }
+    case 'stack': {
+      const StackComponent = field.direction === 'horizontal' ? HStack : VStack;
+
+      return (
+        <StackComponent gap={2} alignItems="stretch">
+          {field.forms.map((value, idx) => (
+            <FormView key={idx} name={`${name}[${idx}]`} view={value} />
+          ))}
+        </StackComponent>
+      );
+    }
     default: {
       logNever(field);
       break;
@@ -268,5 +287,5 @@ function renderFormField(name: string, field: IOForm<any>) {
 }
 
 function logNever(type: never): void {
-  console.log(`Unexpected type: ${type}`);
+  console.warn(`Unexpected type: ${type}`);
 }

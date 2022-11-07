@@ -1,5 +1,10 @@
 import type { Actions } from '~/api/actions';
 
+const logger = {
+  // eslint-disable-next-line no-console
+  info: (message: string, ...args: any[]) => console.log(message, ...args),
+};
+
 export const DEFAULT_ACTIONS: Actions = {
   assign_user_to_team: {
     title: 'Assign a user to a team',
@@ -113,7 +118,7 @@ export const DEFAULT_ACTIONS: Actions = {
 
       await sleep();
 
-      console.log('Created user', {
+      logger.info('Created user', {
         name,
         email,
         password,
@@ -156,15 +161,26 @@ export const DEFAULT_ACTIONS: Actions = {
         }),
       });
 
-      const shouldContinue = await io.input.boolean({ label: 'Should continue', defaultValue: true });
+      const data2 = await io.hstack(
+        io.vstack(io.input.text({ label: 'Text', optional: true }), io.input.number({ label: 'Number' })),
+        io.input.boolean({ label: 'Checkbox' })
+      );
+
+      const response = await io.hstack(
+        io.message.info({
+          title: 'Data 1',
+          description: JSON.stringify(data, null, 2),
+        }),
+        io.message.info({
+          title: 'Data 2',
+          description: JSON.stringify(data2, null, 2),
+        }),
+        io.input.boolean({ label: 'Should continue', defaultValue: true })
+      );
+      const shouldContinue = response[2];
       if (!shouldContinue) {
         return;
       }
-
-      await io.message.info({
-        title: 'Data',
-        description: JSON.stringify(data, null, 2),
-      });
 
       await io.message.success({
         title: 'User',
@@ -197,7 +213,7 @@ export const DEFAULT_ACTIONS: Actions = {
         headers: ['Key', 'Value', 'Date', 'Link', 'Image', 'Lorem', 'Number', 'Null', 'True', 'False'],
       });
 
-      console.log('data', data);
+      logger.info('data', data);
     },
   },
 };
@@ -250,5 +266,5 @@ function getTeams() {
 }
 
 async function assignTeam(userId: string, teamId: string) {
-  console.log('assignTeam', userId, teamId);
+  logger.info('assignTeam', userId, teamId);
 }

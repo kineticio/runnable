@@ -54,7 +54,7 @@ export function normalizeAsSingleton<T>(value: T | T[] | undefined | null): T | 
 
   if (Array.isArray(value)) {
     if (value.length > 1) {
-      console.log('Expected single value, but got ' + value.length);
+      console.warn('Expected single value, but got ' + value.length);
     }
     if (value.length === 0) {
       throw new ValidationError('Missing required field.');

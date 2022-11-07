@@ -54,5 +54,6 @@ module.exports = {
     'unicorn/prevent-abbreviations': 'off',
     'no-var': 'warn',
     'no-restricted-imports': ['error'],
+    'no-console': ['error', { allow: ['warn', 'error'] }],
   },
 };

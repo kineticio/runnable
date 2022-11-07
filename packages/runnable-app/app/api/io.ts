@@ -98,6 +98,12 @@ interface MultiTableOptions<T> {
   getColumns: (item: T) => TableCellValue[];
 }
 
+interface CombinedForm {
+  <A, B>(a: FormPromise<A>, b: FormPromise<B>): FormPromise<[A, B]>;
+  <A, B, C>(a: FormPromise<A>, b: FormPromise<B>, c: FormPromise<C>): FormPromise<[A, B, C]>;
+  <A, B, C, D>(a: FormPromise<A>, b: FormPromise<B>, c: FormPromise<C>, d: FormPromise<D>): FormPromise<[A, B, C, D]>;
+}
+
 /**
  * Input/Output for an action
  *
@@ -112,6 +118,8 @@ interface MultiTableOptions<T> {
  */
 export interface InputOutput {
   form<T extends Record<string, any>>(form: InputForm<T>): FormPromise<T>;
+  hstack: CombinedForm;
+  vstack: CombinedForm;
   input: {
     text(opts: TextOptions): FormPromise<string>;
     number(opts: NumberOptions): FormPromise<number>;
@@ -131,10 +139,10 @@ export interface InputOutput {
   };
   message: {
     html(opts: { dangerouslySetInnerHTML: string }): void;
-    info(opts: { title: string; description: string }): Promise<void>;
-    table(opts: { title: string; headers: string[]; rows: TableCellValue[][] }): Promise<void>;
-    success(opts: { title: string; description: string }): Promise<void>;
-    warning(opts: { title: string; description: string }): Promise<void>;
-    error(opts: { title: string; description: string }): Promise<void>;
+    info(opts: { title: string; description: string }): FormPromise<void>;
+    table(opts: { title: string; headers: string[]; rows: TableCellValue[][] }): FormPromise<void>;
+    success(opts: { title: string; description: string }): FormPromise<void>;
+    warning(opts: { title: string; description: string }): FormPromise<void>;
+    error(opts: { title: string; description: string }): FormPromise<void>;
   };
 }

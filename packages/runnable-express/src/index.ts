@@ -11,6 +11,8 @@ export interface ExpressApplication {
 }
 
 export function installRunnable(app: ExpressApplication, actions: Actions, context: RunnableAppContext): void {
+  const logger = context.logger || console;
+
   // Remix fingerprints its assets so we can cache forever.
   // app.use('/build', express.static('public/build', { immutable: true, maxAge: '1y' }));
 
@@ -19,7 +21,7 @@ export function installRunnable(app: ExpressApplication, actions: Actions, conte
   // app.use(express.static('public', { maxAge: '1h' }));
 
   const prefix = process.env['ACTIONS_BASE_URL'] || 'admin';
-  console.log(`Installing Runnable at /${prefix}`);
+  logger.log(`Installing Runnable at /${prefix}`);
 
   const { publicPath, assetsBuildDirectory } = require('@runnablejs/app/build');
   const basePath = resolvePackagePath('@runnablejs/app', __dirname);

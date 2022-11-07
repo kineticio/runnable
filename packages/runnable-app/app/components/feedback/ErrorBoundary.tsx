@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const LargeErrorBoundary: React.FC<Props> = ({ error }) => {
-  console.log(error);
+  console.error(error);
   return (
     <Alert variant="outline" color="red" title="Error">
       An error occurred: {error.message}

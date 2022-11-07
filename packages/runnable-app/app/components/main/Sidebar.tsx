@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
-import { BoxProps, FlexProps ,
+import {
+  BoxProps,
+  FlexProps,
   IconButton,
   Box,
   CloseButton,
@@ -81,7 +83,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </NavItem>
       ))}
       <Flex flex={1} />
-      <Form action={getUrl("/logout")} method="post">
+      <Form action={getUrl('/logout')} method="post">
         <Flex
           as="button"
           flex={1}
@@ -125,14 +127,7 @@ const NavItem = ({ icon, children, to, ...rest }: NavItemProps) => {
         }}
         {...rest}
       >
-        {icon && (
-          <Iconify
-            mr="4"
-            fontSize="16"
-            minWidth="20px"
-            icon={icon}
-          />
-        )}
+        {icon && <Iconify mr="4" fontSize="16" minWidth="20px" icon={icon} />}
         {children}
       </Flex>
     </Link>

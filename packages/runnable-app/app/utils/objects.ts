@@ -1,7 +1,9 @@
-export function keyBy<T>(arr: T[], getKey: (item: T) => string): Record<string, T> {
-  const result = {} as Record<string, T>;
-  for (const item of arr) {
-    result[getKey(item)] = item;
+type MapKey = string | number | symbol;
+
+export function keyBy<T>(arr: T[], getKey: (item: T, idx: number) => MapKey): Record<MapKey, T> {
+  const result = {} as Record<MapKey, T>;
+  for (const [idx, item] of arr.entries()) {
+    result[getKey(item, idx)] = item;
   }
   return result;
 }

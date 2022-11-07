@@ -17,7 +17,15 @@ export const Page: React.FC<React.PropsWithChildren<Props>> = ({ title, children
   const titles = Array.isArray(title) ? title : [title];
   return (
     <Flex flexDirection="column" height="100vh">
-      <HStack backgroundColor="white" px={10} height={HEADER_HEIGHT} boxShadow="md" mb={'1px'}>
+      <HStack
+        backgroundColor="white"
+        px={10}
+        height={HEADER_HEIGHT}
+        boxShadow="md"
+        mb={'1px'}
+        flexShrink={0}
+        flexGrow={0}
+      >
         <HStack gap={2} divider={<span>/</span>}>
           {titles.map((t) => (
             <Text key={t} fontWeight={600}>

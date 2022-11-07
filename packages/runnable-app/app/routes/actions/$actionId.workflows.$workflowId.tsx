@@ -27,6 +27,7 @@ import type { WorkflowId } from '../../models/ids';
 import { WORKFLOW_MANAGER } from '../../models/workflows/workflow-manager.server';
 import { Action } from '../../types';
 import type { ActionResponse } from '../../types/response';
+import { parseFormData } from '../../utils/parseFormData';
 import { internalRedirect } from '../../utils/routes';
 
 const ROOT = '__root__';
@@ -53,25 +54,14 @@ export const action: ActionFunction = async ({ request, params, context }) => {
   context = defaultContext(context);
   invariant(params.workflowId, 'workflowId not found');
   invariant(params.actionId, 'actionId not found');
-  const action = context.actions[params.actionId];
+  const runnableAction = context.actions[params.actionId];
 
   const formData = await request.formData();
-
-  let data: any;
-  if (formData.has(ROOT)) {
-    // single value
-    data = formData.getAll(ROOT);
-  } else {
-    // nested values
-    data = {};
-    for (const [key, value] of formData.entries()) {
-      data[key.replace(`${ROOT}.`, '')] = value;
-    }
-  }
+  const data = parseFormData<any>(formData)[ROOT] ?? {};
 
   const response = await WORKFLOW_MANAGER.continueWorkflow(params.workflowId as WorkflowId, { ioResponse: data });
 
-  return json<LoaderData>({ action, ...response });
+  return json<LoaderData>({ action: runnableAction, ...response });
 };
 
 export const meta: MetaFunction<LoaderData> = ({ data }) => {

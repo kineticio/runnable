@@ -72,6 +72,11 @@ export type IOForm<T = any> =
       form: Record<string, IOForm>;
     }
   | {
+      $type: 'stack';
+      forms: IOForm[];
+      direction: 'horizontal' | 'vertical';
+    }
+  | {
       $type: 'table';
       label: string;
       helperText?: string;

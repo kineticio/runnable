@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 interface User {
   email: string;
@@ -7,6 +7,8 @@ interface User {
 
 @Injectable()
 export class AppService {
+  private logger = new Logger(AppService.name);
+
   public users: User[] = [];
 
   getHello(): string {
@@ -14,10 +16,10 @@ export class AppService {
   }
 
   async createUser(payload: { name: string; email: string; password: string }): Promise<void> {
-    console.log('Creating user...');
+    this.logger.log('Creating user...');
     // Create user...
     this.users.push({ email: payload.email, name: payload.name });
-    console.log(`User created: ${payload.name}`);
+    this.logger.log(`User created: ${payload.name}`);
   }
 
   async deleteUser(payload: { email: string }): Promise<void> {
@@ -26,9 +28,9 @@ export class AppService {
       throw new Error(`User with email ${payload.email} not found`);
     }
 
-    console.log('Deleting user...');
+    this.logger.log('Deleting user...');
     // Delete user...
     this.users = this.users.filter((user) => user.email !== payload.email);
-    console.log(`User deleted: ${payload.email}`);
+    this.logger.log(`User deleted: ${payload.email}`);
   }
 }
