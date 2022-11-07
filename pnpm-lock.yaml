@@ -13,6 +13,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^5.38.1
       '@typescript-eslint/parser': ^5.38.1
       bumpp: ^8.2.1
+      chakra-multiselect: ^0.3.7
       cross-env: ^7.0.3
       esbuild: 0.15.7
       eslint: ^8.24.0
@@ -33,6 +34,7 @@ importers:
       vue: ^3.2.40
     dependencies:
       '@remix-run/dev': 1.7.2
+      chakra-multiselect: 0.3.7
     devDependencies:
       '@rollup/plugin-alias': 3.1.9_rollup@2.79.1
       '@rollup/plugin-commonjs': 22.0.2_rollup@2.79.1
@@ -162,6 +164,7 @@ importers:
       '@types/react-dom': ^18.0.6
       '@types/uuid': ^8.3.4
       binode: ^1.0.5
+      chakra-multiselect: ^0.3.7
       cross-env: ^7.0.3
       eslint: ^8.24.0
       framer-motion: ^7.5.1
@@ -211,6 +214,7 @@ importers:
       '@types/react-dom': 18.0.6
       '@types/uuid': 8.3.4
       binode: 1.0.5
+      chakra-multiselect: 0.3.7_v555kcfve4bxdd7xuuqrgjbmmm
       cross-env: 7.0.3
       eslint: 8.24.0
       framer-motion: 7.5.1_biqbaboplfbrettd7655fr4n2y
@@ -5468,6 +5472,40 @@ packages:
 
   /caniuse-lite/1.0.30001409:
     resolution: {integrity: sha512-V0mnJ5dwarmhYv8/MzhJ//aW68UpvnQBXv8lJ2QUsvn2pHcmAuNtu8hQEDz37XnA1iE+lRR9CIfGWWpgJ5QedQ==}
+
+  /chakra-multiselect/0.3.7:
+    resolution: {integrity: sha512-yyTF629WAWK3KJsOZvKleMZSVUwT6SJ4flEzTdxrgIKLR5DElPV0HSzS3XEIOA5hRVW/TY9r2PP1DzVxIfSgig==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@chakra-ui/react': '>=2'
+      '@chakra-ui/react-utils': '>=2'
+      '@chakra-ui/theme-tools': '>=2'
+      '@chakra-ui/utils': '>=2'
+      '@emotion/react': '>=11'
+      '@emotion/styled': '>=11'
+      framer-motion: '>=7'
+      react: '>=18.0.0'
+    dev: false
+
+  /chakra-multiselect/0.3.7_v555kcfve4bxdd7xuuqrgjbmmm:
+    resolution: {integrity: sha512-yyTF629WAWK3KJsOZvKleMZSVUwT6SJ4flEzTdxrgIKLR5DElPV0HSzS3XEIOA5hRVW/TY9r2PP1DzVxIfSgig==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@chakra-ui/react': '>=2'
+      '@chakra-ui/react-utils': '>=2'
+      '@chakra-ui/theme-tools': '>=2'
+      '@chakra-ui/utils': '>=2'
+      '@emotion/react': '>=11'
+      '@emotion/styled': '>=11'
+      framer-motion: '>=7'
+      react: '>=18.0.0'
+    dependencies:
+      '@chakra-ui/react': 2.3.4_l4bygxe3cznbrojleqjhzaggci
+      '@emotion/react': 11.10.4_bjroym7kxlcs2vvwnej4p3gzwu
+      '@emotion/styled': 11.10.4_ogudqqhlstsi7uge4lir7ff3ty
+      framer-motion: 7.5.1_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+    dev: true
 
   /chalk/2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}

@@ -1,7 +1,8 @@
 import { AnimatePresence } from 'framer-motion';
 import React, { useContext, useEffect } from 'react';
 import { withEmotionCache } from '@emotion/react';
-import { Box, Button, ChakraProvider, Heading, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, ChakraProvider, extendTheme, Heading, Text, VStack } from '@chakra-ui/react';
+import { MultiSelectTheme } from 'chakra-multiselect';
 import {
   Link,
   Links,
@@ -48,6 +49,12 @@ interface DocumentProps {
   children: React.ReactNode;
 }
 
+const theme = extendTheme({
+  components: {
+    MultiSelect: MultiSelectTheme,
+  },
+});
+
 const Document = withEmotionCache(({ children, head }: DocumentProps, emotionCache) => {
   const data = useLoaderData();
   const serverStyleData = useContext(ServerStyleContext);
@@ -78,7 +85,7 @@ const Document = withEmotionCache(({ children, head }: DocumentProps, emotionCac
         ))}
       </head>
       <body>
-        <ChakraProvider>{children}</ChakraProvider>
+        <ChakraProvider theme={theme}>{children}</ChakraProvider>
         <script dangerouslySetInnerHTML={{ __html: `window.ENV = ${JSON.stringify(data?.ENV)}` }} />
         <ScrollRestoration />
         <Scripts />

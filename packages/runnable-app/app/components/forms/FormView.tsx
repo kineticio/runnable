@@ -25,6 +25,7 @@ import {
   VStack,
   HStack,
 } from '@chakra-ui/react';
+
 import { CheckCircleIcon, CloseIcon } from '@chakra-ui/icons';
 import React from 'react';
 import { IOForm } from '../../types/response';
@@ -32,6 +33,8 @@ import { CompositeFormView } from './CompositeInput';
 import { TableInput } from './TableInput';
 import { ImageInput } from './ImageInput';
 import { TableView } from './TableView';
+import { MultiSelect } from './MultiSelect';
+import { SingleSelect } from './SingleSelect';
 
 interface Props {
   name: string;
@@ -173,19 +176,13 @@ function renderFormField(name: string, field: IOForm<any>) {
         return (
           <FormControl isRequired>
             <FormLabel>{field.label}</FormLabel>
-            <Select
-              backgroundColor="white"
+            <SingleSelect
               placeholder={field.placeholder}
               name={name}
               required
+              options={field.data}
               defaultValue={field.initialSelection}
-            >
-              {field.data.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
+            />
             <FormHelperText>{field.helperText}</FormHelperText>
           </FormControl>
         );
@@ -214,13 +211,13 @@ function renderFormField(name: string, field: IOForm<any>) {
         return (
           <FormControl isRequired>
             <FormLabel>{field.label}</FormLabel>
-            <select placeholder={field.placeholder} name={name} multiple required defaultValue={field.initialSelection}>
-              {field.data.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            <MultiSelect
+              placeholder={field.placeholder}
+              name={name}
+              required
+              defaultValue={field.initialSelection}
+              options={field.data}
+            />
             <FormHelperText>{field.helperText}</FormHelperText>
           </FormControl>
         );
