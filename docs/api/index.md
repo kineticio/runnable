@@ -15,7 +15,7 @@ export interface Action {
 }
 ```
 
-## io
+## Basic inputs
 
 - **Type:** `InputOutput`
 
@@ -29,7 +29,7 @@ export interface Action {
 
 ### io.input.text
 
-- **Type:** `(opts: TextOptions): FormPromise<string>;`
+- **Type:** `text(opts: TextOptions): FormPromise<string>;`
 
   Send a text input to the client, and wait for a response.
 
@@ -57,7 +57,7 @@ interface TextOptions {
   label: string;
   helperText?: string;
   placeholder?: string;
-  defaultValue?: boolean;
+  defaultValue?: string;
   optional?: boolean;
   type?: 'text' | 'password' | 'email';
   validation?: Validator<string>;
@@ -66,7 +66,7 @@ interface TextOptions {
 
 ### io.input.number
 
-- **Type:** `(opts: { label: string; helperText?: string; placeholder?: string; validation?: Validator<number>; }): FormPromise<number>;`
+- **Type:** `number(opts: NumberOptions): FormPromise<number>;`
 
   Send a number input to the client, and wait for a response.
 
@@ -78,9 +78,21 @@ interface TextOptions {
   };
   ```
 
+#### NumberOptions
+
+```ts
+interface NumberOptions {
+  label: string;
+  helperText?: string;
+  placeholder?: string;
+  defaultValue?: number;
+  validation?: Validator<number>;
+}
+```
+
 ### io.input.boolean
 
-- **Type:** `(opts: { label: string; helperText?: string; placeholder?: string; validation?: Validator<boolean>; }): FormPromise<boolean>;`
+- **Type:** `boolean(opts: BooleanOptions): FormPromise<boolean>;`
 
   Send a boolean input to the client, and wait for a response.
 
@@ -92,9 +104,19 @@ interface TextOptions {
   };
   ```
 
+#### BooleanOptions
+
+```ts
+interface BooleanOptions {
+  label: string;
+  helperText?: string;
+  defaultValue?: boolean;
+}
+```
+
 ### io.input.color
 
-- **Type:** `(opts: { label: string; helperText?: string; placeholder?: string }): FormPromise<string>;`
+- **Type:** `color(opts: ColorOptions): FormPromise<string>;`
 
   Send a color input to the client, and wait for a response.
 
@@ -106,9 +128,19 @@ interface TextOptions {
   };
   ```
 
+#### ColorOptions
+
+```ts
+interface ColorOptions {
+  label: string;
+  helperText?: string;
+  defaultValue?: string;
+}
+```
+
 ### io.input.imageURL
 
-- **Type:** `(opts: { label: string; helperText?: string; placeholder?: string; validation?: Validator<string>; }): FormPromise<string>;`
+- **Type:** `imageURL(opts: ImageOptions): FormPromise<string>;`
 
   Send an image URL input to the client, and wait for a response.
 
@@ -120,26 +152,55 @@ interface TextOptions {
   };
   ```
 
+#### ImageOptions
+
+```ts
+interface ImageOptions {
+  label: string;
+  helperText?: string;
+  defaultValue?: string;
+}
+```
+
 ### io.select.radio / io.select.dropdown
 
-- **Type:** `radio<T>(opts: { label: string; helperText?: string; validation?: Validator<T>; data: T[]; getLabel: (item: T) => string; getValue: (item: T) => string; }): FormPromise<T>`
+- **Type:** `radio<T>(opts: SelectOptions<T>): FormPromise<T>;`
 
   Send a select input to the client, and wait for a response.
 
   ```ts
   const execute = (io: InputOutput) => {
-    const color = await io.input.select({
+    const color = await io.select.radio({
       label: 'Select a color',
       data: ['red', 'green', 'blue'],
       getLabel: (color) => color.toUpperCase(),
       getValue: (color) => color,
     });
+
+    const format = await io.select.dropdown({
+      label: 'Select a format',
+      data: ['json', 'yaml', 'toml'],
+      getLabel: (format) => format.toUpperCase(),
+      getValue: (format) => format,
+    });
   };
   ```
 
+```ts
+interface SelectOptions<T> {
+  label: string;
+  helperText?: string;
+  initialSelection?: string;
+  validation?: Validator<T>;
+  data: T[];
+  getLabel: (item: T) => string;
+  getValue: (item: T) => string;
+}
+```
+
 ### io.select.table
 
-- **Type:** `table<T>(opts: { label: string; helperText?: string; data: T[]; getValue: (item: T) => string; getColumns: (item: T) => TableCellValue[] }): FormPromise<T>`
+- **Type:** `table<T>(opts: TableOptions<T>): FormPromise<T>;`
 
   Send a table input to the client, and wait for a response.
 
@@ -154,32 +215,68 @@ interface TextOptions {
   };
   ```
 
+#### TableOptions
+
+```ts
+interface TableOptions<T> {
+  label: string;
+  helperText?: string;
+  validation?: Validator<T>;
+  data: T[];
+  headers: string[];
+  initialSelection?: string;
+  getValue: (item: T) => string;
+  getColumns: (item: T) => TableCellValue[];
+}
+```
+
 ### io.multiSelect.checkbox / io.multiSelect.dropdown
 
-- **Type:** `checkbox<T>(opts: { label: string; helperText?: string; validation?: Validator<T[]>; data: T[]; getLabel: (item: T) => string; getValue: (item: T) => string; }): FormPromise<T[]>`
+- **Type:** `checkbox<T>(opts: MultiSelectOptions<T>): FormPromise<T[]>;`
 
   Send a multi-select input to the client, and wait for a response.
 
   ```ts
   const execute = (io: InputOutput) => {
-    const colors = await io.input.multiSelect({
+    const colors = await io.multiSelect.checkbox({
       label: 'Select colors',
       data: ['red', 'green', 'blue'],
       getLabel: (color) => color.toUpperCase(),
       getValue: (color) => color,
     });
+
+    const format = await io.multiSelect.dropdown({
+      label: 'Select a format',
+      data: ['json', 'yaml', 'toml'],
+      getLabel: (format) => format.toUpperCase(),
+      getValue: (format) => format,
+    });
   };
   ```
 
+#### MultiSelectOptions
+
+```ts
+interface MultiSelectOptions<T> {
+  label: string;
+  helperText?: string;
+  initialSelection?: string[];
+  validation?: Validator<T[]>;
+  data: T[];
+  getLabel: (item: T) => string;
+  getValue: (item: T) => string;
+}
+```
+
 ### io.multiSelect.table
 
-- **Type:** `table<T>(opts: { label: string; helperText?: string; data: T[]; getValue: (item: T) => string; getColumns: (item: T) => TableCellValue[] }): FormPromise<T[]>`
+- **Type:** `table<T>(opts: MultiTableOptions<T>): FormPromise<T[]>`
 
   Send a multi-select table input to the client, and wait for a response.
 
   ```ts
   const execute = (io: InputOutput) => {
-    const teams = await io.input.table({
+    const teams = await io.multiSelect.table({
       label: 'Select teams',
       data: ['HR', 'Sales', 'Marketing'],
       getValue: (team) => team,
@@ -187,6 +284,23 @@ interface TextOptions {
     });
   };
   ```
+
+#### MultiSelectTableOptions
+
+```ts
+interface MultiTableOptions<T> {
+  label: string;
+  helperText?: string;
+  validation?: Validator<T[]>;
+  data: T[];
+  headers: string[];
+  initialSelection?: string[];
+  getValue: (item: T) => string;
+  getColumns: (item: T) => TableCellValue[];
+}
+```
+
+## Messages
 
 ### io.message.html
 
@@ -202,7 +316,7 @@ interface TextOptions {
   };
   ```
 
-### io.message.info / io.message.success / io.message.warning / io.message.error
+### io.message.success / io.message.warning / io.message.error
 
 - **Type:** `(opts: { message: string; description: string }): void`
 
@@ -217,9 +331,11 @@ interface TextOptions {
   };
   ```
 
+## Advanced Inputs
+
 ### io.message.table
 
-- **Type:** `(opts: { title: string; description: string; data: TableCellValue[][] }): void`
+- **Type:** `table(opts: { title: string; headers: string[]; rows: TableCellValue[][] }): FormPromise<void>;`
 
   Send a read-only table to the client.
 
@@ -235,3 +351,54 @@ interface TextOptions {
     });
   };
   ```
+
+### io.form
+
+Create a composite form with multiple inputs.
+
+```ts
+const execute = (io: InputOutput) => {
+  const { name, email } = await io.form({
+    name: io.input.text({
+      label: 'Name',
+      helperText: 'Enter the name of the user',
+    }),
+    email: io.input.text({
+      label: 'Email',
+      helperText: 'Enter the email of the user',
+      type: 'email',
+    }),
+  });
+```
+
+### io.hstack / io.vstack
+
+Create a horizontal or vertical stack of inputs.
+
+```ts
+const execute = (io: InputOutput) => {
+  const [, [newUser]] = await io.hstack(
+    io.message.table({
+      label: 'Existing Users',
+      headers: ['Name', 'Email'],
+      rows: users,
+    }),
+    io.vstack(
+      io.form({
+        name: io.input.text({
+          label: 'Name',
+          helperText: 'Enter the name of the user',
+        }),
+        email: io.input.text({
+          label: 'Email',
+          helperText: 'Enter the email of the user',
+          type: 'email',
+        }),
+      }),
+      io.message.warning({
+        description: 'Some message about creating users.',
+      })
+    )
+  );
+};
+```

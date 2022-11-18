@@ -20,32 +20,32 @@
     "typecheck": " pnpm -r --parallel run typecheck"
   },
   "devDependencies": {
-    "@rollup/plugin-alias": "^3.1.9",
-    "@rollup/plugin-commonjs": "^22.0.2",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^14.1.0",
-    "@types/node": "^18.7.23",
-    "@typescript-eslint/eslint-plugin": "^5.38.1",
-    "@typescript-eslint/parser": "^5.38.1",
+    "@rollup/plugin-alias": "^4.0.2",
+    "@rollup/plugin-commonjs": "^23.0.2",
+    "@rollup/plugin-json": "^5.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@types/node": "^18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "@typescript-eslint/parser": "^5.43.0",
     "bumpp": "^8.2.1",
     "cross-env": "^7.0.3",
-    "esbuild": "0.15.7",
-    "eslint": "^8.24.0",
+    "esbuild": "0.15.14",
+    "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-react": "^7.31.8",
-    "eslint-plugin-unicorn": "^44.0.0",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-unicorn": "^44.0.2",
     "lint-staged": "^13.0.3",
-    "pnpm": "7.12.2",
+    "pnpm": "7.16.1",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.79.1",
-    "rollup-plugin-dts": "^4.2.2",
-    "rollup-plugin-esbuild": "^4.10.1",
-    "simple-git-hooks": "^2.8.0",
-    "typescript": "^4.8.4",
-    "vitepress": "^1.0.0-alpha.17",
-    "vue": "^3.2.40"
+    "rollup": "^3.3.0",
+    "rollup-plugin-dts": "^5.0.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "simple-git-hooks": "^2.8.1",
+    "typescript": "^4.9.3",
+    "vitepress": "^1.0.0-alpha.29",
+    "vue": "^3.2.45"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
@@ -56,6 +56,6 @@
     ]
   },
   "dependencies": {
-    "@remix-run/dev": "^1.7.2"
+    "@remix-run/dev": "^1.7.6"
   }
 }

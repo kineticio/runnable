@@ -12,10 +12,12 @@ Runnable is a framework to build admin workflows, with little code and no mainte
 - Your internal operations stay _internal_.
 - You don't need to build REST or GraphQL endpoints.
 - Opinionated UI lets you focus on the business logic.
+- It works with Nest.js and Express.
+- It handles complex workflows with conditionals and loops.
 
 ## Checkout the demo
 
-You can play around with the [demo Runnable](https://demo.getrunnable.com)!
+You can play around with the [demo Runnable](https://demo.getrunnable.com)! The password is `secret`.
 
 ## Installing Runnable
 
