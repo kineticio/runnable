@@ -1,16 +1,16 @@
-import esbuild from 'rollup-plugin-esbuild'
-import dts from 'rollup-plugin-dts'
-import resolve from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-import json from '@rollup/plugin-json'
-import alias from '@rollup/plugin-alias'
-import pkg from './package.json'
+import esbuild from 'rollup-plugin-esbuild';
+import dts from 'rollup-plugin-dts';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
+import alias from '@rollup/plugin-alias';
+import pkg from './package.json' assert { type: 'json' };
 
 const external = [
   ...Object.keys(pkg.dependencies),
   // ...Object.keys(pkg.peerDependencies || {}),
   'worker_threads',
-]
+];
 
 const plugins = [
   alias({
@@ -24,13 +24,11 @@ const plugins = [
   esbuild({
     target: 'node14',
   }),
-]
+];
 
 export default () => [
   {
-    input: [
-      './src/index.ts',
-    ],
+    input: ['./src/index.ts'],
     output: {
       dir: 'dist',
       format: 'cjs',
@@ -47,4 +45,4 @@ export default () => [
     external,
     plugins: [dts()],
   },
-]
+];
