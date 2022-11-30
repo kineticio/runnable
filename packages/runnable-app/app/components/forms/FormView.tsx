@@ -2,7 +2,6 @@ import {
   Stack,
   Text,
   Input,
-  Select,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -166,7 +165,13 @@ function renderFormField(name: string, field: IOForm<any>) {
       return (
         <FormControl isRequired={isRequired}>
           <FormLabel>{field.label}</FormLabel>
-          <Input backgroundColor="white" placeholder={field.placeholder || field.label} type={field.type} name={name} defaultValue={field.defaultValue} />
+          <Input
+            backgroundColor="white"
+            placeholder={field.placeholder || field.label}
+            type={field.type}
+            name={name}
+            defaultValue={field.defaultValue}
+          />
           <FormHelperText>{field.helperText}</FormHelperText>
         </FormControl>
       );

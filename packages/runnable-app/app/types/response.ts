@@ -7,6 +7,7 @@ export type IOForm<T = any> =
       label: string;
       placeholder?: string;
       type?: 'text' | 'password' | 'email' | 'number';
+      defaultValue?: string | number;
       optional?: boolean;
       helperText?: string;
     }
