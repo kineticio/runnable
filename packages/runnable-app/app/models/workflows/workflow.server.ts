@@ -210,7 +210,14 @@ export class Workflow {
       },
       select: {
         dropdown: (opts) => {
-          const input = createInput({ $type: 'select', display: 'dropdown', ...opts, data: toOptions(opts.data, opts) })
+          const options = toOptions(opts.data, opts);
+          const input = createInput({
+            $type: 'select',
+            display: 'dropdown',
+            ...opts,
+            data: options,
+            initialSelection: opts.initialSelection ?? options[0].value,
+          })
             .normalizeAsString()
             .thenMap((key) => {
               const found = opts.data.find((item) => opts.getValue(item) === key);
