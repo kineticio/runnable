@@ -9,13 +9,16 @@ on:
 
 jobs:
   deploy:
+    name: 🚀 Deploy Demo
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
 
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: 🪰 Setup flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: Deploy to Fly
+      - name: 🚀 Deploy to Fly
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

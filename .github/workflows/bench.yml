@@ -11,21 +11,35 @@ jobs:
     if: ${{ github.event.issue.pull_request && (github.event.comment.body == '/bench' || github.event.comment.body == '/benchmark') }}
 
     steps:
-      - uses: actions/checkout@v3
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3checkout@v3
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-
-      - name: Install node
+      - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
+          node-version: 18
           cache: pnpm
 
-      - name: Install
-        working-directory: ./bench
-        run: pnpm i
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          run_install: false
+      - name: 📦 Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - name: 📦 Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Run benchmark
+      - name: 🏃‍♂️ Run benchmark
         working-directory: ./bench
         run: pnpm bench:ci
         env:

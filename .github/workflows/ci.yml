@@ -9,44 +9,88 @@ on:
     branches:
       - main
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   lint:
+    name: ⬣ ESLint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
 
-      - name: Install pnpm
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 📦 Install pnpm
         uses: pnpm/action-setup@v2
+        with:
+          run_install: false
 
-      - name: Set node
+      - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18
+          cache: pnpm
 
-      - name: Install
-        run: pnpm i
+      - name: 📦 Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - name: 📦 Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
         run: pnpm run lint
 
-  typecheck:
+  build_and_test:
+    name: 🏗 Build and Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
 
-      - name: Install pnpm
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 📦 Install pnpm
         uses: pnpm/action-setup@v2
+        with:
+          run_install: false
 
-      - name: Set node
+      - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18
+          cache: pnpm
 
-      - name: Install
-        run: pnpm i
+      - name: 📦 Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - name: 📦 Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Build
+      - name: 🔨 Build
         run: pnpm run build
 
-      - name: Typecheck
+      - name: ʦ Typecheck
         run: pnpm run typecheck

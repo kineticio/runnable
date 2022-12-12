@@ -9,14 +9,17 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v3
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 18
 
-      - run: npx changelogithub
+      - name: 🪵 Generate changelog
+        run: npx changelogithub
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
