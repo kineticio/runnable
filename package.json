@@ -2,7 +2,7 @@
   "name": "@runnablejs/monorepo",
   "version": "0.3.13",
   "private": true,
-  "packageManager": "pnpm@7.12.0",
+  "packageManager": "pnpm@7.18.2",
   "description": "Build internal apps with ease",
   "scripts": {
     "build": "pnpm -r --filter=./packages/** run build",
@@ -20,30 +20,30 @@
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^4.0.2",
-    "@rollup/plugin-commonjs": "^23.0.2",
-    "@rollup/plugin-json": "^5.0.1",
+    "@rollup/plugin-commonjs": "^23.0.4",
+    "@rollup/plugin-json": "^5.0.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "@types/node": "^18.11.9",
-    "@typescript-eslint/eslint-plugin": "^5.43.0",
-    "@typescript-eslint/parser": "^5.43.0",
+    "@types/node": "^18.11.13",
+    "@typescript-eslint/eslint-plugin": "^5.46.0",
+    "@typescript-eslint/parser": "^5.46.0",
     "bumpp": "^8.2.1",
     "cross-env": "^7.0.3",
-    "esbuild": "0.15.14",
-    "eslint": "^8.28.0",
+    "esbuild": "0.16.4",
+    "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-unicorn": "^44.0.2",
-    "lint-staged": "^13.0.3",
-    "pnpm": "7.16.1",
-    "prettier": "^2.7.1",
+    "lint-staged": "^13.1.0",
+    "pnpm": "7.18.2",
+    "prettier": "^2.8.1",
     "rimraf": "^3.0.2",
-    "rollup": "^3.3.0",
+    "rollup": "^3.7.3",
     "rollup-plugin-dts": "^5.0.0",
     "rollup-plugin-esbuild": "^5.0.0",
     "simple-git-hooks": "^2.8.1",
-    "typescript": "^4.9.3",
-    "vitepress": "^1.0.0-alpha.29",
+    "typescript": "^4.9.4",
+    "vitepress": "^1.0.0-alpha.31",
     "vue": "^3.2.45"
   },
   "simple-git-hooks": {
@@ -55,6 +55,6 @@
     ]
   },
   "dependencies": {
-    "@remix-run/dev": "^1.7.6"
+    "@remix-run/dev": "^1.8.2"
   }
 }
