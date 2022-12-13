@@ -16,6 +16,8 @@ type LoaderData = {
 };
 
 export const meta: MetaFunction<LoaderData> = ({ data }) => {
+  if (!data?.action) return { title: 'Runnable' };
+
   return {
     title: `${data.action.title} | Runnable`,
   };

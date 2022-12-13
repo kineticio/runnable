@@ -47,6 +47,7 @@ export const links: LinksFunction = () => {
 interface DocumentProps {
   head?: React.ReactNode;
   children: React.ReactNode;
+  includeEnv?: boolean;
 }
 
 const theme = extendTheme({
@@ -55,8 +56,7 @@ const theme = extendTheme({
   },
 });
 
-const Document = withEmotionCache(({ children, head }: DocumentProps, emotionCache) => {
-  const data = useLoaderData();
+const Document = withEmotionCache(({ children, head, includeEnv = true }: DocumentProps, emotionCache) => {
   const serverStyleData = useContext(ServerStyleContext);
   const clientStyleData = useContext(ClientStyleContext);
 
@@ -86,7 +86,7 @@ const Document = withEmotionCache(({ children, head }: DocumentProps, emotionCac
       </head>
       <body>
         <ChakraProvider theme={theme}>{children}</ChakraProvider>
-        <script dangerouslySetInnerHTML={{ __html: `window.ENV = ${JSON.stringify(data?.ENV)}` }} />
+        {includeEnv && <ProvideEnv />}
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
@@ -105,10 +105,15 @@ export default function App() {
   );
 }
 
+const ProvideEnv = () => {
+  const data = useLoaderData();
+  return <script dangerouslySetInnerHTML={{ __html: `window.ENV = ${JSON.stringify(data?.ENV)}` }} />;
+};
+
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
   return (
-    <Document>
+    <Document includeEnv={false}>
       <VStack h="100vh" justify="center">
         <Heading>There was an error</Heading>
         <Text>{error.message}</Text>
