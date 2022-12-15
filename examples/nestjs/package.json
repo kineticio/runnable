@@ -8,7 +8,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "SESSION_SECRET='super-duper-s3cret' nest start",
+    "start": "FLY_REGION=dfw FLY_ALLOC_ID=123 SESSION_SECRET='super-duper-s3cr3t' nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -20,10 +20,11 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@runnablejs/express": "^0.3.11",
     "@nestjs/common": "^9.2.0",
     "@nestjs/core": "^9.2.0",
     "@nestjs/platform-express": "^9.2.0",
+    "@runnablejs/express": "^0.3.11",
+    "express": "^4.18.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.7"
   },

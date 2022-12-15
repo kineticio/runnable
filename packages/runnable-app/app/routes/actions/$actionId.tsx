@@ -38,6 +38,8 @@ export const loader: LoaderFunction = async ({ params, context = DEFAULT_CONTEXT
 export default function ActionDetailsPage() {
   const { action, actionId } = useLoaderData() as LoaderData;
 
+  if (!action) return <div>Cannot find action {actionId}</div>;
+
   return (
     <Page title={['Actions', action.title]} animationKey={useLocation().pathname}>
       <VStack spacing={6} alignItems="flex-start">

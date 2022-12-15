@@ -18,6 +18,7 @@ import { MetaFunction, LinksFunction, json } from '@remix-run/node';
 
 import { ServerStyleContext, ClientStyleContext } from './context';
 import { getBaseUrl } from './utils/routes';
+import { RemoveFlyCookie } from './components/ext/FlyCookie';
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -29,6 +30,7 @@ export async function loader() {
   return json({
     ENV: {
       ACTIONS_BASE_URL: process.env.ACTIONS_BASE_URL,
+      FLY_ALLOC_ID: process.env.FLY_ALLOC_ID,
     },
   });
 }
@@ -98,7 +100,7 @@ const Document = withEmotionCache(({ children, head, includeEnv = true }: Docume
 export default function App() {
   return (
     <Document>
-      <AnimatePresence exitBeforeEnter>
+      <AnimatePresence mode="wait">
         <Outlet />
       </AnimatePresence>
     </Document>
@@ -114,6 +116,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
   return (
     <Document includeEnv={false}>
+      <RemoveFlyCookie />
       <VStack h="100vh" justify="center">
         <Heading>There was an error</Heading>
         <Text>{error.message}</Text>
@@ -199,6 +202,7 @@ export function CatchBoundary() {
 
   return (
     <Document>
+      <RemoveFlyCookie />
       <VStack h="100vh" justify="center">
         {message}
       </VStack>

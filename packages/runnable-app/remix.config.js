@@ -15,6 +15,7 @@ module.exports = {
   routes: () => {
     return mountRoutes(basePath, 'routes');
   },
+  future: {},
   serverDependenciesToBundle: [
     // regex that matches none of deps
     new RegExp(`^(?!${deps.join('|')})`),

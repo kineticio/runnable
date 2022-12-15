@@ -10,7 +10,7 @@ async function bootstrap() {
   const context = app.get('ACTIONS_APP_CONTEXT');
   installRunnable(app.getHttpServer()._events.request, actions, context);
 
-  await app.listen(3000);
+  await app.listen(3007);
 }
 
 bootstrap();
