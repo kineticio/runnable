@@ -58,24 +58,27 @@ export function installRunnable(app: ExpressApplication, actions: Actions, conte
   // If the client has set 'x-runnable-fly-instance', then we want to redirect to that instance.
   app.use(`/${prefix}`, async (req: any, res: any, next: any) => {
     // If we are not a fly instance, then we don't need to do anything
-    const flyInstance = process.env['FLY_ALLOC_ID'];
-    if (!flyInstance) {
+    const { PRIMARY_REGION, FLY_REGION } = process.env;
+    if (!PRIMARY_REGION || !FLY_REGION) {
       next();
       return;
     }
 
-    // If we have a desired fly region set, then redirect to that region
-    const isMethodReplayable = ['GET', 'POST'].includes(req.method);
-    const desiredInstance = req.cookies?.['x-runnable-fly-instance'];
-    const shouldReplay = desiredInstance && desiredInstance !== flyInstance && isMethodReplayable;
-    if (shouldReplay) {
-      res.set('fly-replay', `instance=${desiredInstance}`);
-      // clear the cookie so we don't redirect again
-      res.clearCookie('x-runnable-fly-instance');
-      res.sendStatus(409);
-      return;
-    }
+    const { method, path: pathname } = req;
+    const isMethodReplayable = !['OPTIONS', 'HEAD'].includes(method);
+    const isReadOnlyRegion = FLY_REGION !== PRIMARY_REGION;
+    const shouldReplay = isMethodReplayable && isReadOnlyRegion;
+    if (!shouldReplay) return next();
 
+    const logInfo = {
+      pathname,
+      method,
+      PRIMARY_REGION,
+      FLY_REGION,
+    };
+    logger.log(`Replaying:`, logInfo);
+    res.set('fly-replay', `region=${PRIMARY_REGION}`);
+    return res.sendStatus(409);
     next();
   });
 
