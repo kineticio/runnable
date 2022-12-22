@@ -28,6 +28,12 @@ export default defineConfig({
     ['link', { href: font, rel: 'stylesheet' }],
     ['link', { rel: 'mask-icon', href: '/logo.svg', color: '#ffffff' }],
     ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }],
+    ['script', { async: 'true', src: 'https://www.googletagmanager.com/gtag/js?id=G-15B9LCM64H' }],
+    [
+      'script',
+      {},
+      "window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-15B9LCM64H');",
+    ],
   ],
   lastUpdated: true,
   markdown: {
