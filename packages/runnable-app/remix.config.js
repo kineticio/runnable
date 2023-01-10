@@ -17,14 +17,7 @@ module.exports = {
   },
   future: {},
   serverDependenciesToBundle: [
-    // regex that matches none of deps
-    new RegExp(`^(?!${deps.join('|')})`),
-    'react-focus-lock',
-    'react-fast-compare',
-    'react-remove-scroll',
-    'react-clientside-effect',
-    'react-remove-scroll-bar',
-    'react-remove-scroll-bar/constants',
-    'react-style-singleton',
+    // Bundling all deps
+    /^.*/,
   ],
 };

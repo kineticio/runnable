@@ -22,14 +22,13 @@
     "start": "remix-serve build",
     "start:mocks": "binode --require ./mocks -- @remix-run/serve:remix-serve build"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "@remix-run/node": "^1.9.0",
     "@remix-run/react": "^1.9.0",
     "@remix-run/server-runtime": "^1.9.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
+    "react-dom": "^18.2.0",
     "@babel/core": "^7.20.5",
     "@chakra-ui/icons": "^2.0.14",
     "@chakra-ui/react": "^2.4.4",
