@@ -19,7 +19,7 @@ importers:
       eslint-config-prettier: ^8.6.0
       eslint-plugin-import: ^2.27.5
       eslint-plugin-react: ^7.32.1
-      eslint-plugin-unicorn: ^44.0.2
+      eslint-plugin-unicorn: ^45.0.2
       lint-staged: ^13.1.0
       pnpm: 7.25.1
       prettier: ^2.8.3
@@ -48,7 +48,7 @@ importers:
       eslint-config-prettier: 8.6.0_eslint@8.32.0
       eslint-plugin-import: 2.27.5_2l6piu6guil2f63lj3qmhzbnn4
       eslint-plugin-react: 7.32.1_eslint@8.32.0
-      eslint-plugin-unicorn: 44.0.2_eslint@8.32.0
+      eslint-plugin-unicorn: 45.0.2_eslint@8.32.0
       lint-staged: 13.1.0
       pnpm: 7.25.1
       prettier: 2.8.3
@@ -122,7 +122,7 @@ importers:
       eslint-config-prettier: ^8.6.0
       eslint-plugin-import: ^2.27.5
       eslint-plugin-react: ^7.32.1
-      eslint-plugin-unicorn: ^44.0.2
+      eslint-plugin-unicorn: ^45.0.2
       typescript: ^4.9.4
     dependencies:
       '@typescript-eslint/eslint-plugin': 5.48.2_caon6io6stgpr7lz2rtbhekxqy
@@ -131,7 +131,7 @@ importers:
       eslint-config-prettier: 8.6.0_eslint@8.32.0
       eslint-plugin-import: 2.27.5_2l6piu6guil2f63lj3qmhzbnn4
       eslint-plugin-react: 7.32.1_eslint@8.32.0
-      eslint-plugin-unicorn: 44.0.2_eslint@8.32.0
+      eslint-plugin-unicorn: 45.0.2_eslint@8.32.0
       typescript: 4.9.4
 
   packages/runnable-app:
@@ -3695,6 +3695,15 @@ packages:
     dev: true
     optional: true
 
+  /@eslint-community/eslint-utils/4.1.2_eslint@8.32.0:
+    resolution: {integrity: sha512-7qELuQWWjVDdVsFQ5+beUl+KPczrEDA7S3zM4QUd/bJl7oXgsmpXaEVqrRTnOBqenOV4rWf2kVZk2Ot085zPWA==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+    dependencies:
+      eslint: 8.32.0
+      eslint-visitor-keys: 3.3.0
+
   /@eslint/eslintrc/1.3.3:
     resolution: {integrity: sha512-uj3pT6Mg+3t39fvLrj8iuCIJ38zKO9FpGtJ4BBJebJhEwjoT+KLVNCcHT5QC9NGRIEi7fZ0ZR8YRb884auB4Lg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -6467,6 +6476,11 @@ packages:
 
   /ci-info/3.4.0:
     resolution: {integrity: sha512-t5QdPT5jq3o262DOQ8zA6E1tlH2upmUc4Hlvrbx1pGYJuiiHl7O7rvVNI+l8HTVhd/q3Qc9vqimkNk5yiXsAug==}
+    dev: true
+
+  /ci-info/3.7.1:
+    resolution: {integrity: sha512-4jYS4MOAaCIStSRwiuxc4B8MYhIe676yO1sYGzARnjXkWpmzZMMYxY6zu8WYWDhSuth5zhrQ1rhNSibyyvv4/w==}
+    engines: {node: '>=8'}
 
   /cjs-module-lexer/1.2.2:
     resolution: {integrity: sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==}
@@ -7603,26 +7617,28 @@ packages:
       - typescript
     dev: true
 
-  /eslint-plugin-unicorn/44.0.2_eslint@8.32.0:
-    resolution: {integrity: sha512-GLIDX1wmeEqpGaKcnMcqRvMVsoabeF0Ton0EX4Th5u6Kmf7RM9WBl705AXFEsns56ESkEs0uyelLuUTvz9Tr0w==}
+  /eslint-plugin-unicorn/45.0.2_eslint@8.32.0:
+    resolution: {integrity: sha512-Y0WUDXRyGDMcKLiwgL3zSMpHrXI00xmdyixEGIg90gHnj0PcHY4moNv3Ppje/kDivdAy5vUeUr7z211ImPv2gw==}
     engines: {node: '>=14.18'}
     peerDependencies:
-      eslint: '>=8.23.1'
+      eslint: '>=8.28.0'
     dependencies:
       '@babel/helper-validator-identifier': 7.19.1
-      ci-info: 3.4.0
+      '@eslint-community/eslint-utils': 4.1.2_eslint@8.32.0
+      ci-info: 3.7.1
       clean-regexp: 1.0.0
       eslint: 8.32.0
-      eslint-utils: 3.0.0_eslint@8.32.0
       esquery: 1.4.0
       indent-string: 4.0.0
       is-builtin-module: 3.2.0
+      jsesc: 3.0.2
       lodash: 4.17.21
       pluralize: 8.0.0
       read-pkg-up: 7.0.1
       regexp-tree: 0.1.24
+      regjsparser: 0.9.1
       safe-regex: 2.1.1
-      semver: 7.3.7
+      semver: 7.3.8
       strip-indent: 3.0.0
 
   /eslint-scope/5.1.1:
@@ -9349,7 +9365,7 @@ packages:
       '@types/node': 18.11.9
       babel-jest: 29.3.1_@babel+core@7.20.12
       chalk: 4.1.2
-      ci-info: 3.4.0
+      ci-info: 3.7.1
       deepmerge: 4.2.2
       glob: 7.2.3
       graceful-fs: 4.2.10
@@ -9389,7 +9405,7 @@ packages:
       '@types/node': 18.11.18
       babel-jest: 29.3.1_@babel+core@7.20.12
       chalk: 4.1.2
-      ci-info: 3.4.0
+      ci-info: 3.7.1
       deepmerge: 4.2.2
       glob: 7.2.3
       graceful-fs: 4.2.10
@@ -9710,7 +9726,7 @@ packages:
       '@jest/types': 29.1.2
       '@types/node': 18.11.18
       chalk: 4.1.2
-      ci-info: 3.4.0
+      ci-info: 3.7.1
       graceful-fs: 4.2.10
       picomatch: 2.3.1
     dev: true
@@ -9722,7 +9738,7 @@ packages:
       '@jest/types': 29.3.1
       '@types/node': 18.11.18
       chalk: 4.1.2
-      ci-info: 3.4.0
+      ci-info: 3.7.1
       graceful-fs: 4.2.10
       picomatch: 2.3.1
     dev: true
@@ -12273,6 +12289,7 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
+    dev: true
 
   /semver/7.3.8:
     resolution: {integrity: sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==}
