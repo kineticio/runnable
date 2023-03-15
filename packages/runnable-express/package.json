@@ -1,6 +1,6 @@
 {
   "name": "@runnablejs/express",
-  "version": "0.3.18",
+  "version": "0.3.19",
   "type": "module",
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
