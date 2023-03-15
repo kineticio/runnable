@@ -5,25 +5,19 @@
   "author": "",
   "private": true,
   "scripts": {
-    "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "FLY_REGION=dfw FLY_ALLOC_ID=123 SESSION_SECRET='super-duper-s3cr3t' nest start",
+    "start": "SESSION_SECRET='super-duper-s3cr3t' nest start",
     "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "start:prod": "node -r dotenv/config dist/main",
+    "lint": "TIMING=1 eslint src --fix",
+    "test": "jest"
   },
   "dependencies": {
     "@nestjs/common": "^9.2.0",
     "@nestjs/core": "^9.2.0",
     "@nestjs/platform-express": "^9.2.0",
     "@runnablejs/express": "^0.3.11",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.7"

@@ -1,0 +1,20 @@
+{
+  "name": "@runnablejs/api",
+  "version": "0.3.18",
+  "sideEffects": false,
+  "main": "index.ts",
+  "types": "index.ts",
+  "files": [
+    "schema.ts",
+    "index.ts",
+    "client.ts",
+    "api.yml"
+  ],
+  "scripts": {
+    "generate:api": "npx openapi-typescript api.yml --output schema.ts"
+  },
+  "devDependencies": {
+    "@asyncapi/cli": "^0.27.1",
+    "@asyncapi/modelina": "^0.59.9"
+  }
+}

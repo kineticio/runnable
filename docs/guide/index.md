@@ -92,17 +92,17 @@ app.listen(3000);
 
 ### Setting up with Next.js
 
-Create the providers for the `Actions` and `ActionsContext`.
+Create the providers for the `RunnableWorkflows` and `RunnableAppContext`.
 
 ```ts
 // actions.provider.ts
 
 import { FactoryProvider, Provider } from '@nestjs/common';
-import { Actions, RunnableAppContext } from '@runnablejs/express';
+import { RunnableWorkflows, RunnableAppContext } from '@runnablejs/express';
 import { AppService } from './app.service';
 
-export const ActionsProvider: FactoryProvider<Actions> = {
-  provide: 'ACTIONS',
+export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
+  provide: 'RUNNABLE_ACTIONS',
   inject: [AppService],
   useFactory: (database: DatabaseService) => ({
     assign_user_to_team: {
@@ -115,11 +115,10 @@ export const ActionsProvider: FactoryProvider<Actions> = {
 };
 
 export const RunnableAppContextProvider: Provider<RunnableAppContext> = {
-  provide: 'ACTIONS_APP_CONTEXT',
+  provide: 'RUNNABLE_CONTEXT',
   useFactory: (authService: AuthService) => ({
     auth: {
       verifyLogin: (opts) => authService.verifyLogin(opts),
-      getUserById: ({ id }) => authService.getUserById(id),
     },
   }),
 };
@@ -153,8 +152,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Runnable
-  const actions = app.get('ACTIONS');
-  const context = app.get('ACTIONS_APP_CONTEXT');
+  const actions = app.get('RUNNABLE_ACTIONS');
+  const context = app.get('RUNNABLE_CONTEXT');
   installRunnable(app.getHttpServer()._events.request, actions, context);
 
   await app.listen(3000);

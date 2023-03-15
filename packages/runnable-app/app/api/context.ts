@@ -1,21 +1,20 @@
+import type { components, Logger } from '@runnablejs/api';
+
 export interface RunnableAppContext {
-  logger?: typeof console;
+  logger?: Logger;
   /**
    * Authentication
    */
   auth: {
-    verifyLogin: (payload: { email: string; password: string }) => Promise<User>;
-    getUserById: (payload: { id: string }) => Promise<User>;
+    form?: {
+      verifyLogin: (payload: { email: string; password: string }) => Promise<User>;
+    };
   };
 }
 
 export interface RunnableContext {
-  logger: typeof console;
+  logger: Logger;
   user: User;
 }
 
-export interface User {
-  id: string;
-  name?: string;
-  email: string;
-}
+export type User = components['schemas']['User'];

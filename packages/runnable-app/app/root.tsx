@@ -16,9 +16,8 @@ import {
 } from '@remix-run/react';
 import { MetaFunction, LinksFunction, json } from '@remix-run/node';
 
-import { ServerStyleContext, ClientStyleContext } from './context';
 import { getBaseUrl } from './utils/routes';
-import { RemoveFlyCookie } from './components/ext/FlyCookie';
+import { ServerStyleContext, ClientStyleContext } from './styles/context';
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -29,7 +28,7 @@ export const meta: MetaFunction = () => ({
 export async function loader() {
   return json({
     ENV: {
-      ACTIONS_BASE_URL: process.env.ACTIONS_BASE_URL,
+      RUNNABLE_BASE_URL: process.env.RUNNABLE_BASE_URL,
       FLY_ALLOC_ID: process.env.FLY_ALLOC_ID,
     },
   });
@@ -108,7 +107,7 @@ export default function App() {
 }
 
 const ProvideEnv = () => {
-  const data = useLoaderData();
+  const data = useLoaderData<typeof loader>();
   return <script dangerouslySetInnerHTML={{ __html: `window.ENV = ${JSON.stringify(data?.ENV)}` }} />;
 };
 
@@ -116,7 +115,6 @@ export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
   return (
     <Document includeEnv={false}>
-      <RemoveFlyCookie />
       <VStack h="100vh" justify="center">
         <Heading>There was an error</Heading>
         <Text>{error.message}</Text>
@@ -201,8 +199,7 @@ export function CatchBoundary() {
   }
 
   return (
-    <Document>
-      <RemoveFlyCookie />
+    <Document includeEnv={false}>
       <VStack h="100vh" justify="center">
         {message}
       </VStack>

@@ -1,9 +1,9 @@
 import { FactoryProvider, Provider } from '@nestjs/common';
-import { Actions, RunnableAppContext } from '@runnablejs/express';
+import { RunnableWorkflows, RunnableAppContext } from '@runnablejs/express';
 import { AppService } from './app.service';
 
-export const ActionsProvider: FactoryProvider<Actions> = {
-  provide: 'ACTIONS',
+export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
+  provide: 'RUNNABLE_ACTIONS',
   inject: [AppService],
   useFactory: (appService: AppService) => {
     return {
@@ -11,6 +11,7 @@ export const ActionsProvider: FactoryProvider<Actions> = {
         title: 'Create User',
         description: 'Create a new user',
         icon: 'fa6-solid:user-plus',
+        category: 'User',
         execute: async (io) => {
           const { name, email } = await io.form({
             name: io.input.text({
@@ -93,6 +94,7 @@ export const ActionsProvider: FactoryProvider<Actions> = {
         title: 'Delete User',
         description: 'Delete a user',
         icon: 'fa6-solid:user-minus',
+        category: 'User',
         execute: async (io) => {
           const user = await io.select.dropdown({
             label: 'Select a user',
@@ -109,20 +111,16 @@ export const ActionsProvider: FactoryProvider<Actions> = {
 };
 
 export const RunnableAppContextProvider: Provider<RunnableAppContext> = {
-  provide: 'ACTIONS_APP_CONTEXT',
+  provide: 'RUNNABLE_CONTEXT',
   useValue: {
     auth: {
-      verifyLogin: async () => {
-        return {
-          id: '123',
-          email: 'user@getrunnable.com',
-        };
-      },
-      getUserById: async ({ id }) => {
-        return {
-          id: '123',
-          email: 'user@getrunnable.com',
-        };
+      form: {
+        verifyLogin: async () => {
+          return {
+            id: '123',
+            email: 'user@getrunnable.com',
+          };
+        },
       },
     },
   },
