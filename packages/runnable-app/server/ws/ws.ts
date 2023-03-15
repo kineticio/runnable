@@ -3,6 +3,7 @@ import {
   ClientToServerEvents,
   InterServerEvents,
   IRunnableClient,
+  Logger,
   NamespaceId,
   ServerToClientEvents,
   SocketData,
@@ -11,12 +12,15 @@ import {
   WorkflowType,
 } from '@runnablejs/api';
 import { Server, Socket } from 'socket.io';
-import { Logger } from '../../app/api/context';
 
 export type ClientSocket = Socket<ServerToClientEvents, ServerToClientEvents, ClientToServerEvents, SocketData>;
 
 interface Options {
   srv?: http.Server | number;
+  /**
+   * The secret used to authenticate the client.
+   */
+  secret: string;
   logger?: Logger;
 }
 
@@ -35,13 +39,19 @@ export class RunnableWsServer implements IRunnableClient {
    */
   private socketsByWorkflowId: Map<WorkflowId, ClientSocket> = new Map();
 
-  constructor(opts?: Options) {
+  constructor(opts: Options) {
     this.io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(opts?.srv);
     this.logger = opts?.logger ?? console;
 
     this.io.on('connection', (socket) => {
       const namespace = socket.handshake.auth.namespace as NamespaceId;
       socket.data.namespace = namespace;
+
+      if (socket.handshake.auth.token !== opts.secret) {
+        this.logger.error(`Socket ${socket.id} failed to authenticate. Namespace: ${namespace}`);
+        socket.disconnect();
+        return;
+      }
 
       this.logger.log(`Socket ${socket.id} connected. Namespace: ${namespace}`);
 
@@ -62,9 +72,12 @@ export class RunnableWsServer implements IRunnableClient {
 
     const promises: Promise<WorkflowType[]>[] = [];
     for (const [id, socket] of this.sockets) {
+      if (namespace && socket.data.namespace !== namespace) {
+        continue;
+      }
       promises.push(
         (socket.timeout(1000) as ClientSocket)
-          .emitWithAck('listWorkflowTypes', namespace)
+          .emitWithAck('listWorkflowTypes')
           .then((response) =>
             response.map((workflow) => ({ ...workflow, id: `${socket.data.namespace}.${workflow.id}` }))
           )

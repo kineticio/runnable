@@ -9,6 +9,7 @@ import morgan from 'morgan';
 import { createRequestHandler } from '@remix-run/express';
 import prom from 'express-prometheus-middleware';
 import { RunnableWsServer } from './ws/ws';
+import { serverEnv } from './server-env';
 
 const app = express();
 const metricsApp = express();
@@ -23,7 +24,7 @@ app.use(
 
 app.use((req, res, next) => {
   // helpful headers:
-  res.set('x-fly-region', process.env.FLY_REGION ?? 'unknown');
+  res.set('x-fly-region', serverEnv.FLY_REGION ?? 'unknown');
   res.set('Strict-Transport-Security', `max-age=${60 * 60 * 24 * 365 * 100}`);
 
   // /clean-urls/ -> /clean-urls
@@ -50,13 +51,8 @@ app.use(express.static('public', { maxAge: '1h' }));
 
 app.use(morgan('tiny'));
 
-const MODE = process.env.NODE_ENV;
+const MODE = serverEnv.NODE_ENV;
 const BUILD_DIR = path.join(process.cwd(), 'build');
-// const CONFIG_FILE = path.join(process.cwd(), 'config.yaml');
-
-// const anyConfig = yaml.load(fs.readFileSync(CONFIG_FILE, 'utf8'));
-// const config = validate(anyConfig);
-// const client = new FederatedRunnableClient(config);
 
 app.all(
   '*',
@@ -76,21 +72,22 @@ app.all(
       }
 );
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const { PORT, METRICS_PORT, WS_PORT, RUNNABLE_AUTH_SECRET } = serverEnv;
+
+app.listen(PORT, () => {
   // require the built app so we're ready when the first request comes in
   require(BUILD_DIR);
-  console.log(`✅ app ready: http://localhost:${port}`);
+  console.log(`✅ app ready: http://localhost:${PORT}`);
 });
 
-const metricsPort = process.env.METRICS_PORT || 3001;
-metricsApp.listen(metricsPort, () => {
-  console.log(`✅ metrics ready: http://localhost:${metricsPort}/metrics`);
+metricsApp.listen(METRICS_PORT, () => {
+  console.log(`✅ metrics ready: http://localhost:${METRICS_PORT}/metrics`);
 });
 
 const runnable = new RunnableWsServer({
   srv: createServer(app),
-}).listen(Number(process.env.WS_PORT) || 3007);
+  secret: RUNNABLE_AUTH_SECRET,
+}).listen(Number(WS_PORT));
 
 function purgeRequireCache() {
   // purge require cache on requests for "server side HMR" this won't let

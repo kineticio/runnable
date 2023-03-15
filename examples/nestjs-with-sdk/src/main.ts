@@ -20,6 +20,7 @@ async function bootstrap() {
     namespace: 'user-server',
     runnableHost: 'ws://localhost:3007',
     logger: logger,
+    token: 'another-secret',
   });
 }
 

@@ -33,17 +33,23 @@ describe('my awesome project', () => {
 
   beforeEach((done) => {
     const httpServer = createServer();
-    io = new RunnableWsServer({ srv: httpServer, logger });
+    io = new RunnableWsServer({ srv: httpServer, logger, secret: '012345' });
     httpServer.listen(() => {
       const port = (httpServer.address() as AddressInfo).port;
       // Connect user service
-      userService = connect(`http://localhost:${port}`, { auth: { namespace: 'user-service' } });
+      userService = connect(`http://localhost:${port}`, {
+        auth: { namespace: 'user-service', token: '012345' },
+      });
       userService.on('connect', () => {
         // Connect email service
-        emailService = connect(`http://localhost:${port}`, { auth: { namespace: 'email-service' } });
+        emailService = connect(`http://localhost:${port}`, {
+          auth: { namespace: 'email-service', token: '012345' },
+        });
         emailService.on('connect', () => {
           // Connect another user service
-          userService2 = connect(`http://localhost:${port}`, { auth: { namespace: 'user-service' } });
+          userService2 = connect(`http://localhost:${port}`, {
+            auth: { namespace: 'user-service', token: '012345' },
+          });
           userService2.on('connect', () => {
             done();
           });
@@ -74,11 +80,11 @@ describe('my awesome project', () => {
       [
         {
           "id": "user-service.create-user",
-          "name": "Create User",
+          "title": "Create User",
         },
         {
           "id": "email-service.send-email",
-          "name": "Send Email",
+          "title": "Send Email",
         },
       ]
     `);
@@ -100,7 +106,7 @@ describe('my awesome project', () => {
       [
         {
           "id": "user-service.create-user",
-          "name": "Create User",
+          "title": "Create User",
         },
       ]
     `);
@@ -116,7 +122,14 @@ describe('my awesome project', () => {
     });
 
     const response = await io.listWorkflowTypes('email-service' as NamespaceId);
-    expect(response.workflows).toMatchInlineSnapshot();
+    expect(response.workflows).toMatchInlineSnapshot(`
+      [
+        {
+          "id": "email-service.send-email",
+          "title": "Send Email",
+        },
+      ]
+    `);
   });
 
   it('should be able to start a workflow and pick it up', async () => {
@@ -133,7 +146,12 @@ describe('my awesome project', () => {
     const response = await io.startWorkflow('user-service.create-user');
     expect(response).toMatchInlineSnapshot(`
       {
-        "prompt": "name?",
+        "prompt": {
+          "$type": "message",
+          "message": "",
+          "severity": "info",
+          "title": "name?",
+        },
         "workflowId": "user-service.123",
       }
     `);
@@ -159,7 +177,12 @@ describe('my awesome project', () => {
     expect(started).toBeCalledWith('create-user');
     expect(response).toMatchInlineSnapshot(`
       {
-        "prompt": "name?",
+        "prompt": {
+          "$type": "message",
+          "message": "",
+          "severity": "info",
+          "title": "name?",
+        },
         "workflowId": "user-service.123",
       }
     `);
@@ -174,7 +197,12 @@ describe('my awesome project', () => {
     expect(continued).toBeCalledWith('123', { title: 'John' });
     expect(response2).toMatchInlineSnapshot(`
       {
-        "prompt": "email?",
+        "prompt": {
+          "$type": "message",
+          "message": "",
+          "severity": "info",
+          "title": "name?",
+        },
         "workflowId": "user-service.123",
       }
     `);
@@ -203,7 +231,12 @@ describe('my awesome project', () => {
     expect(continued).toBeCalledWith('123', { title: 'John' });
     expect(response2).toMatchInlineSnapshot(`
       {
-        "prompt": "email?",
+        "prompt": {
+          "$type": "message",
+          "message": "",
+          "severity": "info",
+          "title": "name?",
+        },
         "workflowId": "user-service.123",
       }
     `);
