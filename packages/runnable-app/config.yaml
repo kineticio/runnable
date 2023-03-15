@@ -1,0 +1,10 @@
+servers:
+  - namespace: default
+    host: http://localhost:3007
+    auth_key: '0123456789'
+
+  - namespace: nestjs
+    host: https://runnable-nestjs.fly.dev:3007
+    auth_key: '0123456789'
+
+auth: {}

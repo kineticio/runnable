@@ -35,6 +35,6 @@
   "dependencies": {
     "@runnablejs/api": "^0.3.15",
     "@runnablejs/app": "^0.3.16",
-    "@runnablejs/sdk": "^0.3.15"
+    "@runnablejs/sdk": "^0.3.17"
   }
 }

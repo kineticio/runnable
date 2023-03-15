@@ -1,0 +1,457 @@
+openapi: 3.0.0
+
+info:
+  title: 'Runnable API'
+  version: '1.0.0'
+  description: 'Runnable API'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # Workflow types
+    WorkflowType:
+      type: object
+      required: [id, title, description, icon, category]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+        category:
+          type: string
+
+    # Bread crumbs
+    Breadcrumb:
+      type: object
+      required: [key, value]
+      properties:
+        key:
+          type: string
+        value:
+          oneOf:
+            - type: string
+            - type: number
+
+    # Authentication
+    User:
+      type: object
+      required: [id, email]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+
+    WorkflowResponse:
+      type: object
+      additionalProperties: {}
+
+    WorkflowPrompt:
+      oneOf:
+        - $ref: '#/components/schemas/WorkflowPromptFormField'
+        - $ref: '#/components/schemas/WorkflowPromptMessage'
+        - $ref: '#/components/schemas/WorkflowPromptTerminal'
+        - $ref: '#/components/schemas/WorkflowPromptCompositeForm'
+        - $ref: '#/components/schemas/WorkflowPromptStack'
+
+    WorkflowPromptFormField:
+      type: object
+      required:
+        - $type
+        - input
+      properties:
+        $type:
+          type: string
+          enum: [form-field]
+        label:
+          type: string
+        helperText:
+          type: string
+        defaultValue:
+          oneOf:
+            - type: string
+            - type: integer
+            - type: boolean
+            - type: 'null'
+            - type: array
+              items:
+                type: string
+        optional:
+          type: boolean
+        placeholder:
+          type: string
+        input:
+          oneOf:
+            - $ref: '#/components/schemas/WorkflowPromptFormInput'
+            - $ref: '#/components/schemas/WorkflowPromptFormSelectInput'
+            - $ref: '#/components/schemas/WorkflowPromptFormMultiSelectInput'
+            - $ref: '#/components/schemas/WorkflowPromptFormTableInput'
+            - $ref: '#/components/schemas/WorkflowPromptCompositeForm'
+
+    Option:
+      type: object
+      required:
+        - label
+        - value
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+
+    Severity:
+      type: string
+      enum: [info, warning, error, success]
+
+    TableLinkCell:
+      type: object
+      required:
+        - $type
+        - href
+        - text
+      properties:
+        $type:
+          type: string
+          enum: [link]
+        href:
+          type: string
+        text:
+          type: string
+
+    TableDateCell:
+      type: object
+      required:
+        - $type
+        - date
+      properties:
+        $type:
+          type: string
+          enum: [date]
+        date:
+          type: string
+          format: date-time
+
+    TableImageCell:
+      type: object
+      required:
+        - $type
+        - src
+        - alt
+      properties:
+        $type:
+          type: string
+          enum: [image]
+        src:
+          type: string
+        alt:
+          type: string
+
+    TableCell:
+      oneOf:
+        - type: string
+        - type: integer
+        - type: boolean
+        - type: 'null'
+        - $ref: '#/components/schemas/TableLinkCell'
+        - $ref: '#/components/schemas/TableDateCell'
+        - $ref: '#/components/schemas/TableImageCell'
+
+    # Simple inputs with no additional properties
+    # If additional properties are needed, they can be pulled out into their own schema
+    WorkflowPromptFormInput:
+      type: object
+      required: [type]
+      properties:
+        $type:
+          type: string
+          enum: [text, number, email, password, boolean, color, image]
+
+    WorkflowPromptFormSelectInput:
+      type: object
+      required:
+        - $type
+        - display
+        - options
+      properties:
+        $type:
+          type: string
+          enum: [select]
+        display:
+          type: string
+          enum: [dropdown, radio]
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+
+    WorkflowPromptFormMultiSelectInput:
+      type: object
+      required:
+        - $type
+        - display
+        - options
+      properties:
+        $type:
+          type: string
+          enum: [multi-select]
+        display:
+          type: string
+          enum: [dropdown, checkbox]
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+
+    WorkflowPromptFormTableInput:
+      type: object
+      required:
+        - $type
+        - headers
+        - isMultiSelect
+        - rows
+      properties:
+        $type:
+          type: string
+          enum: [table]
+        headers:
+          type: array
+          items:
+            type: string
+        isMultiSelect:
+          type: boolean
+        readonly:
+          type: boolean
+        rows:
+          type: array
+          items:
+            type: object
+            required:
+              - key
+              - cells
+            properties:
+              key:
+                type: string
+              cells:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TableCell'
+
+    WorkflowPromptMessage:
+      type: object
+      required:
+        - $type
+        - title
+        - message
+        - severity
+      properties:
+        $type:
+          type: string
+          enum: [message]
+        title:
+          type: string
+        message:
+          type: string
+        dangerouslySetInnerHTML:
+          type: boolean
+        severity:
+          $ref: '#/components/schemas/Severity'
+
+    WorkflowPromptTerminal:
+      type: object
+      required:
+        - $type
+        - title
+        - message
+        - severity
+      properties:
+        $type:
+          type: string
+          enum: [terminal]
+        title:
+          type: string
+        message:
+          type: string
+        severity:
+          $ref: '#/components/schemas/Severity'
+
+    WorkflowPromptCompositeForm:
+      type: object
+      required:
+        - $type
+        - title
+        - fields
+      properties:
+        $type:
+          type: string
+          enum: [form]
+        fields:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/WorkflowPromptFormField'
+
+    WorkflowPromptStack:
+      type: object
+      required:
+        - $type
+        - items
+        - direction
+      properties:
+        $type:
+          type: string
+          enum: [stack]
+        direction:
+          type: string
+          enum: [horizontal, vertical]
+        items:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/WorkflowPromptFormField'
+              - $ref: '#/components/schemas/WorkflowPromptMessage'
+              - $ref: '#/components/schemas/WorkflowPromptCompositeForm'
+
+  responses:
+    ListWorkflowTypesResponse:
+      description: Response to list workflows
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [workflows]
+            properties:
+              workflows:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkflowType'
+
+    AuthenticationResponse:
+      description: Response for authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+
+    WorkflowResponse:
+      description: Response to a workflow
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [workflowId, promptId, breadcrumbs, prompt]
+            properties:
+              workflowId:
+                type: string
+              promptId:
+                type: string
+              breadcrumbs:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Breadcrumb'
+              prompt:
+                $ref: '#/components/schemas/WorkflowPrompt'
+              error:
+                type: string
+
+  requestBodies:
+    StartWorkflowRequest:
+      description: Request to start a workflow
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [workflowTypeId]
+            properties:
+              workflowTypeId:
+                type: string
+
+    ContinueWorkflowRequest:
+      description: Request to continue a workflow
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [workflowId, promptId, response]
+            properties:
+              workflowId:
+                type: string
+              promptId:
+                type: string
+              response:
+                $ref: '#/components/schemas/WorkflowResponse'
+
+    AuthenticationRequest:
+      description: Request to authenticate
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [username, password]
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+
+paths:
+  /authenticate:
+    post:
+      requestBody:
+        $ref: '#/components/requestBodies/AuthenticationRequest'
+
+      responses:
+        200:
+          $ref: '#/components/responses/AuthenticationResponse'
+
+  /start-workflow:
+    post:
+      requestBody:
+        $ref: '#/components/requestBodies/StartWorkflowRequest'
+
+      responses:
+        200:
+          $ref: '#/components/responses/WorkflowResponse'
+
+  /list-workflow-types:
+    get:
+      responses:
+        200:
+          $ref: '#/components/responses/ListWorkflowTypesResponse'
+
+  /continue-workflow:
+    post:
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/ContinueWorkflowRequest'
+
+      responses:
+        200:
+          $ref: '#/components/responses/WorkflowResponse'
+
+  /pickup-workflow/{workflowId}:
+    get:
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: workflowId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          $ref: '#/components/responses/WorkflowResponse'

@@ -1,0 +1,70 @@
+import { Button, Heading, Text, VStack } from '@chakra-ui/react';
+import type { LoaderArgs, MetaFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
+import { Link, Outlet, useLoaderData, useLocation } from '@remix-run/react';
+import invariant from 'tiny-invariant';
+
+import { WorkflowType } from '@runnablejs/api';
+import { Page } from '../components/layout/Page';
+
+import { getUrl } from '../utils/routes';
+import { internalRedirect } from '../utils/internalRedirect';
+
+type LoaderData = {
+  actionId: string;
+  action: WorkflowType;
+};
+
+export const meta: MetaFunction<LoaderData> = ({ data }) => {
+  if (!data?.action) return { title: 'Runnable' };
+
+  return {
+    title: `${data.action.title} | Runnable`,
+  };
+};
+
+export async function loader({ params, context }: LoaderArgs) {
+  invariant(params.actionId, 'actionId not found');
+  const actions = await context.client.listWorkflowTypes();
+  const action = actions.workflows.find((action) => action.id === params.actionId);
+
+  if (!action) {
+    throw internalRedirect(`/`);
+  }
+
+  return json<LoaderData>({ actionId: params.actionId, action });
+}
+
+export default function ActionDetailsPage() {
+  const { action, actionId } = useLoaderData() as LoaderData;
+
+  if (!action) return <div>Cannot find action {actionId}</div>;
+
+  return (
+    <Page title={['Actions', action.title]} animationKey={useLocation().pathname}>
+      <VStack spacing={6} alignItems="flex-start">
+        <Heading as="h2" size="xl">
+          {action.title}
+        </Heading>
+        <Text>{action.description}</Text>
+        <Button
+          size="md"
+          height="48px"
+          width="200px"
+          variant="ghost"
+          border="2px"
+          borderColor="teal.500"
+          as={Link}
+          colorScheme="teal"
+          to={getUrl(`/actions/${actionId}/workflows/new`)}
+        >
+          New
+        </Button>
+      </VStack>
+      <Outlet />
+    </Page>
+  );
+}
+
+export { DefaultCatchBoundary as CatchBoundary } from '../components/feedback/CatchBoundary';
+export { LargeErrorBoundary as ErrorBoundary } from '../components/feedback/ErrorBoundary';
