@@ -98,7 +98,7 @@ export const DEFAULT_WORKFLOWS: RunnableWorkflows = {
         data: ['Michael', 'Dwight', 'Jim', 'Pam', 'Angela', 'Oscar'],
         headers: ['Name', 'Level'],
         initialSelection: ['Michael'],
-        getColumns: (r) => [r, level[r.length % level.length]],
+        getColumns: (r) => [r, level[r.length % level.length] ?? null],
         getValue: (r) => r,
       });
 
@@ -209,7 +209,7 @@ export const DEFAULT_WORKFLOWS: RunnableWorkflows = {
         rows: Object.entries(data).map(([key, value]) => [
           key,
           JSON.stringify(value),
-          new Date(),
+          new Date().toString(),
           { $type: 'link', href: 'https://google.com', text: 'Google' },
           { $type: 'image', src: 'https://picsum.photos/200/300', alt: 'Random image' },
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies'.repeat(2),
@@ -217,7 +217,7 @@ export const DEFAULT_WORKFLOWS: RunnableWorkflows = {
           null,
           true,
           false,
-        ]),
+        ]) as any,
         headers: ['Key', 'Value', 'Date', 'Link', 'Image', 'Lorem', 'Number', 'Null', 'True', 'False'],
       });
 
