@@ -1,7 +1,7 @@
-import { components } from '@runnablejs/api';
+import { components, Logger } from '@runnablejs/api';
 
 export interface RunnableAppContext {
-  logger?: typeof console;
+  logger?: Logger;
   /**
    * Authentication
    */
@@ -13,7 +13,7 @@ export interface RunnableAppContext {
 }
 
 export interface RunnableContext {
-  logger: typeof console;
+  logger: Logger;
   user: User;
 }
 

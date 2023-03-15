@@ -20,4 +20,4 @@ RUN pnpm run build
 
 WORKDIR /app/packages/runnable-app
 
-CMD ["pnpm", "run", "start"]
+CMD ["pnpm", "dev:server"]

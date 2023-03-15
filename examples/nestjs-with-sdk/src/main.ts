@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
-import { Runnable } from '@runnablejs/sdk';
+import { RunnableWs } from '@runnablejs/sdk';
 import { NestFactory } from '@nestjs/core';
+import { Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -10,11 +11,16 @@ async function bootstrap() {
   const actions = app.get('RUNNABLE_ACTIONS');
 
   // Start express server
-  await app.listen(process.env.PORT || 3000);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  await app.listen(process.env.PORT || 3002);
+  const logger = new Logger('RunnableSDK');
+  logger.log(`Application is running on: ${await app.getUrl()}`);
 
   // Start Runnable server
-  new Runnable(actions).start({ port: 3007 });
+  new RunnableWs(actions).start({
+    namespace: 'user-server',
+    runnableHost: 'ws://localhost:3007',
+    logger: logger,
+  });
 }
 
 bootstrap();

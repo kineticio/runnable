@@ -1,4 +1,3 @@
-import { WorkflowResponse } from '@runnablejs/api';
 import type { ClientResponse } from '../../types/response';
 import { mapValues, keyBy } from '../../utils/objects';
 import { toOptions } from '../../utils/options';

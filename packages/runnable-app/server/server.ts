@@ -1,17 +1,18 @@
 /* eslint-disable no-console */
+import 'dotenv/config';
+
 import path from 'node:path';
-import fs from 'node:fs';
+import { createServer } from 'node:http';
 import express from 'express';
 import compression from 'compression';
 import morgan from 'morgan';
 import { createRequestHandler } from '@remix-run/express';
 import prom from 'express-prometheus-middleware';
-import yaml from 'js-yaml';
-import { FederatedRunnableClient } from './FederatedRunnableClient';
-import { validate } from './config';
+import { RunnableWsServer } from './ws/ws';
 
 const app = express();
 const metricsApp = express();
+
 app.use(
   prom({
     metricsPath: '/metrics',
@@ -51,11 +52,11 @@ app.use(morgan('tiny'));
 
 const MODE = process.env.NODE_ENV;
 const BUILD_DIR = path.join(process.cwd(), 'build');
-const CONFIG_FILE = path.join(process.cwd(), 'config.yaml');
+// const CONFIG_FILE = path.join(process.cwd(), 'config.yaml');
 
-const anyConfig = yaml.load(fs.readFileSync(CONFIG_FILE, 'utf8'));
-const config = validate(anyConfig);
-const client = new FederatedRunnableClient(config);
+// const anyConfig = yaml.load(fs.readFileSync(CONFIG_FILE, 'utf8'));
+// const config = validate(anyConfig);
+// const client = new FederatedRunnableClient(config);
 
 app.all(
   '*',
@@ -67,7 +68,7 @@ app.all(
           build: require(BUILD_DIR),
           mode: MODE,
           getLoadContext: () => ({
-            client,
+            client: runnable,
             auth: {},
           }),
         });
@@ -86,6 +87,10 @@ const metricsPort = process.env.METRICS_PORT || 3001;
 metricsApp.listen(metricsPort, () => {
   console.log(`✅ metrics ready: http://localhost:${metricsPort}/metrics`);
 });
+
+const runnable = new RunnableWsServer({
+  srv: createServer(app),
+}).listen(Number(process.env.WS_PORT) || 3007);
 
 function purgeRequireCache() {
   // purge require cache on requests for "server side HMR" this won't let

@@ -1,3 +1,5 @@
+import { Logger } from '@runnablejs/api';
+
 export interface RunnableAppContext {
   /**
    * Websocket
@@ -5,11 +7,11 @@ export interface RunnableAppContext {
    */
   wsUrl: string;
 
-  logger?: typeof console;
+  logger?: Logger;
 }
 
 export interface RunnableContext {
-  logger: typeof console;
+  logger: Logger;
   user: User;
 }
 

@@ -1,6 +1,5 @@
+import { NamespaceId, WorkflowId } from './ids';
 import { components } from './schema';
-
-export type WorkflowId = string & { readonly brand: unique symbol };
 
 export type WorkflowResponse = components['responses']['WorkflowResponse']['content']['application/json'];
 export type WorkflowPrompt = components['schemas']['WorkflowPrompt'];
@@ -12,8 +11,14 @@ export type Option = components['schemas']['Option'];
  */
 export type WorkflowType = components['schemas']['WorkflowType'];
 
+export interface Logger {
+  log(message: any, ...optionalParams: any[]): any;
+  error(message: any, ...optionalParams: any[]): any;
+  warn(message: any, ...optionalParams: any[]): any;
+  debug?(message: any, ...optionalParams: any[]): any;
+}
 export interface IRunnableClient {
-  listWorkflowTypes(): Promise<{ workflows: WorkflowType[] }>;
+  listWorkflowTypes(namespace?: NamespaceId): Promise<{ workflows: WorkflowType[] }>;
   startWorkflow(workflowTypeId: string): Promise<WorkflowResponse>;
   pickUpWorkflow(workflowId: WorkflowId): Promise<WorkflowResponse>;
   continueWorkflow(workflowId: WorkflowId, response: { [key: string]: unknown }): Promise<WorkflowResponse>;

@@ -1,4 +1,5 @@
 import type { RequestHandler } from '@remix-run/express';
+import type { Logger } from '@runnablejs/api';
 
 /**
  * Add useful Fly headers to all responses
@@ -22,7 +23,7 @@ export function flyHeaderMiddleware(): RequestHandler {
 /**
  * If the client has set 'x-runnable-fly-instance', then we want to redirect to that instance.
  */
-export function flyRedirectMiddleware(logger: typeof console): RequestHandler {
+export function flyRedirectMiddleware(logger: Logger): RequestHandler {
   return async (req, res, next) => {
     // If we are not a fly instance, then we don't need to do anything
     const { PRIMARY_REGION, FLY_REGION } = process.env;

@@ -1,8 +1,7 @@
-import { WorkflowResponse } from '@runnablejs/api';
+import { WorkflowId, WorkflowResponse } from '@runnablejs/api';
 import type { RunnableWorkflow } from '../../api/workflows';
 import { RunnableContext } from '../../api/context';
 import type { ClientResponse } from '../../types/response';
-import type { WorkflowId } from '../ids';
 import { createWorkflowId } from '../ids';
 import { WorkflowManager } from './types';
 import { Workflow } from './workflow.server';

@@ -1,8 +1,7 @@
-import { WorkflowResponse } from '@runnablejs/api';
+import { WorkflowId, WorkflowResponse } from '@runnablejs/api';
 import { RunnableContext } from '../../api/context';
 import { RunnableWorkflow } from '../../types';
 import { ClientResponse } from '../../types/response';
-import { WorkflowId } from '../ids';
 
 /**
  * Possible form values returned by the `form` method.

@@ -1,4 +1,4 @@
-export type WorkflowId = string & { readonly brand: unique symbol };
+import { WorkflowId } from '@runnablejs/api';
 
 export function createWorkflowId(id: string = uuid()): WorkflowId {
   return id as WorkflowId;

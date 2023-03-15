@@ -4,16 +4,12 @@ import { json } from '@remix-run/node';
 import { Link, Outlet, useLoaderData, useLocation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
-import { WorkflowType } from '@runnablejs/api';
+import { parseNamespacedWorkflowId, WorkflowType } from '@runnablejs/api';
 import { Page } from '../components/layout/Page';
 
 import { getUrl } from '../utils/routes';
 import { internalRedirect } from '../utils/internalRedirect';
 
-type LoaderData = {
-  actionId: string;
-  action: WorkflowType;
-};
 
 export const meta: MetaFunction<LoaderData> = ({ data }) => {
   if (!data?.action) return { title: 'Runnable' };
@@ -25,18 +21,21 @@ export const meta: MetaFunction<LoaderData> = ({ data }) => {
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.actionId, 'actionId not found');
-  const actions = await context.client.listWorkflowTypes();
+  const [namespace, actionId] = parseNamespacedWorkflowId(params.actionId);
+  const actions = await context.client.listWorkflowTypes(namespace);
   const action = actions.workflows.find((action) => action.id === params.actionId);
 
   if (!action) {
+    console.error(`Cannot find action ${actionId} in namespace ${namespace}`);
+    console.error(`Available actions: ${actions.workflows.map((action) => action.id).join(', ')}`);
     throw internalRedirect(`/`);
   }
 
-  return json<LoaderData>({ actionId: params.actionId, action });
+  return json({ actionId, namespace, action });
 }
 
 export default function ActionDetailsPage() {
-  const { action, actionId } = useLoaderData() as LoaderData;
+  const { namespace, action, actionId } = useLoaderData<typeof loader>();
 
   if (!action) return <div>Cannot find action {actionId}</div>;
 
@@ -56,7 +55,7 @@ export default function ActionDetailsPage() {
           borderColor="teal.500"
           as={Link}
           colorScheme="teal"
-          to={getUrl(`/actions/${actionId}/workflows/new`)}
+          to={getUrl(`/actions/${namespace}.${actionId}/workflows/new`)}
         >
           New
         </Button>

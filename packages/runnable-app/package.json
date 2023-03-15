@@ -12,9 +12,8 @@
   ],
   "scripts": {
     "build": "remix build",
-    "build:server": "esbuild --platform=node --format=cjs ./server/server.ts --outdir=build --bundle",
     "dev": "RUNNABLE_BASE_URL='/' remix dev",
-    "dev:server": "cross-env NODE_ENV=development node -r dotenv/config ./build/server.js",
+    "dev:server": "tsx server/server.ts",
     "prepublishOnly": "pnpm build",
     "format": "prettier --write .",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
@@ -83,11 +82,14 @@
     "remix-auth-form": "^1.3.0",
     "remix-auth-google": "^1.2.0",
     "remix-utils": "^6.0.0",
+    "socket.io": "^4.6.1",
+    "socket.io-client": "^4.6.1",
     "stylis": "^4.1.3",
     "tiny-invariant": "^1.3.1",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.2",
+    "tsx": "^3.12.5",
     "typescript": "^4.9.4",
     "zod": "^3.20.2"
   }
