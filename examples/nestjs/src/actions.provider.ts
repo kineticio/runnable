@@ -114,17 +114,13 @@ export const RunnableAppContextProvider: Provider<RunnableAppContext> = {
   provide: 'RUNNABLE_CONTEXT',
   useValue: {
     auth: {
-      verifyLogin: async () => {
-        return {
-          id: '123',
-          email: 'user@getrunnable.com',
-        };
-      },
-      getUserById: async ({ id }) => {
-        return {
-          id: '123',
-          email: 'user@getrunnable.com',
-        };
+      form: {
+        verifyLogin: async () => {
+          return {
+            id: '123',
+            email: 'user@getrunnable.com',
+          };
+        },
       },
     },
   },

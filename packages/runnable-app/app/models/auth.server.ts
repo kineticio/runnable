@@ -2,6 +2,7 @@ import { FormStrategy } from 'remix-auth-form';
 import { Authenticator } from 'remix-auth';
 import { GoogleStrategy } from 'remix-auth-google';
 import { User } from '../api/context';
+import { getUrl } from '../utils/routes';
 import { sessionStorage } from './session.server';
 import { env } from './env';
 
@@ -49,7 +50,7 @@ if (env.RUNNABLE_AUTH_PROVIDER_GOOGLE_CLIENT_ID && env.RUNNABLE_AUTH_PROVIDER_GO
         clientSecret: env.RUNNABLE_AUTH_PROVIDER_GOOGLE_CLIENT_SECRET,
         callbackURL:
           process.env.NODE_ENV === 'development'
-            ? 'http://localhost:3000/auth/callback/google'
+            ? `http://localhost:3000${getUrl('/auth/callback/google')}`
             : `${env.RUNNABLE_AUTH_PROVIDER_GOOGLE_HOSTNAME}/auth/callback/google`,
         hd: env.RUNNABLE_AUTH_PROVIDER_GOOGLE_HD,
       },

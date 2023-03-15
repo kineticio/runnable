@@ -8,7 +8,6 @@ export interface RunnableAppContext {
   auth: {
     form?: {
       verifyLogin: (payload: { email: string; password: string }) => Promise<User>;
-      getUserById: (payload: { id: string }) => Promise<User>;
     };
   };
 }

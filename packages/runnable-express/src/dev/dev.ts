@@ -6,17 +6,13 @@ const app = express();
 
 installRunnable(app, DEFAULT_WORKFLOWS, {
   auth: {
-    verifyLogin: async () => {
-      return {
-        id: '123',
-        email: '',
-      };
-    },
-    getUserById: async () => {
-      return {
-        id: '123',
-        email: '',
-      };
+    form: {
+      verifyLogin: async () => {
+        return {
+          id: '123',
+          email: '',
+        };
+      },
     },
   },
 });

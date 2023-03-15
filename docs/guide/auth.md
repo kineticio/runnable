@@ -25,11 +25,6 @@ installRunnable(app, actions, {
         email: opts.email,
         password: opts.password,
       }),
-    /**
-     * This function is called on each `execute` call to get the user.
-     * This user is passed to the `Action` as the `context.user`.
-     */
-    getUserById: ({ id }) => getUser({ where: { id } }),
   },
 });
 ```

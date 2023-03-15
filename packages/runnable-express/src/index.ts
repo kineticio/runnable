@@ -30,6 +30,10 @@ export function installRunnable(
   const prefix = process.env['RUNNABLE_BASE_URL'] || 'admin';
   logger.log(`Installing Runnable at /${prefix}`);
 
+  if (context.auth.form) {
+    process.env['RUNNABLE_AUTH_PROVIDER_FORM'] = 'true';
+  }
+
   const { publicPath, assetsBuildDirectory } = require('@runnablejs/app/build');
   const basePath = resolvePackagePath('@runnablejs/app', __dirname);
 
@@ -48,10 +52,6 @@ export function installRunnable(
   app.use(`/${prefix}`, flyRedirectMiddleware(logger));
 
   const client = new Runnable(workflows);
-
-  if (context.auth.form) {
-    process.env['RUNNABLE_AUTH_PROVIDER_FORM'] = 'true';
-  }
 
   app.all(`/${prefix}*`, (req, res, next) => {
     return createRequestHandler({

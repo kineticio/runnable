@@ -7,10 +7,11 @@ import { Flex, Stack, FormControl, Input, Button, Box, Checkbox, FormLabel } fro
 
 import { namedAction } from 'remix-utils';
 import { authenticator, strategies } from '../models/auth.server';
+import { getUrl } from '../utils/routes';
 
 export const loader = async ({ request }: LoaderArgs) => {
   await authenticator.isAuthenticated(request, {
-    successRedirect: '/',
+    successRedirect: getUrl('/'),
   });
 
   return json({
@@ -23,8 +24,8 @@ export async function action({ request }: ActionArgs) {
   return namedAction(request, {
     async form() {
       return await authenticator.authenticate('form', request, {
-        successRedirect: '/',
-        failureRedirect: '/login',
+        successRedirect: getUrl('/'),
+        failureRedirect: getUrl('/login'),
       });
     },
     async google() {

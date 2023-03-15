@@ -119,7 +119,6 @@ export const RunnableAppContextProvider: Provider<RunnableAppContext> = {
   useFactory: (authService: AuthService) => ({
     auth: {
       verifyLogin: (opts) => authService.verifyLogin(opts),
-      getUserById: ({ id }) => authService.getUserById(id),
     },
   }),
 };

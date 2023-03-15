@@ -3,6 +3,7 @@ import type { LoaderFunction, MetaFunction } from '@remix-run/server-runtime';
 
 import { AppContainer } from '../components/main/AppContainer';
 import { authenticator } from '../models/auth.server';
+import { getUrl } from '../utils/routes';
 
 export const meta: MetaFunction = () => {
   return {
@@ -12,7 +13,7 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   await authenticator.isAuthenticated(request, {
-    failureRedirect: '/login',
+    failureRedirect: getUrl('/login'),
   });
   return null;
 };
