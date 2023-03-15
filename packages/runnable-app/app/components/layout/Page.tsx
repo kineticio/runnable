@@ -1,5 +1,5 @@
 import { HStack, Flex, Text } from '@chakra-ui/react';
-import { useTransition } from '@remix-run/react';
+import { useNavigation } from '@remix-run/react';
 import { motion } from 'framer-motion';
 
 import React from 'react';
@@ -13,7 +13,7 @@ interface Props {
 const HEADER_HEIGHT = '60px';
 
 export const Page: React.FC<React.PropsWithChildren<Props>> = ({ title, children, animationKey }) => {
-  const transition = useTransition();
+  const transition = useNavigation();
   const titles = Array.isArray(title) ? title : [title];
   return (
     <Flex flexDirection="column" height="100vh">

@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { ActionFunction, MetaFunction, json, LoaderArgs } from '@remix-run/node';
-import { Form, useActionData, useLoaderData, useLocation, useTransition } from '@remix-run/react';
+import { Form, useActionData, useLoaderData, useLocation, useNavigation } from '@remix-run/react';
 import { WorkflowId, WorkflowResponse, WorkflowType } from '@runnablejs/api';
 import invariant from 'tiny-invariant';
 
@@ -77,7 +77,7 @@ export const meta: MetaFunction<LoaderData> = ({ data }) => {
 export default function WorkflowDetailsPage() {
   const { prompt, workflowId, breadcrumbs, action } = useLoaderData() as LoaderData;
   const actionData = useActionData() as LoaderData;
-  const transition = useTransition();
+  const transition = useNavigation();
 
   const currentView = actionData?.prompt ?? prompt;
   const currentError = actionData?.error;

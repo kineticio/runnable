@@ -1,6 +1,6 @@
 {
   "name": "@runnablejs/app",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "sideEffects": false,
   "main": "build/index.js",
   "types": "app/types.ts",

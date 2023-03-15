@@ -120,7 +120,7 @@ importers:
       '@nestjs/common': ^9.2.0
       '@nestjs/core': ^9.2.0
       '@nestjs/platform-express': ^9.2.0
-      '@runnablejs/sdk': ^0.3.17
+      '@runnablejs/sdk': ^0.3.18
       '@types/express': ^4.17.14
       '@types/jest': 29.2.3
       '@types/node': ^18.11.9
