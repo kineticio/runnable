@@ -10,7 +10,6 @@ import { Page } from '../components/layout/Page';
 import { getUrl } from '../utils/routes';
 import { internalRedirect } from '../utils/internalRedirect';
 
-
 export const meta: MetaFunction<LoaderData> = ({ data }) => {
   if (!data?.action) return { title: 'Runnable' };
 
