@@ -1,7 +1,7 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Link, Td } from '@chakra-ui/react';
+import { TableCellValue } from '@runnablejs/api';
 import React from 'react';
-import { TableCellValue } from '../../api/io';
 
 interface Props {
   value: TableCellValue;
@@ -15,7 +15,7 @@ const sx = {
   maxHeight: '120px',
 };
 
-export const TableCell: React.FC<Props> = ({ value }) => {
+export const TableCellComponent: React.FC<Props> = ({ value }) => {
   const title = toString(value);
 
   if (value === null) {
@@ -71,7 +71,7 @@ export const TableCell: React.FC<Props> = ({ value }) => {
       );
     }
 
-    if (value.type === 'link') {
+    if (value.$type === 'link') {
       return (
         <Td title={title} sx={sx}>
           <Link color="teal.800" isExternal href={value.href}>
@@ -81,7 +81,7 @@ export const TableCell: React.FC<Props> = ({ value }) => {
       );
     }
 
-    if (value.type === 'date') {
+    if (value.$type === 'date') {
       return (
         <Td title={title} sx={sx}>
           {formatDate(new Date(value.date))}
@@ -89,7 +89,7 @@ export const TableCell: React.FC<Props> = ({ value }) => {
       );
     }
 
-    if (value.type === 'image') {
+    if (value.$type === 'image') {
       return (
         <Td sx={sx}>
           <img src={value.src} alt={value.alt} />

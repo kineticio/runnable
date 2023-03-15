@@ -61,6 +61,7 @@ components:
       oneOf:
         - $ref: '#/components/schemas/WorkflowPromptFormField'
         - $ref: '#/components/schemas/WorkflowPromptMessage'
+        - $ref: '#/components/schemas/WorkflowPromptTable'
         - $ref: '#/components/schemas/WorkflowPromptTerminal'
         - $ref: '#/components/schemas/WorkflowPromptCompositeForm'
         - $ref: '#/components/schemas/WorkflowPromptStack'
@@ -267,6 +268,29 @@ components:
         severity:
           $ref: '#/components/schemas/Severity'
 
+    WorkflowPromptTable:
+      type: object
+      required:
+        - $type
+        - headers
+        - rows
+      properties:
+        $type:
+          type: string
+          enum: [table]
+        title:
+          type: string
+        headers:
+          type: array
+          items:
+            type: string
+        rows:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/TableCell'
+
     WorkflowPromptTerminal:
       type: object
       required:
@@ -319,6 +343,7 @@ components:
             oneOf:
               - $ref: '#/components/schemas/WorkflowPromptFormField'
               - $ref: '#/components/schemas/WorkflowPromptMessage'
+              - $ref: '#/components/schemas/WorkflowPromptTable'
               - $ref: '#/components/schemas/WorkflowPromptCompositeForm'
 
   responses:

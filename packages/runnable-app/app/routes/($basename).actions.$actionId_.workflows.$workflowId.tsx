@@ -20,7 +20,7 @@ import { WorkflowId, WorkflowResponse, WorkflowType } from '@runnablejs/api';
 import invariant from 'tiny-invariant';
 
 import { FormView } from '../components/forms/FormView';
-import { TableCell } from '../components/forms/TableCell';
+import { TableCellComponent } from '../components/forms/TableCell';
 import { Page } from '../components/layout/Page';
 
 import { parseFormData } from '../utils/parseFormData';
@@ -130,7 +130,7 @@ export default function WorkflowDetailsPage() {
                       <Td>
                         <Text fontWeight={600}>{breadcrumb.key}</Text>
                       </Td>
-                      <TableCell value={breadcrumb.value} />
+                      <TableCellComponent value={breadcrumb.value} />
                     </Tr>
                   ))}
                 </Tbody>

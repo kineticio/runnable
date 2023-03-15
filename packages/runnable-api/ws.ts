@@ -1,5 +1,5 @@
-import { WorkflowType, WorkflowResponse } from './client';
-import { WorkflowId, NamespaceId } from './ids';
+import type { WorkflowType, WorkflowResponse } from './client';
+import type { WorkflowId, NamespaceId } from './ids';
 
 export interface ServerToClientEvents {
   listWorkflowTypes: (namespace: NamespaceId | undefined, callback: (workflows: WorkflowType[]) => void) => void;

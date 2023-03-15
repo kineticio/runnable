@@ -1,8 +1,9 @@
-import { NamespaceId, WorkflowId } from './ids';
-import { components } from './schema';
+import type { NamespaceId, WorkflowId } from './ids';
+import type { components } from './schema';
 
 export type WorkflowResponse = components['responses']['WorkflowResponse']['content']['application/json'];
 export type WorkflowPrompt = components['schemas']['WorkflowPrompt'];
+export type TableCellValue = components['schemas']['TableCell'];
 export type Breadcrumb = components['schemas']['Breadcrumb'];
 export type Option = components['schemas']['Option'];
 

@@ -1,15 +1,5 @@
+import { TableCellValue } from '@runnablejs/api';
 import type { Validator } from './validator';
-
-export type TableCellValue =
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | { $type: 'link'; href: string; text: string }
-  | { $type: 'date'; date: Date }
-  | { $type: 'image'; src: string; alt: string }
-  | Date;
 
 export type InputForm<T extends object> = {
   [P in keyof T]: FormPromise<T[P]>;

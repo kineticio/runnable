@@ -11,9 +11,9 @@ import {
   Radio,
   RadioGroup,
 } from '@chakra-ui/react';
+import { TableCellValue } from '@runnablejs/api';
 import React from 'react';
-import { TableCellValue } from '../../api/io';
-import { TableCell } from './TableCell';
+import { TableCellComponent } from './TableCell';
 
 interface Props {
   helperText?: string;
@@ -59,7 +59,7 @@ export const TableInput: React.FC<Props> = ({ name, headers, isMultiSelect, init
                 {/* checkbox */}
                 <Td>{renderCheckbox(row.key)}</Td>
                 {row.cells.map((value, idx) => (
-                  <TableCell key={idx} value={value} />
+                  <TableCellComponent key={idx} value={value} />
                 ))}
               </Tr>
             ))}

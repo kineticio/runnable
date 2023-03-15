@@ -67,7 +67,7 @@ export class RunnableWsServer implements IRunnableClient {
     });
   }
 
-  listWorkflowTypes(namespace: NamespaceId | undefined): Promise<{ workflows: WorkflowType[] }> {
+  listWorkflowTypes(namespace?: NamespaceId): Promise<{ workflows: WorkflowType[] }> {
     this.logger.log('Handling listWorkflowTypes');
 
     const promises: Promise<WorkflowType[]>[] = [];
@@ -77,7 +77,8 @@ export class RunnableWsServer implements IRunnableClient {
       }
       promises.push(
         (socket.timeout(1000) as ClientSocket)
-          .emitWithAck('listWorkflowTypes')
+          // eslint-disable-next-line unicorn/no-useless-undefined
+          .emitWithAck('listWorkflowTypes', undefined)
           .then((response) =>
             response.map((workflow) => ({ ...workflow, id: `${socket.data.namespace}.${workflow.id}` }))
           )

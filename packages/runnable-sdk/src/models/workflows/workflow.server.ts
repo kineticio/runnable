@@ -1,9 +1,10 @@
+import { TableCellValue } from '@runnablejs/api';
 import type { ClientResponse } from '../../types/response';
 import { mapValues, keyBy } from '../../utils/objects';
 import { toOptions } from '../../utils/options';
 import { ValidationError } from '../errors';
 import { RunnableContext } from '../../api/context';
-import { InputForm, FormPromise, TableCellValue } from '../../api/io';
+import { InputForm, FormPromise } from '../../api/io';
 import { InputOutput } from '../../types';
 import { RunnableWorkflow } from '../../api/workflows';
 import { createInput, createMessage, Input } from './InputBuilder';
@@ -513,12 +514,10 @@ export class Workflow {
         table: (opts: { title: string; rows: TableCellValue[][]; headers: string[] }): FormPromise<void> => {
           return this.asFormPromise(
             createMessage({
-              $type: 'message',
+              $type: 'table',
               title: opts.title,
-              severity: 'info',
-              message: '',
-              // headers: opts.headers.join(', ')
-              // rows: opts.rows.join(', ')
+              headers: opts.headers,
+              rows: opts.rows,
             })
           );
         },

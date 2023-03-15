@@ -1,4 +1,4 @@
-import { components, Logger } from '@runnablejs/api';
+import type { components, Logger } from '@runnablejs/api';
 
 export interface RunnableAppContext {
   logger?: Logger;

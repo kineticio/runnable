@@ -4,13 +4,13 @@ import { json } from '@remix-run/node';
 import { Link, Outlet, useLoaderData, useLocation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
-import { parseNamespacedWorkflowId, WorkflowType } from '@runnablejs/api';
+import { parseNamespacedWorkflowId } from '@runnablejs/api';
 import { Page } from '../components/layout/Page';
 
 import { getUrl } from '../utils/routes';
 import { internalRedirect } from '../utils/internalRedirect';
 
-export const meta: MetaFunction<LoaderData> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   if (!data?.action) return { title: 'Runnable' };
 
   return {

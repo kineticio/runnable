@@ -1,7 +1,7 @@
-import { TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
+import { TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody } from '@chakra-ui/react';
+import { TableCellValue } from '@runnablejs/api';
 import React from 'react';
-import { TableCellValue } from '../../api/io';
-import { TableCell } from './TableCell';
+import { TableCellComponent } from './TableCell';
 
 interface Props {
   title?: string;
@@ -32,7 +32,7 @@ export const TableView: React.FC<Props> = ({ headers, title, rows }) => {
           {rows.map((row, idx) => (
             <Tr key={idx}>
               {row.map((value, idx2) => (
-                <TableCell key={idx2} value={value} />
+                <TableCellComponent key={idx2} value={value} />
               ))}
             </Tr>
           ))}
@@ -41,10 +41,3 @@ export const TableView: React.FC<Props> = ({ headers, title, rows }) => {
     </TableContainer>
   );
 };
-
-function toPrettyString(value: TableCellValue) {
-  if (typeof value === 'string') {
-    return value;
-  }
-  return JSON.stringify(value);
-}

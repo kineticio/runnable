@@ -75,6 +75,7 @@ export interface components {
     WorkflowPrompt:
       | components['schemas']['WorkflowPromptFormField']
       | components['schemas']['WorkflowPromptMessage']
+      | components['schemas']['WorkflowPromptTable']
       | components['schemas']['WorkflowPromptTerminal']
       | components['schemas']['WorkflowPromptCompositeForm']
       | components['schemas']['WorkflowPromptStack'];
@@ -162,6 +163,13 @@ export interface components {
       dangerouslySetInnerHTML?: boolean;
       severity: components['schemas']['Severity'];
     };
+    WorkflowPromptTable: {
+      /** @enum {string} */
+      $type: 'table';
+      title?: string;
+      headers: string[];
+      rows: components['schemas']['TableCell'][][];
+    };
     WorkflowPromptTerminal: {
       /** @enum {string} */
       $type: 'terminal';
@@ -184,6 +192,7 @@ export interface components {
       items: (
         | components['schemas']['WorkflowPromptFormField']
         | components['schemas']['WorkflowPromptMessage']
+        | components['schemas']['WorkflowPromptTable']
         | components['schemas']['WorkflowPromptCompositeForm']
       )[];
     };

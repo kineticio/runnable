@@ -33,6 +33,7 @@ import { TableInput } from './TableInput';
 import { ImageInput } from './ImageInput';
 import { MultiSelect } from './MultiSelect';
 import { SingleSelect } from './SingleSelect';
+import { TableView } from './TableView';
 
 interface Props {
   name: string;
@@ -112,9 +113,9 @@ function renderFormField(name: string, field: WorkflowPrompt) {
         </Alert>
       );
     }
-    // case 'message-table': {
-    //   return <TableView title={field.title} headers={field.headers} rows={field.rows} />;
-    // }
+    case 'table': {
+      return <TableView title={field.title} headers={field.headers} rows={field.rows} />;
+    }
     case 'form-field': {
       switch (field.input.$type) {
         case 'boolean': {
