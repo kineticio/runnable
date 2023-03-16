@@ -57,7 +57,13 @@ const BUILD_DIR = path.join(process.cwd(), 'build');
 app.all(
   '*',
   MODE === 'production'
-    ? createRequestHandler({ build: require(BUILD_DIR) })
+    ? createRequestHandler({
+        build: require(BUILD_DIR),
+        getLoadContext: () => ({
+          client: runnable,
+          auth: {},
+        }),
+      })
     : (...args) => {
         purgeRequireCache();
         const requestHandler = createRequestHandler({
