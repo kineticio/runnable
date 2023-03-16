@@ -65,7 +65,7 @@
     "eslint": "^8.36.0",
     "express": "^4.18.2",
     "express-prometheus-middleware": "^1.2.0",
-    "framer-motion": "^8.5.5",
+    "framer-motion": "^10.4.0",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "js-cookie": "^3.0.1",
