@@ -2,7 +2,7 @@
   "name": "@runnablejs/monorepo",
   "version": "0.3.19",
   "private": true,
-  "packageManager": "pnpm@7.25.1",
+  "packageManager": "pnpm@7.29.3",
   "description": "Build internal apps with ease",
   "scripts": {
     "build": "pnpm -r --filter=./packages/** run build",
@@ -19,32 +19,32 @@
     "typecheck": " pnpm -r --parallel run typecheck"
   },
   "devDependencies": {
-    "@rollup/plugin-alias": "^4.0.2",
-    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-alias": "^4.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "@types/node": "^18.11.18",
-    "@typescript-eslint/eslint-plugin": "^5.48.2",
-    "@typescript-eslint/parser": "^5.48.2",
+    "@types/node": "^18.15.3",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
     "bumpp": "^8.2.1",
     "cross-env": "^7.0.3",
-    "esbuild": "0.17.3",
-    "eslint": "^8.32.0",
-    "eslint-config-prettier": "^8.6.0",
+    "esbuild": "0.17.11",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-react": "^7.32.1",
+    "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-unicorn": "^44.0.2",
-    "lint-staged": "^13.1.0",
-    "pnpm": "7.25.1",
-    "prettier": "^2.8.3",
+    "lint-staged": "^13.2.0",
+    "pnpm": "7.29.3",
+    "prettier": "^2.8.4",
     "rimraf": "^3.0.2",
-    "rollup": "^3.10.0",
-    "rollup-plugin-dts": "^5.1.1",
+    "rollup": "^3.19.1",
+    "rollup-plugin-dts": "^5.2.0",
     "rollup-plugin-esbuild": "^5.0.0",
     "simple-git-hooks": "^2.8.1",
-    "typescript": "^4.9.4",
-    "vitepress": "^1.0.0-alpha.38",
-    "vue": "^3.2.45"
+    "typescript": "^4.9.5",
+    "vitepress": "^1.0.0-alpha.60",
+    "vue": "^3.2.47"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
@@ -55,6 +55,6 @@
     ]
   },
   "dependencies": {
-    "@remix-run/dev": "^1.11.0"
+    "@remix-run/dev": "^1.14.3"
   }
 }
