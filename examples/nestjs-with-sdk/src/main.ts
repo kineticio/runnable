@@ -18,7 +18,7 @@ async function bootstrap() {
   // Start Runnable server
   new RunnableWs(actions).start({
     namespace: 'user-server',
-    runnableHost: 'ws://localhost:3007',
+    runnableHost: 'ws://localhost:3000',
     logger: logger,
     token: 'another-secret',
   });

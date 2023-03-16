@@ -167,9 +167,8 @@ export class RunnableWsServer implements IRunnableClient {
     return id.split('.', 2) as [NamespaceId, T];
   }
 
-  listen(port: number) {
-    this.io.listen(port);
-    this.logger.log(`RunnableWsServer Listening on port ${port}`);
+  listen(srv: http.Server | number) {
+    this.io.listen(srv);
     return this;
   }
 

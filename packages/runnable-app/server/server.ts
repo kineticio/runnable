@@ -78,9 +78,16 @@ app.all(
       }
 );
 
-const { PORT, METRICS_PORT, WS_PORT, RUNNABLE_AUTH_SECRET } = serverEnv;
+const { PORT, METRICS_PORT, RUNNABLE_AUTH_SECRET } = serverEnv;
 
-app.listen(PORT, () => {
+const server = createServer(app);
+
+const runnable = new RunnableWsServer({
+  srv: server,
+  secret: RUNNABLE_AUTH_SECRET,
+}).listen(server);
+
+server.listen(PORT, () => {
   // require the built app so we're ready when the first request comes in
   require(BUILD_DIR);
   console.log(`✅ app ready: http://localhost:${PORT}`);
@@ -89,11 +96,6 @@ app.listen(PORT, () => {
 metricsApp.listen(METRICS_PORT, () => {
   console.log(`✅ metrics ready: http://localhost:${METRICS_PORT}/metrics`);
 });
-
-const runnable = new RunnableWsServer({
-  srv: createServer(app),
-  secret: RUNNABLE_AUTH_SECRET,
-}).listen(Number(WS_PORT));
 
 function purgeRequireCache() {
   // purge require cache on requests for "server side HMR" this won't let
