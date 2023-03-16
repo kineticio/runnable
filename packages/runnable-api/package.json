@@ -1,6 +1,6 @@
 {
   "name": "@runnablejs/api",
-  "version": "0.3.19",
+  "version": "0.3.20",
   "sideEffects": false,
   "main": "index.ts",
   "types": "index.ts",
