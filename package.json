@@ -37,7 +37,7 @@
     "lint-staged": "^13.2.0",
     "pnpm": "7.29.3",
     "prettier": "^2.8.4",
-    "rimraf": "^3.0.2",
+    "rimraf": "^4.4.0",
     "rollup": "^3.19.1",
     "rollup-plugin-dts": "^5.2.0",
     "rollup-plugin-esbuild": "^5.0.0",
