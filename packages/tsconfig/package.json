@@ -1,6 +1,6 @@
 {
   "name": "@runnablejs/tsconfig",
-  "version": "0.3.20",
+  "version": "0.4.0",
   "private": true,
   "main": "index.js",
   "files": [
