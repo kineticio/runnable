@@ -23,7 +23,7 @@ importers:
       lint-staged: ^13.2.0
       pnpm: 7.29.3
       prettier: ^2.8.4
-      rimraf: ^3.0.2
+      rimraf: ^4.4.0
       rollup: ^3.19.1
       rollup-plugin-dts: ^5.2.0
       rollup-plugin-esbuild: ^5.0.0
@@ -52,7 +52,7 @@ importers:
       lint-staged: 13.2.0
       pnpm: 7.29.3
       prettier: 2.8.4
-      rimraf: 3.0.2
+      rimraf: 4.4.0
       rollup: 3.19.1
       rollup-plugin-dts: 5.2.0_h4kaxwm6ctjivrsm4cpxaz7nqu
       rollup-plugin-esbuild: 5.0.0_caszwlkzzxo5hzxqu45fmzwfye
@@ -12199,6 +12199,16 @@ packages:
       once: 1.4.0
     dev: true
 
+  /glob/9.3.0:
+    resolution: {integrity: sha512-EAZejC7JvnQINayvB/7BJbpZpNOJ8Lrw2OZNEvQxe0vaLn1SuwMcfV7/MNaX8L/T0wmptBFI4YMtDvSBxYDc7w==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    dependencies:
+      fs.realpath: 1.0.0
+      minimatch: 7.4.2
+      minipass: 4.2.5
+      path-scurry: 1.6.1
+    dev: true
+
   /global-dirs/3.0.1:
     resolution: {integrity: sha512-NBcGGFbBA9s1VzD41QXDG+3++t9Mn5t1FpLdhESY6oKY4gYTFpX4wO3sqGUa0Srjtbfj3szX0RnemmrVRUdULA==}
     engines: {node: '>=10'}
@@ -14803,6 +14813,13 @@ packages:
       brace-expansion: 2.0.1
     dev: true
 
+  /minimatch/7.4.2:
+    resolution: {integrity: sha512-xy4q7wou3vUoC9k1xGTXc+awNdGaGVHtFUaey8tiX4H1QRc04DZ/rmDFwNm2EBsuYEhAZ6SgMmYf3InGY6OauA==}
+    engines: {node: '>=10'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: true
+
   /minimist/1.2.6:
     resolution: {integrity: sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==}
 
@@ -14854,6 +14871,11 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       yallist: 4.0.0
+
+  /minipass/4.2.5:
+    resolution: {integrity: sha512-+yQl7SX3bIT83Lhb4BVorMAHVuqsskxRdlmO9kTpyukp8vsm2Sn/fUOV9xlnG8/a5JsypJzap21lz/y3FBMJ8Q==}
+    engines: {node: '>=8'}
+    dev: true
 
   /minizlib/2.1.2:
     resolution: {integrity: sha512-bAxsR8BVfj60DWXHE3u30oHzfl4G7khkSuPW+qvpd7jFRHm7dLxOjUk1EHACJ/hxLY8phGJ0YhYHZo7jil7Qdg==}
@@ -15668,6 +15690,14 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       path-root-regex: 0.1.2
+    dev: true
+
+  /path-scurry/1.6.1:
+    resolution: {integrity: sha512-OW+5s+7cw6253Q4E+8qQ/u1fVvcJQCJo/VFD8pje+dbJCF1n5ZRMV2AEHbGp+5Q7jxQIYJxkHopnj6nzdGeZLA==}
+    engines: {node: '>=14'}
+    dependencies:
+      lru-cache: 7.14.1
+      minipass: 4.2.5
     dev: true
 
   /path-to-regexp/0.1.7:
@@ -16757,6 +16787,14 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
+
+  /rimraf/4.4.0:
+    resolution: {integrity: sha512-X36S+qpCUR0HjXlkDe4NAOhS//aHH0Z+h8Ckf2auGJk3PTnx5rLmrHkwNdbVQuCSUhOyFrlRvFEllZOYE+yZGQ==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      glob: 9.3.0
+    dev: true
 
   /rollup-plugin-dts/5.2.0_h4kaxwm6ctjivrsm4cpxaz7nqu:
     resolution: {integrity: sha512-B68T/haEu2MKcz4kNUhXB8/h5sq4gpplHAJIYNHbh8cp4ZkvzDvNca/11KQdFrB9ZeKucegQIotzo5T0JUtM8w==}
