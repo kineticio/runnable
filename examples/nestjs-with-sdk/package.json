@@ -17,6 +17,7 @@
     "@nestjs/core": "^9.2.0",
     "@nestjs/platform-express": "^9.2.0",
     "@runnablejs/express": "*",
+    "@runnablejs/sdk": "*",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.7"
   },

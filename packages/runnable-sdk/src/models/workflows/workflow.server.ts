@@ -213,6 +213,7 @@ export class Workflow {
             label: opts.label,
             helperText: opts.helperText,
             placeholder: opts.placeholder,
+            defaultValue: opts.defaultValue,
             optional: opts.optional,
             input: {
               $type: 'boolean',
@@ -297,6 +298,7 @@ export class Workflow {
             label: opts.label,
             helperText: opts.helperText,
             placeholder: opts.placeholder,
+            defaultValue: opts.initialSelection,
             optional: opts.optional,
             input: {
               $type: 'select',
