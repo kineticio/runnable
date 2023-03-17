@@ -4,7 +4,7 @@ import { json } from '@remix-run/node';
 import { Link, Outlet, useLoaderData, useLocation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
-import { parseNamespacedWorkflowId } from '@runnablejs/api';
+import { parseNamespacedId } from '@runnablejs/api';
 import { Page } from '../components/layout/Page';
 
 import { getUrl } from '../utils/routes';
@@ -20,7 +20,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.actionId, 'actionId not found');
-  const [namespace, actionId] = parseNamespacedWorkflowId(params.actionId);
+  const [namespace, actionId] = parseNamespacedId(params.actionId);
   const actions = await context.client.listWorkflowTypes(namespace);
   const action = actions.workflows.find((action) => action.id === params.actionId);
 

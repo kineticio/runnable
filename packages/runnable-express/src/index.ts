@@ -5,8 +5,9 @@ import { createRequestHandler, RequestHandler } from '@remix-run/express';
 import express from 'express';
 import resolvePackagePath from 'resolve-package-path';
 import cookieParser from 'cookie-parser';
-import { Runnable } from '@runnablejs/sdk';
+import { NamespacedRunnable, Runnable } from '@runnablejs/sdk';
 import type { RunnableWorkflows } from '@runnablejs/sdk';
+import type { NamespaceId } from '@runnablejs/api';
 import { flyHeaderMiddleware, flyRedirectMiddleware } from './middleware';
 
 export interface ExpressApplication {
@@ -51,7 +52,7 @@ export function installRunnable(
   app.use(`/${prefix}`, flyHeaderMiddleware());
   app.use(`/${prefix}`, flyRedirectMiddleware(logger));
 
-  const client = new Runnable(workflows);
+  const client = new NamespacedRunnable(new Runnable(workflows, { logger: console }), 'main' as NamespaceId);
 
   app.all(`/${prefix}*`, (req, res, next) => {
     return createRequestHandler({

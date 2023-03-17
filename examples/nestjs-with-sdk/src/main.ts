@@ -16,12 +16,12 @@ async function bootstrap() {
   logger.log(`Application is running on: ${await app.getUrl()}`);
 
   // Start Runnable server
-  new RunnableWs(actions).start({
+  new RunnableWs(actions, {
     namespace: 'user-server',
     runnableHost: 'ws://localhost:3000',
     logger: logger,
     token: 'another-secret',
-  });
+  }).start();
 }
 
 bootstrap();

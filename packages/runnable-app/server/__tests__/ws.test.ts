@@ -3,12 +3,20 @@
  */
 import { createServer } from 'node:http';
 import { AddressInfo } from 'node:net';
-import { NamespaceId, ServerToClientEvents, WorkflowId, WorkflowPrompt } from '@runnablejs/api';
+import { NamespaceId, ServerToClientEvents, WorkflowId, WorkflowPrompt, WorkflowTypeId } from '@runnablejs/api';
 import { connect, Socket } from 'socket.io-client';
-import { RunnableWsServer } from '../ws/ws';
+import { RunnableWsServer } from '../ws/RunnableWsServer';
 
 type NoInfer<T> = [T][T extends any ? 0 : never];
 const prompt: WorkflowPrompt = { $type: 'message', title: 'name?', severity: 'info', message: '' };
+
+const context = {
+  user: {
+    id: '1',
+    name: 'M Scott',
+    email: 'mscott@dm.com',
+  },
+};
 
 function partial<T>(payload: Partial<NoInfer<T>>): T {
   return payload as T;
@@ -134,7 +142,7 @@ describe('my awesome project', () => {
 
   it('should be able to start a workflow and pick it up', async () => {
     // start a workflow
-    userService.on('startWorkflow', (type, cb) => {
+    userService.on('startWorkflow', (type, context, cb) => {
       started(type);
       cb(partial({ workflowId: '123', prompt }));
     });
@@ -143,7 +151,7 @@ describe('my awesome project', () => {
       cb(partial({ workflowId: '123', prompt }));
     });
 
-    const response = await io.startWorkflow('user-service.create-user');
+    const response = await io.startWorkflow('user-service.create-user' as WorkflowTypeId, context);
     expect(response).toMatchInlineSnapshot(`
       {
         "prompt": {
@@ -168,13 +176,13 @@ describe('my awesome project', () => {
 
   it('should be able to start a workflow and get the result', async () => {
     // start a workflow
-    userService.on('startWorkflow', (type, cb) => {
+    userService.on('startWorkflow', (type, context, cb) => {
       started(type);
       cb(partial({ workflowId: '123', prompt: partial(prompt) }));
     });
-    const response = await io.startWorkflow('user-service.create-user');
+    const response = await io.startWorkflow('user-service.create-user' as WorkflowTypeId, context);
     expect(started).toBeCalledTimes(1);
-    expect(started).toBeCalledWith('create-user');
+    expect(started).toBeCalledWith('user-service.create-user');
     expect(response).toMatchInlineSnapshot(`
       {
         "prompt": {
@@ -194,7 +202,7 @@ describe('my awesome project', () => {
     });
     const response2 = await io.continueWorkflow(response.workflowId as WorkflowId, { title: 'John' });
     expect(continued).toBeCalledTimes(1);
-    expect(continued).toBeCalledWith('123', { title: 'John' });
+    expect(continued).toBeCalledWith('user-service.123', { title: 'John' });
     expect(response2).toMatchInlineSnapshot(`
       {
         "prompt": {
@@ -210,7 +218,7 @@ describe('my awesome project', () => {
 
   it('should be able to run a workflow and not call other instances', async () => {
     // start a workflow
-    userService.on('startWorkflow', (type, cb) => {
+    userService.on('startWorkflow', (type, context, cb) => {
       started(type);
       cb(partial({ workflowId: '123', prompt }));
     });
@@ -221,14 +229,14 @@ describe('my awesome project', () => {
     userService2.on('continueWorkflow', (workflowId, answer, cb) => {
       throw new Error('Should not be called');
     });
-    const response = await io.startWorkflow('user-service.create-user');
+    const response = await io.startWorkflow('user-service.create-user' as WorkflowTypeId, context);
     expect(started).toBeCalledTimes(1);
-    expect(started).toBeCalledWith('create-user');
+    expect(started).toBeCalledWith('user-service.create-user');
 
     // continue the workflow
     const response2 = await io.continueWorkflow(response.workflowId as WorkflowId, { title: 'John' });
     expect(continued).toBeCalledTimes(1);
-    expect(continued).toBeCalledWith('123', { title: 'John' });
+    expect(continued).toBeCalledWith('user-service.123', { title: 'John' });
     expect(response2).toMatchInlineSnapshot(`
       {
         "prompt": {
@@ -244,7 +252,7 @@ describe('my awesome project', () => {
 
   it('should start a workflow on one instance but not more', async () => {
     // start a workflow
-    userService.on('startWorkflow', (type, cb) => {
+    userService.on('startWorkflow', (type, context, cb) => {
       started(type);
       cb(
         partial({
@@ -253,7 +261,7 @@ describe('my awesome project', () => {
         })
       );
     });
-    userService2.on('startWorkflow', (type, cb) => {
+    userService2.on('startWorkflow', (type, context, cb) => {
       started(type);
       cb(
         partial({
@@ -262,7 +270,7 @@ describe('my awesome project', () => {
         })
       );
     });
-    emailService.on('startWorkflow', (type, cb) => {
+    emailService.on('startWorkflow', (type, context, cb) => {
       started(type);
       cb(
         partial({
@@ -272,9 +280,9 @@ describe('my awesome project', () => {
       );
     });
 
-    const response = await io.startWorkflow('user-service.create-user');
+    const response = await io.startWorkflow('user-service.create-user' as WorkflowTypeId, context);
     expect(response.workflowId).toMatchInlineSnapshot(`"user-service.123"`);
     expect(started).toBeCalledTimes(1);
-    expect(started).toBeCalledWith('create-user');
+    expect(started).toBeCalledWith('user-service.create-user');
   });
 });

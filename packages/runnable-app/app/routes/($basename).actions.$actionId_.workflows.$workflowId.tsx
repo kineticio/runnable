@@ -84,8 +84,9 @@ export default function WorkflowDetailsPage() {
   const hasNext = currentView.$type !== 'terminal';
   const loading = transition.state === 'loading' || transition.state === 'submitting';
 
+  const last8 = workflowId.slice(-8);
   return (
-    <Page title={['Actions', action.title, `Workflow ${workflowId.slice(0, 8)}`]} animationKey={useLocation().key}>
+    <Page title={['Actions', action.title, `Workflow ${last8}`]} animationKey={useLocation().key}>
       <Grid templateColumns="repeat(5, 1fr)" width="100%" gap={2}>
         <GridItem colSpan={4}>
           <Form method="post">

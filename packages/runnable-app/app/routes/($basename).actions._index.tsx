@@ -1,8 +1,8 @@
-import { Box, Heading, HStack, Stack, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { Heading, HStack, Stack, Tag, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import { Link, useLoaderData, useLocation } from '@remix-run/react';
 import type { LoaderFunction, MetaFunction } from '@remix-run/server-runtime';
 import { json } from '@remix-run/server-runtime';
-import { WorkflowType } from '@runnablejs/api';
+import { parseNamespacedId, WorkflowType } from '@runnablejs/api';
 import { Iconify } from '../components/icons/Iconify';
 import { Page } from '../components/layout/Page';
 import { getUrl } from '../utils/routes';
@@ -63,10 +63,12 @@ function ActionCard({
   actionId: string;
   action: { title: string; description?: string; icon?: string };
 }) {
+  const [namespace] = parseNamespacedId(actionId);
   return (
-    <Box
+    <VStack
       as={Link}
       p={4}
+      alignItems="flex-start"
       shadow="md"
       borderWidth="1px"
       width={350}
@@ -82,7 +84,10 @@ function ActionCard({
           {action.title}
         </Heading>
       </HStack>
-      <Text mt={3}>{action.description}</Text>
-    </Box>
+      <Text my={3}>{action.description}</Text>
+      <Tag size="sm" variant="subtle" colorScheme="cyan">
+        {namespace}
+      </Tag>
+    </VStack>
   );
 }

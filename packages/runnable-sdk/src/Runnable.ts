@@ -1,27 +1,42 @@
-import { components, IRunnableClient, WorkflowId, WorkflowResponse } from '@runnablejs/api';
+import {
+  IRunnableClient,
+  Logger,
+  RunnableContext,
+  WorkflowId,
+  WorkflowResponse,
+  WorkflowType,
+  WorkflowTypeId,
+} from '@runnablejs/api';
 import { InMemoryWorkflowManager } from './models/workflows/workflow-manager.server';
-import { RunnableWorkflows } from './types';
+import { RunnableWorkflow, RunnableWorkflows } from './types';
+
+interface RunnableOptions {
+  logger: Logger;
+}
 
 export class Runnable implements IRunnableClient {
   private workflowManager = new InMemoryWorkflowManager();
+  private workflows: Record<WorkflowTypeId, RunnableWorkflow>;
 
-  constructor(private workflows: RunnableWorkflows) {}
+  constructor(workflows: RunnableWorkflows, private opts: RunnableOptions) {
+    this.workflows = workflows;
+  }
 
-  async listWorkflowTypes(): Promise<{ workflows: components['schemas']['WorkflowType'][] }> {
+  async listWorkflowTypes(): Promise<{ workflows: WorkflowType[] }> {
     return {
       workflows: Object.entries(this.workflows).map(([id, action]) => {
         return {
-          id,
+          id: id,
           title: action.title,
-          category: action.category ?? '',
-          icon: action.icon ?? '',
-          description: action.description ?? '',
+          category: action.category,
+          icon: action.icon,
+          description: action.description,
         };
       }),
     };
   }
 
-  async startWorkflow(workflowTypeId: string): Promise<WorkflowResponse> {
+  async startWorkflow(workflowTypeId: WorkflowTypeId, context: RunnableContext): Promise<WorkflowResponse> {
     const workflow = this.workflows[workflowTypeId];
     if (!workflow) {
       throw new Error(
@@ -29,8 +44,8 @@ export class Runnable implements IRunnableClient {
       );
     }
     return this.workflowManager.startWorkflow(workflow, {
-      logger: console,
-      user: { id: '123', email: '' },
+      logger: this.opts.logger,
+      user: context.user,
     });
   }
 
@@ -38,7 +53,7 @@ export class Runnable implements IRunnableClient {
     return this.workflowManager.pickUpWorkflow(workflowId);
   }
 
-  async continueWorkflow(workflowId: WorkflowId, response: { [key: string]: unknown }): Promise<WorkflowResponse> {
-    return this.workflowManager.continueWorkflow(workflowId, { ioResponse: response });
+  async continueWorkflow(workflowId: WorkflowId, payload: { [key: string]: unknown }): Promise<WorkflowResponse> {
+    return this.workflowManager.continueWorkflow(workflowId, { ioResponse: payload });
   }
 }

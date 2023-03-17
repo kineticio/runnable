@@ -16,7 +16,7 @@
     "@nestjs/common": "^9.2.0",
     "@nestjs/core": "^9.2.0",
     "@nestjs/platform-express": "^9.2.0",
-    "@runnablejs/express": "^0.4.0",
+    "@runnablejs/express": "*",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "reflect-metadata": "^0.1.13",

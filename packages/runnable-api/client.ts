@@ -1,4 +1,4 @@
-import type { NamespaceId, WorkflowId } from './ids';
+import type { NamespaceId, WorkflowId, WorkflowTypeId } from './ids';
 import type { components } from './schema';
 
 export type WorkflowResponse = components['responses']['WorkflowResponse']['content']['application/json'];
@@ -18,9 +18,28 @@ export interface Logger {
   warn(message: any, ...optionalParams: any[]): any;
   debug?(message: any, ...optionalParams: any[]): any;
 }
+
+export type User = components['schemas']['User'];
+
+export interface RunnableContext {
+  user: User;
+}
+
 export interface IRunnableClient {
+  /**
+   * List workflow types.
+   */
   listWorkflowTypes(namespace?: NamespaceId): Promise<{ workflows: WorkflowType[] }>;
-  startWorkflow(workflowTypeId: string): Promise<WorkflowResponse>;
+  /**
+   * Start workflow for a given Type ID.
+   */
+  startWorkflow(workflowTypeId: WorkflowTypeId, context: RunnableContext): Promise<WorkflowResponse>;
+  /**
+   * Pickup a workflow for ID.
+   */
   pickUpWorkflow(workflowId: WorkflowId): Promise<WorkflowResponse>;
-  continueWorkflow(workflowId: WorkflowId, response: { [key: string]: unknown }): Promise<WorkflowResponse>;
+  /**
+   * Continue a workflow for ID, passing a user response to progress the workflow.
+   */
+  continueWorkflow(workflowId: WorkflowId, payload: { [key: string]: unknown }): Promise<WorkflowResponse>;
 }

@@ -1,4 +1,4 @@
-import type { components, Logger } from '@runnablejs/api';
+import type { Logger, User } from '@runnablejs/api';
 
 export interface RunnableAppContext {
   logger?: Logger;
@@ -16,5 +16,3 @@ export interface RunnableContext {
   logger: Logger;
   user: User;
 }
-
-export type User = components['schemas']['User'];

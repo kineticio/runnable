@@ -8,7 +8,7 @@ import compression from 'compression';
 import morgan from 'morgan';
 import { createRequestHandler } from '@remix-run/express';
 import prom from 'express-prometheus-middleware';
-import { RunnableWsServer } from './ws/ws';
+import { RunnableWsServer } from './ws/RunnableWsServer';
 import { serverEnv } from './server-env';
 
 const app = express();
