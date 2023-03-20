@@ -20,5 +20,6 @@ cypress/downloads
 cypress/screenshots
 docs/public/user-avatars
 docs/public/sponsors
+docs/.vitepress/cache
 
 tsdoc-metadata.json

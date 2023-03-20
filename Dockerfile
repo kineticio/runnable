@@ -18,6 +18,6 @@ ENV NODE_ENV=production
 
 RUN pnpm run build
 
-WORKDIR /app/packages/runnable-app
+WORKDIR /app/examples/nestjs
 
-CMD ["pnpm", "dev:server"]
+CMD ["pnpm", "start:prod"]

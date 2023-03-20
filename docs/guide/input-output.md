@@ -6,7 +6,7 @@ title: Input/Output | Guide
 
 The `io` object is passed to every runnable's `execute` function. It provides a set of methods for interacting with the user.
 
-When asking a user for input, you block the execution while waiting for a `Promise` to resolve. The promise is resolved once the user fills out the response in the client UI.
+When asking a user for input, you block the execution while waiting for a `Promise` to resolve. The promise is resolved once the user fills out the response in the admin portal UI.
 
 This means that you can use `async/await` syntax to make your code more readable, use conditional logic, `try/catch`, handle validation, and use `while` or `for` loops.
 
@@ -31,7 +31,7 @@ const execute = (io: InputOutput) => {
 
 ## Intuitive control flow
 
-I/O methods are designed to be used sequentially. This means that you can't ask another question based on the answer to the previous question.
+I/O methods are designed to be used sequentially. This means that you can ask another question based on the answer to the previous question.
 
 ```ts
 const execute = (io: InputOutput) => {
@@ -96,4 +96,22 @@ const execute = (io: InputOutput) => {
 
   // ... create user
 };
+```
+
+## Creating simple views with stacks
+
+You can also arrange UI in vertical and horizontal stacks to add a bit of layout or hierarchy.
+
+```ts
+const [[firstName, lastName], subscribe] = await io.hstack(
+  io.vstack(
+    io.input.text({
+      label: 'First name',
+    }),
+    io.input.text({
+      label: 'Last name',
+    })
+  ),
+  io.input.boolean({ label: 'Subscribe' })
+);
 ```

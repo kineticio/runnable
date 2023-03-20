@@ -8,7 +8,7 @@ titleTemplate: Build internal workflows with ease
 hero:
   name: Runnable
   text: Build Internal Workflows With Ease
-  tagline: A framework for building user-facing internal workflows with no UI code.
+  tagline: Build user-facing internal workflows without writing UI code.
   image:
     src: /logo_transparent.png
     alt: Runnable
@@ -22,15 +22,15 @@ hero:
 
 features:
   - icon: 🛠️
-    title: No More Coding UIs for Admin Tools
-    details: Just write the business logic and let Runnable handle the UI.
+    title: Simplify Admin Tool Development
+    details: Focus on writing business logic instead of UI code. Runnable handles the UI for you.
   - icon: 🚷
     title: Keep Internal Operations Internal
-    details: Leverage your internal models/db/services without having to expose them via REST/GraphQL.
+    details: Use your internal models, databases, and services without exposing them via REST or GraphQL.
   - icon: 📦
-    title: Works with Nest.js and Express
-    details: Use the framework you're already familiar with. You don't need to deploy a separate server.
+    title: Seamless Integration with Nest.js and Express
+    details: Use the framework you already know and love. No need to deploy a separate server.
   - icon: ⭐️
-    title: Looks Great Out of the Box
-    details: Runnable comes with a default theme that looks great out of the box.
+    title: Professional UI Without the Hassle
+    details: Enjoy a sleek default theme with Runnable. No need to spend time designing your own UI.
 ---

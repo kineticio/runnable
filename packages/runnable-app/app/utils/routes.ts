@@ -12,7 +12,10 @@ export function getBaseUrl(): string {
   if (base === '/') {
     return '';
   }
-  return base;
+  if (base.startsWith('/')) {
+    return base;
+  }
+  return `/${base}`;
 }
 
 export function internalRedirect(url: `/${string}`, init?: number | ResponseInit) {

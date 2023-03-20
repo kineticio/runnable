@@ -318,7 +318,7 @@ interface MultiTableOptions<T> {
 
 ### io.message.success / io.message.warning / io.message.error
 
-- **Type:** `(opts: { message: string; description: string }): void`
+- **Type:** `(opts: { message: string; message: string }): void`
 
   Send a message to the client.
 
@@ -326,7 +326,7 @@ interface MultiTableOptions<T> {
   const execute = (io: InputOutput) => {
     io.message.info({
       title: 'Hello World',
-      description: 'This is a description',
+      message: 'This is a description',
     });
   };
   ```

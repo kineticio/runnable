@@ -26,7 +26,7 @@ export default defineConfig({
     ['meta', { name: 'twitter:image', content: ogImage }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['link', { href: font, rel: 'stylesheet' }],
-    ['link', { rel: 'mask-icon', href: '/logo.svg', color: '#ffffff' }],
+    ['link', { rel: 'mask-icon', href: '/logo_transparent.png', color: '#ffffff' }],
     ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }],
     ['script', { async: 'true', src: 'https://www.googletagmanager.com/gtag/js?id=G-15B9LCM64H' }],
     [
@@ -43,7 +43,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    logo: '/logo.svg',
+    logo: '/logo_transparent.png',
 
     editLink: {
       pattern: 'https://github.com/kineticio/actions/tree/main/docs/:path',
@@ -83,6 +83,18 @@ export default defineConfig({
             {
               text: 'Getting Started',
               link: '/guide/',
+            },
+            {
+              text: 'Install Runnable Mini',
+              link: '/guide/install-mini',
+            },
+            {
+              text: 'Install Runnable Server',
+              link: '/guide/install-server',
+            },
+            {
+              text: 'Runnable SDK',
+              link: '/guide/sdk',
             },
             {
               text: 'Actions',
