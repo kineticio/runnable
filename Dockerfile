@@ -16,7 +16,7 @@ RUN pnpm install
 
 ENV NODE_ENV=production
 
-RUN pnpm run build
+RUN pnpm -r run build
 
 WORKDIR /app/examples/nestjs
 
