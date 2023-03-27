@@ -96,6 +96,14 @@ export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
         icon: 'fa6-solid:user-minus',
         category: 'User',
         execute: async (io) => {
+          if (appService.users.length === 0) {
+            await io.message.warning({
+              title: 'No users',
+              message: 'There are no users to delete',
+            });
+            return;
+          }
+
           const user = await io.select.dropdown({
             label: 'Select a user',
             data: appService.users,
