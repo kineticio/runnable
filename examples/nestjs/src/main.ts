@@ -10,7 +10,7 @@ async function bootstrap() {
   const context = app.get('RUNNABLE_CONTEXT');
   installRunnable(app.getHttpServer()._events.request, actions, context);
 
-  await app.listen(3007);
+  await app.listen(process.env.PORT || 3007);
   // eslint-disable-next-line no-console
   console.log(`Application is running on: ${await app.getUrl()}/admin`);
 }

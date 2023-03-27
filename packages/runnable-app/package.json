@@ -14,6 +14,8 @@
     "build": "remix build",
     "dev": "RUNNABLE_BASE_URL='/' remix dev",
     "dev:server": "tsx server/server.ts",
+    "build:server": "esbuild --platform=node --format=cjs ./server/server.ts --outdir=build --bundle",
+    "start:server": "cross-env RUNNABLE_BASE_URL='/' NODE_ENV=production node ./build/server.js",
     "prepublishOnly": "pnpm build",
     "format": "prettier --write .",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
