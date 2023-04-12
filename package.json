@@ -2,7 +2,7 @@
   "name": "@runnablejs/monorepo",
   "version": "0.4.6",
   "private": true,
-  "packageManager": "pnpm@7.32.0",
+  "packageManager": "pnpm@8.2.0",
   "description": "Build internal apps with ease",
   "scripts": {
     "build": "FORCE_COLOR=1 turbo run build",
@@ -35,7 +35,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-unicorn": "^44.0.2",
     "lint-staged": "^13.2.1",
-    "pnpm": "7.32.0",
+    "pnpm": "8.2.0",
     "prettier": "^2.8.7",
     "rimraf": "^4.4.1",
     "rollup": "^3.20.2",
