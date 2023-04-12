@@ -14,7 +14,7 @@
     "generate:api": "npx openapi-typescript api.yml --output schema.ts"
   },
   "devDependencies": {
-    "@asyncapi/cli": "^0.31.3",
+    "@asyncapi/cli": "^0.37.2",
     "@asyncapi/modelina": "^0.59.9"
   }
 }
