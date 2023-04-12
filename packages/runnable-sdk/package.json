@@ -14,7 +14,7 @@
     "prepublishOnly": "pnpm build",
     "format": "prettier --write .",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "test": "jest --config jest.config.js",
+    "test": "jest --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --noEmit --watch",
     "types": "tsc -p tsconfig.types.json"

@@ -1,6 +1,6 @@
 import { useMatches } from '@remix-run/react';
+import { User } from '@runnablejs/api';
 import { useMemo } from 'react';
-import { User } from '../api/context';
 
 const DEFAULT_REDIRECT = '/';
 

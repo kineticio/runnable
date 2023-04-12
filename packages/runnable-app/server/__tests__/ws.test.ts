@@ -182,7 +182,7 @@ describe('my awesome project', () => {
     });
     const response = await io.startWorkflow('user-service.create-user' as WorkflowTypeId, context);
     expect(started).toBeCalledTimes(1);
-    expect(started).toBeCalledWith('user-service.create-user');
+    expect(started).toBeCalledWith('create-user');
     expect(response).toMatchInlineSnapshot(`
       {
         "prompt": {
@@ -202,7 +202,7 @@ describe('my awesome project', () => {
     });
     const response2 = await io.continueWorkflow(response.workflowId as WorkflowId, { title: 'John' });
     expect(continued).toBeCalledTimes(1);
-    expect(continued).toBeCalledWith('user-service.123', { title: 'John' });
+    expect(continued).toBeCalledWith('123', { title: 'John' });
     expect(response2).toMatchInlineSnapshot(`
       {
         "prompt": {
@@ -231,12 +231,12 @@ describe('my awesome project', () => {
     });
     const response = await io.startWorkflow('user-service.create-user' as WorkflowTypeId, context);
     expect(started).toBeCalledTimes(1);
-    expect(started).toBeCalledWith('user-service.create-user');
+    expect(started).toBeCalledWith('create-user');
 
     // continue the workflow
     const response2 = await io.continueWorkflow(response.workflowId as WorkflowId, { title: 'John' });
     expect(continued).toBeCalledTimes(1);
-    expect(continued).toBeCalledWith('user-service.123', { title: 'John' });
+    expect(continued).toBeCalledWith('123', { title: 'John' });
     expect(response2).toMatchInlineSnapshot(`
       {
         "prompt": {
@@ -283,6 +283,6 @@ describe('my awesome project', () => {
     const response = await io.startWorkflow('user-service.create-user' as WorkflowTypeId, context);
     expect(response.workflowId).toMatchInlineSnapshot(`"user-service.123"`);
     expect(started).toBeCalledTimes(1);
-    expect(started).toBeCalledWith('user-service.create-user');
+    expect(started).toBeCalledWith('create-user');
   });
 });

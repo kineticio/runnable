@@ -20,6 +20,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 
 export async function action({ request }: ActionArgs) {
+  // @ts-expect-error - remix-utils weirdness
   return namedAction(request, {
     async form() {
       return await authenticator.authenticate('form', request, {

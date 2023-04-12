@@ -1,7 +1,7 @@
 import { FormStrategy } from 'remix-auth-form';
 import { Authenticator } from 'remix-auth';
 import { GoogleStrategy } from 'remix-auth-google';
-import { User } from '../api/context';
+import { User } from '@runnablejs/api';
 import { getUrl } from '../utils/routes';
 import { sessionStorage } from './session.server';
 import { env } from './env';

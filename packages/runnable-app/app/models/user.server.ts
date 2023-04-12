@@ -1,4 +1,4 @@
-import { User } from '../api/context';
+import { User } from '@runnablejs/api';
 import { getUrl } from '../utils/routes';
 import { authenticator } from './auth.server';
 

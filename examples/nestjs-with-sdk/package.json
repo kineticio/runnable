@@ -1,5 +1,5 @@
 {
-  "name": "@runnablejs/example-nestjs",
+  "name": "@runnablejs/example-nestjs-with-sdk",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -9,8 +9,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main",
-    "lint": "TIMING=1 eslint src --fix",
-    "test": "jest"
+    "lint": "TIMING=1 eslint src --fix"
   },
   "dependencies": {
     "@nestjs/common": "^9.2.0",

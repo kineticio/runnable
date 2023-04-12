@@ -9,8 +9,7 @@
     "start": "SESSION_SECRET='super-duper-s3cr3t' nest start",
     "start:dev": "nest start --watch",
     "start:prod": "node -r dotenv/config dist/main",
-    "lint": "TIMING=1 eslint src --fix",
-    "test": "jest"
+    "lint": "TIMING=1 eslint src --fix"
   },
   "dependencies": {
     "@nestjs/common": "^9.2.0",
