@@ -23,5 +23,5 @@ export function parseNamespacedId(id: string): [string, string] {
   }
 
   const [namespace, workflowId] = id.split('.', 2);
-  return [namespace, workflowId];
+  return [namespace, workflowId] as [string, string];
 }
