@@ -38,9 +38,9 @@ describe('my awesome project', () => {
   const started = jest.fn();
   const continued = jest.fn();
   const pickup = jest.fn();
+  const httpServer = createServer();
 
   beforeEach((done) => {
-    const httpServer = createServer();
     io = new RunnableWsServer({ srv: httpServer, logger, secret: '012345' });
     httpServer.listen(() => {
       const port = (httpServer.address() as AddressInfo).port;
@@ -64,12 +64,6 @@ describe('my awesome project', () => {
         });
       });
     });
-  });
-
-  afterEach(() => {
-    io.destroy();
-    userService.close();
-    emailService.close();
   });
 
   it('should be able to list all workflow types from different clients', async () => {
@@ -284,5 +278,13 @@ describe('my awesome project', () => {
     expect(response.workflowId).toMatchInlineSnapshot(`"user-service.123"`);
     expect(started).toBeCalledTimes(1);
     expect(started).toBeCalledWith('create-user');
+  });
+
+  afterEach((done) => {
+    io.destroy();
+    userService.removeAllListeners();
+    userService2.removeAllListeners();
+    emailService.removeAllListeners();
+    httpServer.close(done);
   });
 });
