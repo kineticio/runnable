@@ -13,6 +13,11 @@ permissions:
   actions: write
   contents: read
 
+env:
+  TURBO_API: 'https://cache.turbocache.build'
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: 'team_runnable_ci'
+
 jobs:
   lint:
     name: ⬣ ESLint
