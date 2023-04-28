@@ -17,7 +17,7 @@ Runnable is a powerful framework for building admin workflows with minimal code 
 
 ## Checkout the demo
 
-You can play around with the [demo Runnable](https://demo.getrunnable.com)! The password is `secret`.
+You can play around with the [demo Runnable](https://demo.getrunnable.com)!
 
 ## Runnable Mini and Runnable Server
 
