@@ -16,7 +16,7 @@ permissions:
 env:
   TURBO_API: 'https://cache.turbocache.build'
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: 'team_runnable_ci'
+  TURBO_TEAM: 'runnable_ci'
   TURBO_RUN_SUMMARY: true
 
 jobs:

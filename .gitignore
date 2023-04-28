@@ -23,3 +23,6 @@ docs/public/sponsors
 docs/.vitepress/cache
 
 tsdoc-metadata.json
+
+.turbo/**
+!.turbo/config.json
