@@ -19,6 +19,9 @@ Build internal workflows with ease
 - 📦 Works with Nest.js and Express
 - ⭐️ Looks great out of the box
 
+> **Note**
+> You can play around with the [demo Runnable](https://demo.getrunnable.com)! And login with any Google creds.
+
 **Runnable** is a framework for building user-facing internal workflows and applications. It's built on top of Remix to allow you to build workflows without UI code and a developer experience that allows you to only write server code. Using the `io` object, you can prompt the users at any point in the workflow.
 
 <table border="0">
