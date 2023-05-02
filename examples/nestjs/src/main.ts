@@ -1,6 +1,5 @@
 import { installRunnable } from '@runnablejs/express';
 import { NestFactory } from '@nestjs/core';
-import { Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -12,8 +11,8 @@ async function bootstrap() {
   installRunnable(app.getHttpServer()._events.request, actions, context);
 
   await app.listen(process.env.PORT || 3007);
-  const logger = app.get(Logger);
-  logger.log(`Application is running on: ${await app.getUrl()}/admin`);
+  // eslint-disable-next-line no-console
+  console.log(`Application is running on: ${await app.getUrl()}/admin`);
 }
 
 bootstrap();
