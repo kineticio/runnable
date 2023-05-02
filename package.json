@@ -6,18 +6,18 @@
   "description": "Build internal apps with ease",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "build": "FORCE_COLOR=1 turbo run build",
     "ci": "pnpm install && pnpm typecheck && pnpm lint && pnpm build && pnpm test",
-    "dev": "FORCE_COLOR=1 turbo --parallel run dev",
+    "build": "FORCE_COLOR=1 turbo run build",
+    "dev": "FORCE_COLOR=1 turbo run dev",
+    "test": "FORCE_COLOR=1 turbo run test",
+    "typecheck": " FORCE_COLOR=1 turbo run typecheck",
     "docs:build": "vitepress build docs",
     "docs:dev": "vitepress dev docs",
     "docs:serve": "vitepress serve docs",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint:fix": "pnpm lint --fix",
+    "lint:fix": "eslint . --fix",
     "lint": "eslint .",
-    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
-    "test": "FORCE_COLOR=1 turbo run test",
-    "typecheck": " pnpm -r --parallel run typecheck"
+    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.0.0",

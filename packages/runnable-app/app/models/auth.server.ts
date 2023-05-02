@@ -17,7 +17,7 @@ if (env.RUNNABLE_AUTH_PROVIDER_FORM) {
       const password = form.get('password');
       if (context?.auth?.form === undefined) throw new Error('Cannot login using email and password');
       if (typeof email !== 'string' || typeof password !== 'string') throw new Error('Invalid email or password');
-      const user = await context?.auth?.form?.verifyLogin({ email, password });
+      const user = await context.auth.form.verifyLogin({ email, password });
       return user;
     }),
     'form'

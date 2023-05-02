@@ -1,4 +1,5 @@
 import { TableCellValue } from '@runnablejs/api';
+import { Input } from '../models/workflows/InputBuilder';
 import type { Validator } from './validator';
 
 export type InputForm<T extends object> = {
@@ -15,7 +16,7 @@ export interface FormFieldOptions<T> {
 }
 
 export interface FormPromise<T> extends Promise<T> {
-  payload: any;
+  payload: Input<T>;
   cancel: () => void;
 }
 

@@ -13,7 +13,7 @@ export function createInput(payload: WorkflowPrompt): InputBuilder<unknown> {
   return new InputBuilder<unknown>(payload);
 }
 
-export function createMessage(payload: WorkflowPrompt): Input<never> {
+export function createMessage(payload: WorkflowPrompt): Input<void> {
   return {
     form: payload,
     validator: () => true,

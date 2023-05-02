@@ -33,7 +33,6 @@ export interface RunnableWorkflow extends Omit<WorkflowType, 'id'> {
   /**
    * Category to display in the UI
    * @example 'Users'
-   * @default 'Other'
    */
   category: string;
   /**

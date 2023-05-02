@@ -3,6 +3,7 @@ import type { components } from './schema';
 
 export type WorkflowResponse = components['responses']['WorkflowResponse']['content']['application/json'];
 export type WorkflowPrompt = components['schemas']['WorkflowPrompt'];
+export type WorkflowPromptFormField = components['schemas']['WorkflowPromptFormField'];
 export type TableCellValue = components['schemas']['TableCell'];
 export type Breadcrumb = components['schemas']['Breadcrumb'];
 export type Option = components['schemas']['Option'];

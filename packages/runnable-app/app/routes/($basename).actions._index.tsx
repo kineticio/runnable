@@ -1,12 +1,14 @@
-import { Heading, HStack, Stack, Tag, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import { FormControl, FormLabel, Heading, HStack, Select, Stack, Tag, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import { Link, useLoaderData, useLocation } from '@remix-run/react';
 import type { LoaderFunction, MetaFunction } from '@remix-run/server-runtime';
 import { json } from '@remix-run/server-runtime';
 import { parseNamespacedId, WorkflowType } from '@runnablejs/api';
+import { useState } from 'react';
 import { Iconify } from '../components/icons/Iconify';
 import { Page } from '../components/layout/Page';
 import { getUrl } from '../utils/routes';
 import { groupBy } from '../utils/objects';
+import { uniq } from '../utils/array';
 
 type LoaderData = {
   actions: WorkflowType[];
@@ -23,19 +25,46 @@ export const meta: MetaFunction<LoaderData> = () => {
   };
 };
 
+const defaultNamespace = 'All';
+
 export default function ActionsIndexPage() {
   const { actions } = useLoaderData<LoaderData>();
 
-  const categories = groupBy(actions, (action) => action.category || 'Other');
-  // sort, but 'Other' comes last
+  // Namespace filter
+  const [selectedNamespace, setSelectedNamespace] = useState<string>(defaultNamespace);
+  const namespaces = uniq(actions.map((action) => parseNamespacedId(action.id)[0]).filter(Boolean)).sort();
+
+  // Filter actions by namespace
+  const filteredActions = selectedNamespace === defaultNamespace ? actions : actions.filter((action) => parseNamespacedId(action.id)[0] === selectedNamespace);
+
+  // Categorize actions
+  const categories = groupBy(filteredActions, (action) => action.category);
   const sortedCategories = Object.entries(categories).sort(([a], [b]) => {
-    if (a === 'Other') return 1;
-    if (b === 'Other') return -1;
     return a.localeCompare(b);
   });
 
+
   return (
     <Page title="Actions" animationKey={useLocation().pathname}>
+      <FormControl width={350} mb={10}>
+        <FormLabel>Namespace</FormLabel>
+        <Select
+          size='md'
+          bg='white'
+          value={selectedNamespace}
+          onChange={(evt) => {
+            setSelectedNamespace(evt.target.value)
+          }}
+        >
+          <option value={defaultNamespace}>All</option>
+          {namespaces.map((ns) => (
+            <option key={ns} value={ns}>
+              {ns}
+            </option>
+          ))}
+        </Select>
+      </FormControl>
+
       <Stack direction="column" spacing={10}>
         {sortedCategories.map(([category, actionGroup]) => (
           <Stack key={category} direction="column">

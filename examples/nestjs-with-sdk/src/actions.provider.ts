@@ -138,6 +138,7 @@ export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
               getValue: (r) => r,
             }),
             checkbox: io.input.boolean({ label: 'Checkbox' }),
+            checkboxOn: io.input.boolean({ label: 'Checkbox (default on)', defaultValue: true }),
             color: io.input.color({ label: 'Color' }),
             multiCheckbox: io.multiSelect.checkbox({
               label: 'Multi Checkbox',
@@ -150,8 +151,10 @@ export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
 
           const data2 = await io.hstack(
             io.vstack(io.input.text({ label: 'Text', optional: true }), io.input.number({ label: 'Number' })),
-            io.input.boolean({ label: 'Checkbox' })
+            io.input.boolean({ label: 'Another Checkbox' })
           );
+
+          const data3 = await io.input.boolean({ label: 'A 3rd Checkbox' });
 
           const response = await io.hstack(
             io.message.info({
@@ -162,9 +165,13 @@ export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
               title: 'Data 2',
               message: JSON.stringify(data2, null, 2),
             }),
+            io.message.info({
+              title: 'Data 3',
+              message: JSON.stringify(data3, null, 2),
+            }),
             io.input.boolean({ label: 'Should continue', defaultValue: true })
           );
-          const shouldContinue = response[2];
+          const shouldContinue = response[3];
           if (!shouldContinue) {
             return;
           }

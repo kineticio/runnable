@@ -13,12 +13,16 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
+    "typecheck": {
+      "outputs": []
+    },
     "@runnablejs/app#dev": {
       "dependsOn": ["^build"],
       "cache": false
     },
     "dev": {
-      "cache": false
+      "cache": false,
+      "persistent": true
     },
     "clean": {
       "cache": false

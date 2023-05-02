@@ -13,7 +13,7 @@
     "build:watch": "rollup -c --watch --watch.include=src/**",
     "prepublishOnly": "pnpm build",
     "format": "prettier --write .",
-    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "lint": "TIMING=1 eslint . --fix",
     "test": "jest --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --noEmit --watch",

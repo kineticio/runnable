@@ -18,6 +18,10 @@ export const normalizeAsBoolean: Normalizer<boolean> = (value) => {
   if (isEmptyObject(value)) {
     return false;
   }
+  // default HTMLCheckbox will return no value if unchecked
+  if (value == null) {
+    return false;
+  }
   const normalized = normalizeAsSingleton(value);
   if (normalized === 'true' || normalized === '') {
     return true;

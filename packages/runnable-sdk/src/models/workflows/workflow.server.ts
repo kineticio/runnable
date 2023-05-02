@@ -1,4 +1,4 @@
-import { TableCellValue } from '@runnablejs/api';
+import { TableCellValue, WorkflowPromptFormField } from '@runnablejs/api';
 import type { ClientResponse } from '../../types/response';
 import { mapValues, keyBy } from '../../utils/objects';
 import { toOptions } from '../../utils/options';
@@ -72,26 +72,20 @@ export class Workflow {
 
         const input = createInput({
           $type: 'form',
-          fields: mapValues(form, (promise) => (promise.payload as Input<any>).form as any),
+          fields: mapValues(form, (promise) => promise.payload.form as WorkflowPromptFormField),
         })
           .normalizeAsSingleton<T>()
           .thenMap<T>((response) => {
-            return mapValues(response, (value, key) => {
-              const subInput = form[key];
-              if (!subInput) {
-                throw new ValidationError(`Unexpected key ${key.toString()} in response`);
-              }
-              return (subInput.payload as Input<any>).normalize(value);
+            return mapValues(form, (subInput, key) => {
+              const value = response[key as string];
+              return subInput.payload.normalize(value);
             }) as T;
           })
           .validate(validatorForMappedInput(form))
           .formatBreadcrumbs((values) => {
-            return Object.entries(values).flatMap(([key, value]) => {
-              const subInput = form[key];
-              if (!subInput) {
-                throw new ValidationError(`Unexpected key ${key} in response`);
-              }
-              return (subInput.payload as Input<any>).format(value);
+            return Object.entries(form).flatMap(([key, subInput]) => {
+              const value = values[key];
+              return subInput.payload.format(value);
             });
           })
           .build();
@@ -107,26 +101,20 @@ export class Workflow {
         const input = createInput({
           $type: 'stack',
           direction: 'horizontal',
-          items: forms.map((form) => (form.payload as Input<any>).form as any),
+          items: forms.map((form) => form.payload.form as WorkflowPromptFormField),
         })
           .normalizeAsArray<T>()
           .thenMap<T>((response) => {
-            return response.map((value, index) => {
-              const subInput = forms[index];
-              if (!subInput) {
-                throw new ValidationError(`Unexpected index ${index} in response`);
-              }
-              return (subInput.payload as Input<any>).normalize(value);
+            return forms.map((subInput, index) => {
+              const value = response[index];
+              return subInput.payload.normalize(value);
             }) as T;
           })
           .validate(validatorForMappedInput(keyBy(forms, (_, index) => index) as any as T))
           .formatBreadcrumbs((values) => {
-            return values.flatMap((value, index) => {
-              const subInput = forms[index];
-              if (!subInput) {
-                throw new ValidationError(`Unexpected index ${index} in response`);
-              }
-              return (subInput.payload as Input<any>).format(value);
+            return forms.flatMap((subInput, index) => {
+              const value = values[index];
+              return subInput.payload.format(value);
             });
           })
           .build();
@@ -142,26 +130,20 @@ export class Workflow {
         const input = createInput({
           $type: 'stack',
           direction: 'vertical',
-          items: forms.map((form) => (form.payload as Input<any>).form as any),
+          items: forms.map((form) => form.payload.form as WorkflowPromptFormField),
         })
           .normalizeAsArray<T>()
           .thenMap<T>((response) => {
-            return response.map((value, index) => {
-              const subInput = forms[index];
-              if (!subInput) {
-                throw new ValidationError(`Unexpected index ${index} in response`);
-              }
-              return (subInput.payload as Input<any>).normalize(value);
+            return forms.map((subInput, index) => {
+              const value = response[index];
+              return subInput.payload.normalize(value);
             }) as T;
           })
           .validate(validatorForMappedInput(keyBy(forms, (_, index) => index) as any as T))
           .formatBreadcrumbs((values) => {
-            return values.flatMap((value, index) => {
-              const subInput = forms[index];
-              if (!subInput) {
-                throw new ValidationError(`Unexpected index ${index} in response`);
-              }
-              return (subInput.payload as Input<any>).format(value);
+            return forms.flatMap((subInput, index) => {
+              const value = values[index];
+              return subInput.payload.format(value);
             });
           })
           .build();
@@ -281,9 +263,7 @@ export class Workflow {
             .normalizeAsString()
             .thenMap((key) => {
               const found = opts.data.find((item) => opts.getValue(item) === key);
-              if (!found) {
-                throw new ValidationError('Invalid selection');
-              }
+              assertExists(found);
               return found;
             })
             .validate(opts.validation)
@@ -310,9 +290,7 @@ export class Workflow {
             .normalizeAsString()
             .thenMap((key) => {
               const found = opts.data.find((item) => opts.getValue(item) === key);
-              if (!found) {
-                throw new ValidationError('Invalid selection');
-              }
+              assertExists(found);
               return found;
             })
             .validate(opts.validation)
@@ -339,9 +317,7 @@ export class Workflow {
             .normalizeAsString()
             .thenMap((key) => {
               const found = opts.data.find((item) => opts.getValue(item) === key);
-              if (!found) {
-                throw new ValidationError('Invalid selection');
-              }
+              assertExists(found);
               return found;
             })
             .validate(opts.validation)
@@ -577,4 +553,10 @@ export class Workflow {
 
 function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function assertExists<T>(value: T | undefined | null): asserts value is T {
+  if (value == null) {
+    throw new ValidationError('Invalid selection');
+  }
 }
