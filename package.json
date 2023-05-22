@@ -34,7 +34,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-unicorn": "^44.0.2",
+    "eslint-plugin-unicorn": "^47.0.0",
     "lint-staged": "^13.2.2",
     "pnpm": "8.4.0",
     "prettier": "^2.8.8",
