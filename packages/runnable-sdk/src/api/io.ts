@@ -35,7 +35,7 @@ interface SelectOptions<T> extends FormFieldOptions<T> {
 }
 
 interface TextOptions extends FormFieldOptions<string> {
-  type?: 'text' | 'password' | 'email';
+  type?: 'text' | 'password' | 'email' | 'text-area' | 'url';
 }
 
 interface NumberOptions extends FormFieldOptions<number> {}

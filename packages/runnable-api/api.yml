@@ -176,7 +176,7 @@ components:
       properties:
         $type:
           type: string
-          enum: [text, number, email, password, boolean, color, image]
+          enum: [text, number, email, password, boolean, color, image, text-area, url]
 
     WorkflowPromptFormSelectInput:
       type: object

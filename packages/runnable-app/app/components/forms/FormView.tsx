@@ -23,6 +23,7 @@ import {
   AlertTitle,
   VStack,
   HStack,
+  Textarea,
 } from '@chakra-ui/react';
 
 import { CheckCircleIcon, CloseIcon } from '@chakra-ui/icons';
@@ -162,7 +163,23 @@ function renderFormField(name: string, field: WorkflowPrompt) {
             </FormControl>
           );
         }
+        case 'text-area': {
+          const isRequired = !field.optional;
+          return (
+            <FormControl isRequired={isRequired}>
+              <FormLabel>{field.label}</FormLabel>
+              <Textarea
+                backgroundColor="white"
+                placeholder={field.placeholder || field.label}
+                name={name}
+                defaultValue={field.defaultValue as string}
+              />
+              <FormHelperText>{field.helperText}</FormHelperText>
+            </FormControl>
+          );
+        }
         case 'email':
+        case 'url':
         case 'password':
         case 'text': {
           const isRequired = !field.optional;

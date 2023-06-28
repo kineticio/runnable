@@ -40,6 +40,7 @@ module.exports = {
     'unicorn/prefer-export-from': 'warn',
     'unicorn/no-useless-undefined': 'warn',
     'unicorn/prefer-module': 'warn',
+    'unicorn/expiring-todo-comments': 'off',
     'unicorn/no-null': 'off',
     'unicorn/no-array-callback-reference': 'off',
     'unicorn/filename-case': 'off',

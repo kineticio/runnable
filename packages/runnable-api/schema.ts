@@ -70,7 +70,7 @@ export interface components {
       name?: string;
     };
     WorkflowResponse: {
-      [key: string]: unknown | undefined;
+      [key: string]: unknown;
     };
     WorkflowPrompt:
       | components['schemas']['WorkflowPromptFormField']
@@ -128,7 +128,7 @@ export interface components {
       | components['schemas']['TableImageCell'];
     WorkflowPromptFormInput: {
       /** @enum {string} */
-      $type?: 'text' | 'number' | 'email' | 'password' | 'boolean' | 'color' | 'image';
+      $type?: 'text' | 'number' | 'email' | 'password' | 'boolean' | 'color' | 'image' | 'text-area' | 'url';
     };
     WorkflowPromptFormSelectInput: {
       /** @enum {string} */
