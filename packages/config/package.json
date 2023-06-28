@@ -1,6 +1,6 @@
 {
   "name": "@runnablejs/config",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "private": true,
   "main": "index.js",
   "files": [
