@@ -160,7 +160,7 @@ export class Workflow {
             defaultValue: opts.defaultValue,
             optional: opts.optional,
             input: {
-              $type: opts.type,
+              $type: opts.type || 'text',
             },
           })
             .normalizeAsString()

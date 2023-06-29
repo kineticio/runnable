@@ -178,6 +178,7 @@ function renderFormField(name: string, field: WorkflowPrompt) {
             </FormControl>
           );
         }
+        case undefined:
         case 'email':
         case 'url':
         case 'password':
@@ -281,9 +282,6 @@ function renderFormField(name: string, field: WorkflowPrompt) {
               />
             </FormControl>
           );
-        }
-        case undefined: {
-          return null;
         }
         case 'form': {
           return (
