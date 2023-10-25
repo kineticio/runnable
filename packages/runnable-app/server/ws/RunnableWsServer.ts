@@ -9,7 +9,6 @@ import {
   RunnableContext,
   ServerToClientEvents,
   SocketData,
-  toNamespacedId,
   WorkflowId,
   WorkflowResponse,
   WorkflowType,

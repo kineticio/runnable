@@ -5,10 +5,12 @@
   "main": "index.ts",
   "types": "index.ts",
   "files": [
-    "schema.ts",
-    "index.ts",
+    "api.yml",
     "client.ts",
-    "api.yml"
+    "id.ts",
+    "index.ts",
+    "schema.ts",
+    "ws.ts"
   ],
   "scripts": {
     "generate:api": "npx openapi-typescript api.yml --output schema.ts"

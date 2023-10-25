@@ -26,3 +26,4 @@ tsdoc-metadata.json
 
 .turbo/**
 !.turbo/config.json
+.vitepress
