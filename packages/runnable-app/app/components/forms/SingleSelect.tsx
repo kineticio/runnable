@@ -20,7 +20,7 @@ export const SingleSelect: React.FC<Props> = ({ placeholder, name, options, requ
     <Box backgroundColor="white">
       <ChackraMultiSelect
         {...rest}
-        size='md'
+        size="md"
         placeholder={placeholder}
         required={required}
         create={false}

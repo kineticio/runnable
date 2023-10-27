@@ -11,7 +11,7 @@ import type { NamespaceId } from '@runnablejs/api';
 import { flyHeaderMiddleware, flyRedirectMiddleware } from './middleware';
 
 export interface ExpressApplication {
-  all(path: string, handler: RequestHandler): void;
+  all?(path: string, handler: RequestHandler): void;
   use(path: string, handler?: RequestHandler): void;
   use(handler: RequestHandler): void;
 }
@@ -30,6 +30,13 @@ export function installRunnable(
 
   const prefix = process.env['RUNNABLE_BASE_URL'] || 'admin';
   logger.log(`Installing Runnable at /${prefix}`);
+
+  if (!app.all) {
+    console.warn('Express app does not have an `all` method, falling back to `use`');
+    app.all = (p, handler) => {
+      app.use(p, handler);
+    };
+  }
 
   if (context.auth.form) {
     process.env['RUNNABLE_AUTH_PROVIDER_FORM'] = 'true';

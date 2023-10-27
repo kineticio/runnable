@@ -43,17 +43,19 @@ installRunnable(app, actions, {
      * This function is called when the user logs in.
      * The user information will be stored in Runnable's cookie session storage.
      */
-    verifyLogin: (opts) => {
-      const user = authService.verifyLogin({
-        email: opts.email,
-        password: opts.password,
-      });
+    form: {
+      verifyLogin: (opts) => {
+        const user = authService.verifyLogin({
+          email: opts.email,
+          password: opts.password,
+        });
 
-      if (user.role === 'admin') {
-        return user;
-      }
+        if (user.role === 'admin') {
+          return user;
+        }
 
-      throw Error('Unauthorized');
+        throw Error('Unauthorized');
+      },
     },
   },
 });

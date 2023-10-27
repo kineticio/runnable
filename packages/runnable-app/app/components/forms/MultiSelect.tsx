@@ -20,7 +20,7 @@ export const MultiSelect: React.FC<Props> = ({ placeholder, name, options, requi
     <Box backgroundColor="white">
       <ChackraMultiSelect
         {...rest}
-        size='md'
+        size="md"
         backgroundColor="white"
         placeholder={placeholder}
         required={required}

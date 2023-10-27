@@ -8,7 +8,7 @@ async function bootstrap() {
   // Runnable
   const actions = app.get('RUNNABLE_ACTIONS');
   const context = app.get('RUNNABLE_CONTEXT');
-  installRunnable(app.getHttpServer()._events.request, actions, context);
+  installRunnable(app, actions, context);
 
   await app.listen(process.env.PORT || 3007);
   // eslint-disable-next-line no-console

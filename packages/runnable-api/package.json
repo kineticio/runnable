@@ -7,7 +7,7 @@
   "files": [
     "api.yml",
     "client.ts",
-    "id.ts",
+    "ids.ts",
     "index.ts",
     "schema.ts",
     "ws.ts"

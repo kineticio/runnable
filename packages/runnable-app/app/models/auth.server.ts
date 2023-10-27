@@ -8,7 +8,7 @@ import { env } from './env';
 
 export const authenticator = new Authenticator<User>(sessionStorage);
 
-export const strategies: string[] = [];
+const strategies: string[] = [];
 
 if (env.RUNNABLE_AUTH_PROVIDER_FORM) {
   authenticator.use(
@@ -66,3 +66,5 @@ if (env.RUNNABLE_AUTH_PROVIDER_GOOGLE_CLIENT_ID && env.RUNNABLE_AUTH_PROVIDER_GO
   );
   strategies.push('google');
 }
+
+export { strategies };

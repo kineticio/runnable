@@ -1,4 +1,16 @@
-import { FormControl, FormLabel, Heading, HStack, Select, Stack, Tag, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import {
+  FormControl,
+  FormLabel,
+  Heading,
+  HStack,
+  Select,
+  Stack,
+  Tag,
+  Text,
+  VStack,
+  Wrap,
+  WrapItem,
+} from '@chakra-ui/react';
 import { Link, useLoaderData, useLocation } from '@remix-run/react';
 import type { LoaderFunction, MetaFunction } from '@remix-run/server-runtime';
 import { json } from '@remix-run/server-runtime';
@@ -35,7 +47,10 @@ export default function ActionsIndexPage() {
   const namespaces = uniq(actions.map((action) => parseNamespacedId(action.id)[0]).filter(Boolean)).sort();
 
   // Filter actions by namespace
-  const filteredActions = selectedNamespace === defaultNamespace ? actions : actions.filter((action) => parseNamespacedId(action.id)[0] === selectedNamespace);
+  const filteredActions =
+    selectedNamespace === defaultNamespace
+      ? actions
+      : actions.filter((action) => parseNamespacedId(action.id)[0] === selectedNamespace);
 
   // Categorize actions
   const categories = groupBy(filteredActions, (action) => action.category);
@@ -43,17 +58,16 @@ export default function ActionsIndexPage() {
     return a.localeCompare(b);
   });
 
-
   return (
     <Page title="Actions" animationKey={useLocation().pathname}>
       <FormControl width={350} mb={10}>
         <FormLabel>Namespace</FormLabel>
         <Select
-          size='md'
-          bg='white'
+          size="md"
+          bg="white"
           value={selectedNamespace}
           onChange={(evt) => {
-            setSelectedNamespace(evt.target.value)
+            setSelectedNamespace(evt.target.value);
           }}
         >
           <option value={defaultNamespace}>All</option>

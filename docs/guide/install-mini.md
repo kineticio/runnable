@@ -151,7 +151,7 @@ async function bootstrap() {
   // Runnable
   const actions = app.get('RUNNABLE_ACTIONS');
   const context = app.get('RUNNABLE_CONTEXT');
-  installRunnable(app.getHttpServer()._events.request, actions, context);
+  installRunnable(app, actions, context);
 
   await app.listen(3000);
 }
