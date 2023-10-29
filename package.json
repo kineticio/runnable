@@ -2,7 +2,7 @@
   "name": "@runnablejs/monorepo",
   "version": "0.4.15",
   "private": true,
-  "packageManager": "pnpm@8.4.0",
+  "packageManager": "pnpm@8.10.0",
   "description": "Build internal apps with ease",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -20,33 +20,33 @@
     "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public"
   },
   "devDependencies": {
-    "@rollup/plugin-alias": "^5.0.0",
-    "@rollup/plugin-commonjs": "^25.0.0",
-    "@rollup/plugin-json": "^6.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.2",
-    "@types/node": "^18.16.3",
-    "@typescript-eslint/eslint-plugin": "^5.59.2",
-    "@typescript-eslint/parser": "^5.59.2",
-    "bumpp": "^9.1.0",
+    "@rollup/plugin-alias": "^5.0.1",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@types/node": "^18.18.7",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "bumpp": "^9.2.0",
     "cross-env": "^7.0.3",
-    "esbuild": "0.17.18",
-    "eslint": "^8.39.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-react": "^7.32.2",
+    "esbuild": "0.19.5",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-unicorn": "^44.0.2",
-    "lint-staged": "^13.2.2",
-    "pnpm": "8.4.0",
+    "lint-staged": "^13.3.0",
+    "pnpm": "8.10.0",
     "prettier": "^2.8.8",
-    "rimraf": "^5.0.0",
-    "rollup": "^3.21.3",
-    "rollup-plugin-dts": "^5.3.0",
+    "rimraf": "^5.0.5",
+    "rollup": "^3.29.4",
+    "rollup-plugin-dts": "^5.3.1",
     "rollup-plugin-esbuild": "^5.0.0",
-    "simple-git-hooks": "^2.8.1",
-    "turbo": "^1.9.3",
-    "typescript": "^5.0.4",
-    "vitepress": "^1.0.0-alpha.75",
-    "vue": "^3.2.47"
+    "simple-git-hooks": "^2.9.0",
+    "turbo": "^1.10.16",
+    "typescript": "^5.2.2",
+    "vitepress": "^1.0.0-rc.24",
+    "vue": "^3.3.7"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
@@ -57,6 +57,6 @@
     ]
   },
   "dependencies": {
-    "@remix-run/dev": "^1.16.0"
+    "@remix-run/dev": "^1.19.3"
   }
 }
