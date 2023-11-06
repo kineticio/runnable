@@ -2,7 +2,7 @@
   "name": "@runnablejs/monorepo",
   "version": "0.4.15",
   "private": true,
-  "packageManager": "pnpm@8.10.0",
+  "packageManager": "pnpm@8.10.2",
   "description": "Build internal apps with ease",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -24,19 +24,19 @@
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "@types/node": "^18.18.7",
+    "@types/node": "^18.18.8",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "bumpp": "^9.2.0",
     "cross-env": "^7.0.3",
     "esbuild": "0.19.5",
-    "eslint": "^8.52.0",
+    "eslint": "^8.53.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-unicorn": "^44.0.2",
     "lint-staged": "^13.3.0",
-    "pnpm": "8.10.0",
+    "pnpm": "8.10.2",
     "prettier": "^2.8.8",
     "rimraf": "^5.0.5",
     "rollup": "^3.29.4",
@@ -45,8 +45,8 @@
     "simple-git-hooks": "^2.9.0",
     "turbo": "^1.10.16",
     "typescript": "^5.2.2",
-    "vitepress": "^1.0.0-rc.24",
-    "vue": "^3.3.7"
+    "vitepress": "^1.0.0-rc.25",
+    "vue": "^3.3.8"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
