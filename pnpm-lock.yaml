@@ -375,7 +375,7 @@ importers:
         version: 4.18.2
       express-prometheus-middleware:
         specifier: ^1.2.0
-        version: 1.2.0(express@4.18.2)(prom-client@14.2.0)
+        version: 1.2.0(express@4.18.2)(prom-client@15.1.1)
       framer-motion:
         specifier: ^10.16.4
         version: 10.16.4(react-dom@18.2.0)(react@18.2.0)
@@ -404,8 +404,8 @@ importers:
         specifier: ^4.1.5
         version: 4.1.5
       prom-client:
-        specifier: ^14.2.0
-        version: 14.2.0
+        specifier: ^15.1.1
+        version: 15.1.1
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -4982,6 +4982,11 @@ packages:
     transitivePeerDependencies:
       - encoding
 
+  /@opentelemetry/api@1.8.0:
+    resolution: {integrity: sha512-I/s6F7yKUDdtMsoBWXJe8Qz40Tui5vsuKCWJEWVL+5q9sSWRzzx6v2KeNsOBEwd94j0eWkpWCH4yB6rZg9Mf0w==}
+    engines: {node: '>=8.0.0'}
+    dev: true
+
   /@pkgjs/parseargs@0.11.0:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
@@ -8982,18 +8987,18 @@ packages:
       jest-util: 29.7.0
     dev: true
 
-  /express-prometheus-middleware@1.2.0(express@4.18.2)(prom-client@14.2.0):
+  /express-prometheus-middleware@1.2.0(express@4.18.2)(prom-client@15.1.1):
     resolution: {integrity: sha512-efSwft67rdtiW40D0im1f7Rz1TCGHGzPj6lfK0MxZDcPj6z4f/Ab5VNkWPYZEjvLqZiZ7fbS00CYzpigO8tS+g==}
     peerDependencies:
       express: 4.x
       prom-client: '>= 10.x <= 13.x'
     dependencies:
       express: 4.18.2
-      prom-client: 14.2.0
+      prom-client: 15.1.1
       response-time: 2.3.2
       url-value-parser: 2.2.0
     optionalDependencies:
-      prometheus-gc-stats: 0.6.4(prom-client@14.2.0)
+      prometheus-gc-stats: 0.6.4(prom-client@15.1.1)
     dev: true
 
   /express@4.18.2:
@@ -13003,14 +13008,15 @@ packages:
   /process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
 
-  /prom-client@14.2.0:
-    resolution: {integrity: sha512-sF308EhTenb/pDRPakm+WgiN+VdM/T1RaHj1x+MvAuT8UiQP8JmOEbxVqtkbfR4LrvOg5n7ic01kRBDGXjYikA==}
-    engines: {node: '>=10'}
+  /prom-client@15.1.1:
+    resolution: {integrity: sha512-GVA2H96QCg2q71rjc3VYvSrVG7OpnJxyryC7dMzvfJfpJJHzQVwF3TJLfHzKORcwJpElWs1TwXLthlJAFJxq2A==}
+    engines: {node: ^16 || ^18 || >=20}
     dependencies:
+      '@opentelemetry/api': 1.8.0
       tdigest: 0.1.2
     dev: true
 
-  /prometheus-gc-stats@0.6.4(prom-client@14.2.0):
+  /prometheus-gc-stats@0.6.4(prom-client@15.1.1):
     resolution: {integrity: sha512-HtxtDYRurj7gZS9AqjcfEAldf2e053mh+XW//OjifRxr6Y/aLx8y7ETwWesnJ9DaufvAMyqUUQJUzhB9jLc6vg==}
     engines: {node: '>=6'}
     requiresBuild: true
@@ -13018,7 +13024,7 @@ packages:
       prom-client: '>= 10 <= 12'
     dependencies:
       optional: 0.1.4
-      prom-client: 14.2.0
+      prom-client: 15.1.1
     optionalDependencies:
       gc-stats: 1.4.0
     dev: true
