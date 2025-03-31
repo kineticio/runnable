@@ -284,8 +284,8 @@ importers:
         specifier: ^1.1.5
         version: 1.1.5
       '@iconify/react':
-        specifier: ^4.1.1
-        version: 4.1.1(react@18.2.0)
+        specifier: ^5.2.1
+        version: 5.2.1(react@18.2.0)
       '@remix-run/dev':
         specifier: ^1.19.3
         version: 1.19.3(@remix-run/serve@1.19.3)(@types/node@18.18.8)(ts-node@10.9.1)
@@ -553,8 +553,8 @@ importers:
         specifier: ^1.1.5
         version: 1.1.5
       '@iconify/react':
-        specifier: ^4.1.1
-        version: 4.1.1(react@18.2.0)
+        specifier: ^5.2.1
+        version: 5.2.1(react@18.2.0)
       '@runnablejs/api':
         specifier: '*'
         version: link:../runnable-api
@@ -4169,8 +4169,8 @@ packages:
       '@iconify/types': 2.0.0
     dev: true
 
-  /@iconify/react@4.1.1(react@18.2.0):
-    resolution: {integrity: sha512-jed14EjvKjee8mc0eoscGxlg7mSQRkwQG3iX3cPBCO7UlOjz0DtlvTqxqEcHUJGh+z1VJ31Yhu5B9PxfO0zbdg==}
+  /@iconify/react@5.2.1(react@18.2.0):
+    resolution: {integrity: sha512-37GDR3fYDZmnmUn9RagyaX+zca24jfVOMY8E1IXTqJuE8pxNtN51KWPQe3VODOWvuUurq7q9uUu3CFrpqj5Iqg==}
     peerDependencies:
       react: '>=16'
     dependencies:
@@ -9346,6 +9346,7 @@ packages:
   /gc-stats@1.4.0:
     resolution: {integrity: sha512-4FcCj9e8j8rCjvLkqRpGZBLgTC/xr9XEf5By3x77cDucWWB3pJK6FEwXZCTCbb4z8xdaOoi4owBNrvn3ciDdxA==}
     engines: {node: '>=6'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     requiresBuild: true
     dependencies:
       nan: 2.17.0

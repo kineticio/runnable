@@ -34,7 +34,7 @@
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@iconify-json/fa": "^1.1.5",
-    "@iconify/react": "^4.1.1",
+    "@iconify/react": "^5.2.1",
     "@runnablejs/api": "*",
     "@runnablejs/config": "*",
     "@socket.io/component-emitter": "^4.0.0",
