@@ -18,7 +18,11 @@ export class Workflow {
   public hasFinished = false;
   public breadcrumbs = new BreadCrumbs();
 
-  constructor(public readonly id: string, public readonly name: string, public readonly action: RunnableWorkflow) {}
+  constructor(
+    public readonly id: string,
+    public readonly name: string,
+    public readonly action: RunnableWorkflow,
+  ) {}
 
   public start(context: RunnableContext): Promise<WorkflowResponseView> {
     // start action in the background
@@ -309,7 +313,10 @@ export class Workflow {
             defaultValue: opts.initialSelection ? [opts.initialSelection] : undefined,
             input: {
               $type: 'table',
-              rows: opts.data.map((item) => ({ key: opts.getValue(item), cells: opts.getColumns(item) as any })),
+              rows: opts.data.map((item) => ({
+                key: opts.getValue(item),
+                cells: opts.getColumns(item) as any,
+              })),
               headers: opts.headers,
               isMultiSelect: false,
             },
@@ -364,7 +371,10 @@ export class Workflow {
             })
             .validate(opts.validation)
             .formatBreadcrumbs((values) => [
-              { key: opts.label, value: values.map((value) => opts.getLabel(value)).join(', ') },
+              {
+                key: opts.label,
+                value: values.map((value) => opts.getLabel(value)).join(', '),
+              },
             ])
             .build();
 
@@ -395,7 +405,10 @@ export class Workflow {
             })
             .validate(opts.validation)
             .formatBreadcrumbs((values) => [
-              { key: opts.label, value: values.map((value) => opts.getLabel(value)).join(', ') },
+              {
+                key: opts.label,
+                value: values.map((value) => opts.getLabel(value)).join(', '),
+              },
             ])
             .build();
 
@@ -430,7 +443,10 @@ export class Workflow {
             })
             .validate(opts.validation)
             .formatBreadcrumbs((values) => [
-              { key: opts.label, value: values.map((value) => opts.getColumns(value)[0]).join(', ') },
+              {
+                key: opts.label,
+                value: values.map((value) => opts.getColumns(value)[0]).join(', '),
+              },
             ])
             .build();
 
@@ -446,7 +462,7 @@ export class Workflow {
               dangerouslySetInnerHTML: true,
               title: '',
               message: opts.dangerouslySetInnerHTML,
-            })
+            }),
           );
         },
         info: (opts: { title: string; message: string }): FormPromise<void> => {
@@ -456,7 +472,7 @@ export class Workflow {
               severity: 'info',
               title: opts.title,
               message: opts.message,
-            })
+            }),
           );
         },
         success: (opts: { title: string; message: string }): FormPromise<void> => {
@@ -466,7 +482,7 @@ export class Workflow {
               severity: 'success',
               title: opts.title,
               message: opts.message,
-            })
+            }),
           );
         },
         warning: (opts: { title: string; message: string }): FormPromise<void> => {
@@ -476,7 +492,7 @@ export class Workflow {
               severity: 'warning',
               title: opts.title,
               message: opts.message,
-            })
+            }),
           );
         },
         error: (opts: { title: string; message: string }): FormPromise<void> => {
@@ -486,17 +502,21 @@ export class Workflow {
               severity: 'error',
               title: opts.title,
               message: opts.message,
-            })
+            }),
           );
         },
-        table: (opts: { title: string; rows: TableCellValue[][]; headers: string[] }): FormPromise<void> => {
+        table: (opts: {
+          title: string;
+          rows: TableCellValue[][];
+          headers: string[];
+        }): FormPromise<void> => {
           return this.asFormPromise(
             createMessage({
               $type: 'table',
               title: opts.title,
               headers: opts.headers,
               rows: opts.rows,
-            })
+            }),
           );
         },
       },

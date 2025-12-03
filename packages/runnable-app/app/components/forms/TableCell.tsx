@@ -1,5 +1,5 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Link, Td } from '@chakra-ui/react';
+import { ExternalLink } from 'lucide-react';
+import { Link, Table } from '@chakra-ui/react';
 import { TableCellValue } from '@runnablejs/api';
 import React from 'react';
 
@@ -7,8 +7,8 @@ interface Props {
   value: TableCellValue;
 }
 
-const sx = {
-  whiteSpace: 'nowrap',
+const cellStyles = {
+  whiteSpace: 'nowrap' as const,
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   maxWidth: '350px',
@@ -20,91 +20,102 @@ export const TableCellComponent: React.FC<Props> = ({ value }) => {
 
   if (value === null) {
     return (
-      <Td title={title} sx={sx} color="gray.400">
+      <Table.Cell title={title} {...cellStyles} color="gray.400">
         <i>null</i>
-      </Td>
+      </Table.Cell>
     );
   }
 
   if (value === undefined) {
-    return <Td title={title} sx={sx} />;
+    return <Table.Cell title={title} {...cellStyles} />;
   }
 
   if (typeof value === 'string') {
     if (isDateIsoString(value)) {
       return (
-        <Td title={title} sx={sx}>
+        <Table.Cell title={title} {...cellStyles}>
           {formatDate(new Date(value))}
-        </Td>
+        </Table.Cell>
       );
     }
 
     return (
-      <Td title={title} sx={sx}>
+      <Table.Cell title={title} {...cellStyles}>
         {value}
-      </Td>
+      </Table.Cell>
     );
   }
 
   if (typeof value === 'number') {
     return (
-      <Td title={title} sx={sx}>
+      <Table.Cell title={title} {...cellStyles}>
         {value.toLocaleString()}
-      </Td>
+      </Table.Cell>
     );
   }
 
   if (typeof value === 'boolean') {
     return (
-      <Td title={title} sx={sx}>
+      <Table.Cell title={title} {...cellStyles}>
         {value.toString()}
-      </Td>
+      </Table.Cell>
     );
   }
 
   if (typeof value === 'object') {
     if (value instanceof Date) {
       return (
-        <Td title={title} sx={sx}>
+        <Table.Cell title={title} {...cellStyles}>
           {formatDate(value)}
-        </Td>
+        </Table.Cell>
       );
     }
 
     if (value.$type === 'link') {
       return (
-        <Td title={title} sx={sx}>
-          <Link color="teal.800" isExternal href={value.href}>
-            {value.text} <ExternalLinkIcon mx="2px" />
+        <Table.Cell title={title} {...cellStyles}>
+          <Link
+            color="blue.600"
+            href={value.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            fontWeight="medium"
+            _hover={{ color: 'blue.700', textDecoration: 'underline' }}
+          >
+            {value.text} <ExternalLink size={12} style={{ display: 'inline', marginLeft: '2px' }} />
           </Link>
-        </Td>
+        </Table.Cell>
       );
     }
 
     if (value.$type === 'date') {
       return (
-        <Td title={title} sx={sx}>
+        <Table.Cell title={title} {...cellStyles}>
           {formatDate(new Date(value.date))}
-        </Td>
+        </Table.Cell>
       );
     }
 
     if (value.$type === 'image') {
       return (
-        <Td sx={sx}>
-          <img src={value.src} alt={value.alt} />
-        </Td>
+        <Table.Cell {...cellStyles}>
+          <img
+            src={value.src}
+            alt={value.alt}
+            style={{ maxHeight: '80px', maxWidth: '120px', borderRadius: '4px' }}
+          />
+        </Table.Cell>
       );
     }
 
     return (
-      <Td title={title} sx={sx}>
+      <Table.Cell title={title} {...cellStyles}>
         {JSON.stringify(value)}
-      </Td>
+      </Table.Cell>
     );
   }
 
-  return <Td title={title} sx={sx} />;
+  return <Table.Cell title={title} {...cellStyles} />;
 };
 
 function isDateIsoString(value: string): boolean {

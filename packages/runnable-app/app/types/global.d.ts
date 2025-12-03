@@ -1,7 +1,7 @@
-import type { RunnableAppContext, LoadContext } from '../api/context';
 import type { IRunnableClient } from '@runnablejs/api';
+import type { LoadContext, RunnableAppContext } from '../api/context';
 
-declare module '@remix-run/server-runtime' {
+declare module 'react-router' {
   interface AppLoadContext extends RunnableAppContext {
     client: IRunnableClient;
   }

@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { MultiSelect as ChackraMultiSelect } from 'chakra-multiselect';
-import { Box, HTMLChakraProps } from '@chakra-ui/react';
+import React from 'react';
+import { Box, createListCollection } from '@chakra-ui/react';
+import {
+  SelectRoot,
+  SelectTrigger,
+  SelectValueText,
+  SelectContent,
+  SelectItem,
+} from '../ui/select';
 
-interface Props extends HTMLChakraProps<'select'> {
+interface Props {
   placeholder?: string;
   name: string;
   required?: boolean;
@@ -13,27 +19,34 @@ interface Props extends HTMLChakraProps<'select'> {
   }[];
 }
 
-export const SingleSelect: React.FC<Props> = ({ placeholder, name, options, required, defaultValue, ...rest }) => {
-  const [state, setState] = useState(defaultValue);
+export const SingleSelect: React.FC<Props> = ({
+  placeholder,
+  name,
+  options,
+  required,
+  defaultValue,
+}) => {
+  const collection = createListCollection({
+    items: options,
+  });
 
   return (
-    <Box backgroundColor="white">
-      <ChackraMultiSelect
-        {...rest}
-        size="md"
-        placeholder={placeholder}
-        required={required}
-        create={false}
-        single={true}
-        options={options}
-        value={state}
-        defaultValue={defaultValue}
-        onChange={(value) => {
-          const newState = Array.isArray(value) ? value[0] : value;
-          setState(newState as string);
-        }}
-      />
-      <input key={name} type="hidden" name={name} value={state} />
-    </Box>
+    <SelectRoot
+      collection={collection}
+      name={name}
+      defaultValue={defaultValue ? [defaultValue] : undefined}
+      required={required}
+    >
+      <SelectTrigger borderRadius="md">
+        <SelectValueText placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent borderRadius="md" boxShadow="lg">
+        {options.map((option) => (
+          <SelectItem key={option.value} item={option} _hover={{ bg: 'gray.100' }}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </SelectRoot>
   );
 };

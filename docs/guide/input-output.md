@@ -19,7 +19,7 @@ const execute = (io: InputOutput) => {
   const transactions = await getTransactions();
 
   const transaction = await io.select.table({
-    label: 'Select a transaction',
+    label: "Select a transaction",
     data: transactions,
     getValue: (transaction) => transaction.id,
     getColumns: (transaction) => [transaction.name],
@@ -38,7 +38,7 @@ const execute = (io: InputOutput) => {
   // get all companies
   const companies = await getCompanies();
   const company = await io.select.table({
-    label: 'Select a company',
+    label: "Select a company",
     data: companies,
     getValue: (company) => company.id,
     getColumns: (company) => [company.name],
@@ -52,7 +52,7 @@ const execute = (io: InputOutput) => {
   // ask for a transaction, and validate it can be modified
   while (true) {
     const transaction = await io.select.table({
-      label: 'Select a transaction',
+      label: "Select a transaction",
       data: transactionForCompany,
       getValue: (transaction) => transaction.id,
       getColumns: (transaction) => [transaction.name],
@@ -63,8 +63,8 @@ const execute = (io: InputOutput) => {
     }
 
     await io.message.warning({
-      title: 'Error',
-      message: 'You cannot modify this transaction. Select a new one',
+      title: "Error",
+      message: "You cannot modify this transaction. Select a new one",
     });
   }
 
@@ -80,16 +80,16 @@ You can combine I/O methods to create composite forms.
 const execute = (io: InputOutput) => {
   const { name, email } = await io.form({
     name: io.input.text({
-      label: 'Name',
+      label: "Name",
       validation: (value) => {
-        return value.length < 3 ? 'Name must be at least 3 characters' : true;
+        return value.length < 3 ? "Name must be at least 3 characters" : true;
       },
     }),
     email: io.input.text({
-      label: 'Email',
-      type: 'email',
+      label: "Email",
+      type: "email",
       validation: (value) => {
-        return !value.includes('2') ? 'Must be a valid email' : true;
+        return !value.includes("2") ? "Must be a valid email" : true;
       },
     }),
   });
@@ -106,12 +106,12 @@ You can also arrange UI in vertical and horizontal stacks to add a bit of layout
 const [[firstName, lastName], subscribe] = await io.hstack(
   io.vstack(
     io.input.text({
-      label: 'First name',
+      label: "First name",
     }),
     io.input.text({
-      label: 'Last name',
+      label: "Last name",
     })
   ),
-  io.input.boolean({ label: 'Subscribe' })
+  io.input.boolean({ label: "Subscribe" })
 );
 ```

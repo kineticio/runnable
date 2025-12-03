@@ -18,7 +18,12 @@ import { Server, Socket } from 'socket.io';
 import { RunnableWsConnection } from './RunnableWsConnection';
 import { NamespacedRunnable } from './NamespacedRunnable';
 
-export type ClientSocket = Socket<ServerToClientEvents, ServerToClientEvents, ClientToServerEvents, SocketData>;
+export type ClientSocket = Socket<
+  ServerToClientEvents,
+  ServerToClientEvents,
+  ClientToServerEvents,
+  SocketData
+>;
 
 interface Options {
   srv?: http.Server | number;
@@ -32,7 +37,12 @@ interface Options {
 export type SocketId = string;
 
 export class RunnableWsServer implements IRunnableClient {
-  private readonly io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
+  private readonly io: Server<
+    ClientToServerEvents,
+    ServerToClientEvents,
+    InterServerEvents,
+    SocketData
+  >;
   private logger: Logger;
 
   public clients: Map<SocketId, NamespacedRunnable> = new Map();
@@ -45,7 +55,9 @@ export class RunnableWsServer implements IRunnableClient {
   private socketsByWorkflowId: Map<WorkflowId, NamespacedRunnable> = new Map();
 
   constructor(opts: Options) {
-    this.io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(opts?.srv);
+    this.io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(
+      opts?.srv,
+    );
     this.logger = opts?.logger ?? console;
 
     this.io.on('connection', (socket) => {
@@ -102,7 +114,10 @@ export class RunnableWsServer implements IRunnableClient {
     });
   }
 
-  async startWorkflow(workflowTypeId: WorkflowTypeId, context: RunnableContext): Promise<WorkflowResponse> {
+  async startWorkflow(
+    workflowTypeId: WorkflowTypeId,
+    context: RunnableContext,
+  ): Promise<WorkflowResponse> {
     const [namespace] = parseNamespacedId(workflowTypeId);
     this.logger.log(`Starting workflow ${workflowTypeId} in namespace ${namespace}`);
 
@@ -132,7 +147,10 @@ export class RunnableWsServer implements IRunnableClient {
     return socket.pickUpWorkflow(workflowId);
   }
 
-  async continueWorkflow(workflowId: WorkflowId, response: { [key: string]: unknown }): Promise<WorkflowResponse> {
+  async continueWorkflow(
+    workflowId: WorkflowId,
+    response: { [key: string]: unknown },
+  ): Promise<WorkflowResponse> {
     const [namespace] = parseNamespacedId(workflowId);
     this.logger.log(`Continuing workflow ${workflowId} in namespace ${namespace}`);
 

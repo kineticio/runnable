@@ -1,3 +1,19 @@
 # @runnablejs/app
 
-Consumable Runnable Application built via Remix. This app can both be embedded within the same server that runs the actions, or can be standalone in the case of a single Runnable server with distributed actions.
+React Router (Remix) UI for Runnable. Used internally by `@runnablejs/express` and `@runnablejs/hono`.
+
+## Usage
+
+This package is not meant to be used directly. Use `@runnablejs/express` or `@runnablejs/hono` instead.
+
+## Development
+
+```bash
+pnpm dev
+```
+
+## Build
+
+```bash
+pnpm build
+```

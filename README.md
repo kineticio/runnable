@@ -8,7 +8,7 @@ Runnable
 </h1>
 <p align="center">
 Build internal workflows with ease
-<p>
+</p>
 
 <hr/>
 
@@ -36,24 +36,24 @@ Build internal workflows with ease
 
 ```ts
 // index.ts
-import { installRunnable } from '@runnablejs/express';
-import { getUsers, getTeams, assignTeam } from './db';
+import { installRunnable } from "@runnablejs/express";
+import { getUsers, getTeams, assignTeam } from "./db";
 
 // ... normal express setup
 
 installRunnable(app, {
   assign_user_to_team: {
-    title: 'Assign a user to a team',
+    title: "Assign a user to a team",
     execute: async (io) => {
       const users = await getUsers();
       const user = await io.select.dropdown({
-        title: 'Select a user',
+        title: "Select a user",
         data: users,
       });
 
       const teams = await getTeams();
       const team = await io.select.table({
-        title: 'Select team',
+        title: "Select team",
         data: teams,
         initialSelection: user.teamId,
       });

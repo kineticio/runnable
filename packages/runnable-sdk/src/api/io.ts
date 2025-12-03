@@ -65,7 +65,12 @@ interface MultiTableOptions<T> extends FormFieldOptions<T[]> {
 interface CombinedForm {
   <A, B>(a: FormPromise<A>, b: FormPromise<B>): FormPromise<[A, B]>;
   <A, B, C>(a: FormPromise<A>, b: FormPromise<B>, c: FormPromise<C>): FormPromise<[A, B, C]>;
-  <A, B, C, D>(a: FormPromise<A>, b: FormPromise<B>, c: FormPromise<C>, d: FormPromise<D>): FormPromise<[A, B, C, D]>;
+  <A, B, C, D>(
+    a: FormPromise<A>,
+    b: FormPromise<B>,
+    c: FormPromise<C>,
+    d: FormPromise<D>,
+  ): FormPromise<[A, B, C, D]>;
 }
 
 /**

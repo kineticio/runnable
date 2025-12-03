@@ -1,6 +1,0 @@
-dist
-node_modules
-*.snap
-*.d.ts
-coverage
-build

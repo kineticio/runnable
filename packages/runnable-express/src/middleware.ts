@@ -1,4 +1,4 @@
-import type { RequestHandler } from '@remix-run/express';
+import type { RequestHandler } from '@react-router/express';
 import type { Logger } from '@runnablejs/api';
 
 /**

@@ -1,12 +1,11 @@
-import { Outlet } from '@remix-run/react';
-import type { LoaderFunction } from '@remix-run/server-runtime';
+import { AppLoadContext, LoaderFunctionArgs, Outlet } from 'react-router';
 
 import { AppContainer } from '../components/main/AppContainer';
-import { authenticator } from '../models/auth.server';
+import { isAuthenticated } from '../models/auth.server';
 import { getUrl } from '../utils/routes';
 
-export const loader: LoaderFunction = async ({ request }) => {
-  await authenticator.isAuthenticated(request, {
+export const loader = async ({ request }: LoaderFunctionArgs<AppLoadContext>) => {
+  await isAuthenticated(request, {
     failureRedirect: getUrl('/login'),
   });
   return null;

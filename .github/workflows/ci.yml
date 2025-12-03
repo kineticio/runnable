@@ -14,14 +14,14 @@ permissions:
   contents: read
 
 env:
-  TURBO_API: 'https://cache.turbocache.build'
+  TURBO_API: "https://cache.turbocache.build"
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: 'runnable_ci'
+  TURBO_TEAM: "runnable_ci"
   TURBO_RUN_SUMMARY: true
 
 jobs:
   lint:
-    name: ⬣ ESLint
+    name: ⬣ Lint
     runs-on: ubuntu-latest
     steps:
       - uses: turbocache-build/turbocache-action@v1
@@ -103,6 +103,5 @@ jobs:
       - name: ʦ Typecheck
         run: pnpm typecheck
 
-      # Jest tests don't properly close in CI
-      # - name: 🧪 Test
-      #   run: pnpm test
+      - name: 🧪 Test
+        run: pnpm test

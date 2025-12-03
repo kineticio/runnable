@@ -1,4 +1,4 @@
-import { createCookieSessionStorage, Session } from '@remix-run/node';
+import { createCookieSessionStorage, Session } from 'react-router';
 import { internalRedirect } from '../utils/internalRedirect';
 
 export const sessionStorage = createCookieSessionStorage({
@@ -7,7 +7,9 @@ export const sessionStorage = createCookieSessionStorage({
     httpOnly: true,
     path: '/',
     sameSite: 'lax',
-    secrets: [process.env.RUNNABLE_SECRET, process.env.SESSION_SECRET].filter<string>((v): v is string => !!v),
+    secrets: [process.env.RUNNABLE_SECRET, process.env.SESSION_SECRET].filter<string>(
+      (v): v is string => !!v,
+    ),
     secure: process.env.NODE_ENV === 'production',
   },
 });

@@ -13,6 +13,6 @@
     "ws.ts"
   ],
   "scripts": {
-    "generate:api": "npx openapi-typescript api.yml --output schema.ts"
+    "codegen": "npx openapi-typescript api.yml --output schema.ts && pnpm oxfmt schema.ts"
   }
 }

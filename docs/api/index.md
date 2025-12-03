@@ -36,13 +36,13 @@ export interface Action {
   ```ts
   const execute = (io: InputOutput) => {
     const email = await io.input.text({
-      label: 'Enter an email',
-      helperText: 'This must be unique.',
-      placeholder: 'michael@dundermifflin.com',
-      type: 'text',
+      label: "Enter an email",
+      helperText: "This must be unique.",
+      placeholder: "michael@dundermifflin.com",
+      type: "text",
       validation: (email) => {
-        if (!email.includes('@')) {
-          return 'Must be a valid email.';
+        if (!email.includes("@")) {
+          return "Must be a valid email.";
         }
         return true;
       },
@@ -59,7 +59,7 @@ interface TextOptions {
   placeholder?: string;
   defaultValue?: string;
   optional?: boolean;
-  type?: 'text' | 'password' | 'email';
+  type?: "text" | "password" | "email";
   validation?: Validator<string>;
 }
 ```
@@ -73,7 +73,7 @@ interface TextOptions {
   ```ts
   const execute = (io: InputOutput) => {
     const age = await io.input.text({
-      label: 'Enter your age',
+      label: "Enter your age",
     });
   };
   ```
@@ -99,7 +99,7 @@ interface NumberOptions {
   ```ts
   const execute = (io: InputOutput) => {
     const shouldSendEmail = await io.input.boolean({
-      label: 'Should the user receive an email notification of the change?',
+      label: "Should the user receive an email notification of the change?",
     });
   };
   ```
@@ -123,7 +123,7 @@ interface BooleanOptions {
   ```ts
   const execute = (io: InputOutput) => {
     const color = await io.input.color({
-      label: 'Select a color',
+      label: "Select a color",
     });
   };
   ```
@@ -147,7 +147,7 @@ interface ColorOptions {
   ```ts
   const execute = (io: InputOutput) => {
     const imageURL = await io.input.imageURL({
-      label: 'Enter an image URL',
+      label: "Enter an image URL",
     });
   };
   ```
@@ -171,15 +171,15 @@ interface ImageOptions {
   ```ts
   const execute = (io: InputOutput) => {
     const color = await io.select.radio({
-      label: 'Select a color',
-      data: ['red', 'green', 'blue'],
+      label: "Select a color",
+      data: ["red", "green", "blue"],
       getLabel: (color) => color.toUpperCase(),
       getValue: (color) => color,
     });
 
     const format = await io.select.dropdown({
-      label: 'Select a format',
-      data: ['json', 'yaml', 'toml'],
+      label: "Select a format",
+      data: ["json", "yaml", "toml"],
       getLabel: (format) => format.toUpperCase(),
       getValue: (format) => format,
     });
@@ -207,8 +207,8 @@ interface SelectOptions<T> {
   ```ts
   const execute = (io: InputOutput) => {
     const team = await io.input.table({
-      label: 'Select a team',
-      data: ['HR', 'Sales', 'Marketing'],
+      label: "Select a team",
+      data: ["HR", "Sales", "Marketing"],
       getValue: (team) => team,
       getColumns: (team) => [team],
     });
@@ -239,15 +239,15 @@ interface TableOptions<T> {
   ```ts
   const execute = (io: InputOutput) => {
     const colors = await io.multiSelect.checkbox({
-      label: 'Select colors',
-      data: ['red', 'green', 'blue'],
+      label: "Select colors",
+      data: ["red", "green", "blue"],
       getLabel: (color) => color.toUpperCase(),
       getValue: (color) => color,
     });
 
     const format = await io.multiSelect.dropdown({
-      label: 'Select a format',
-      data: ['json', 'yaml', 'toml'],
+      label: "Select a format",
+      data: ["json", "yaml", "toml"],
       getLabel: (format) => format.toUpperCase(),
       getValue: (format) => format,
     });
@@ -277,8 +277,8 @@ interface MultiSelectOptions<T> {
   ```ts
   const execute = (io: InputOutput) => {
     const teams = await io.multiSelect.table({
-      label: 'Select teams',
-      data: ['HR', 'Sales', 'Marketing'],
+      label: "Select teams",
+      data: ["HR", "Sales", "Marketing"],
       getValue: (team) => team,
       getColumns: (team) => [team],
     });
@@ -311,7 +311,7 @@ interface MultiTableOptions<T> {
   ```ts
   const execute = (io: InputOutput) => {
     io.message.html({
-      dangerouslySetInnerHTML: '<h1>Hello World</h1>',
+      dangerouslySetInnerHTML: "<h1>Hello World</h1>",
     });
   };
   ```
@@ -325,8 +325,8 @@ interface MultiTableOptions<T> {
   ```ts
   const execute = (io: InputOutput) => {
     io.message.info({
-      title: 'Hello World',
-      message: 'This is a description',
+      title: "Hello World",
+      message: "This is a description",
     });
   };
   ```
@@ -342,11 +342,11 @@ interface MultiTableOptions<T> {
   ```ts
   const execute = (io: InputOutput) => {
     io.message.table({
-      title: 'Users',
-      headers: ['Name', 'Age'],
+      title: "Users",
+      headers: ["Name", "Age"],
       rows: [
-        ['John', 30],
-        ['Jane', 25],
+        ["John", 30],
+        ["Jane", 25],
       ],
     });
   };
@@ -379,24 +379,24 @@ Create a horizontal or vertical stack of inputs.
 const execute = (io: InputOutput) => {
   const [, [newUser]] = await io.hstack(
     io.message.table({
-      label: 'Existing Users',
-      headers: ['Name', 'Email'],
+      label: "Existing Users",
+      headers: ["Name", "Email"],
       rows: users,
     }),
     io.vstack(
       io.form({
         name: io.input.text({
-          label: 'Name',
-          helperText: 'Enter the name of the user',
+          label: "Name",
+          helperText: "Enter the name of the user",
         }),
         email: io.input.text({
-          label: 'Email',
-          helperText: 'Enter the email of the user',
-          type: 'email',
+          label: "Email",
+          helperText: "Enter the email of the user",
+          type: "email",
         }),
       }),
       io.message.warning({
-        description: 'Some message about creating users.',
+        description: "Some message about creating users.",
       })
     )
   );

@@ -5,52 +5,144 @@
 
 export interface paths {
   '/authenticate': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
       requestBody: components['requestBodies']['AuthenticationRequest'];
       responses: {
         200: components['responses']['AuthenticationResponse'];
       };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   '/start-workflow': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
       requestBody: components['requestBodies']['StartWorkflowRequest'];
       responses: {
         200: components['responses']['WorkflowResponse'];
       };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   '/list-workflow-types': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components['responses']['ListWorkflowTypesResponse'];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   '/continue-workflow': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
       requestBody: components['requestBodies']['ContinueWorkflowRequest'];
       responses: {
         200: components['responses']['WorkflowResponse'];
       };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   '/pickup-workflow/{workflowId}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     get: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           workflowId: string;
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components['responses']['WorkflowResponse'];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
 }
-
 export type webhooks = Record<string, never>;
-
 export interface components {
   schemas: {
     WorkflowType: {
@@ -128,7 +220,16 @@ export interface components {
       | components['schemas']['TableImageCell'];
     WorkflowPromptFormInput: {
       /** @enum {string} */
-      $type?: 'text' | 'number' | 'email' | 'password' | 'boolean' | 'color' | 'image' | 'text-area' | 'url';
+      $type?:
+        | 'text'
+        | 'number'
+        | 'email'
+        | 'password'
+        | 'boolean'
+        | 'color'
+        | 'image'
+        | 'text-area'
+        | 'url';
     };
     WorkflowPromptFormSelectInput: {
       /** @enum {string} */
@@ -181,7 +282,7 @@ export interface components {
       /** @enum {string} */
       $type: 'form';
       fields: {
-        [key: string]: components['schemas']['WorkflowPromptFormField'] | undefined;
+        [key: string]: components['schemas']['WorkflowPromptFormField'];
       };
     };
     WorkflowPromptStack: {
@@ -200,6 +301,9 @@ export interface components {
   responses: {
     /** @description Response to list workflows */
     ListWorkflowTypesResponse: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         'application/json': {
           workflows: components['schemas']['WorkflowType'][];
@@ -208,12 +312,18 @@ export interface components {
     };
     /** @description Response for authentication */
     AuthenticationResponse: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         'application/json': components['schemas']['User'];
       };
     };
     /** @description Response to a workflow */
     WorkflowResponse: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         'application/json': {
           workflowId: string;
@@ -258,7 +368,5 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
-export type external = Record<string, never>;
-
+export type $defs = Record<string, never>;
 export type operations = Record<string, never>;

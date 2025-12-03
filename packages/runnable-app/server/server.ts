@@ -1,15 +1,14 @@
-/* eslint-disable no-console */
 import 'dotenv/config';
 
-import path from 'node:path';
 import { createServer } from 'node:http';
-import express from 'express';
+import path from 'node:path';
+import { createRequestHandler } from '@react-router/express';
 import compression from 'compression';
-import morgan from 'morgan';
-import { createRequestHandler } from '@remix-run/express';
+import express from 'express';
 import prom from 'express-prometheus-middleware';
-import { RunnableWsServer } from './ws/RunnableWsServer';
+import morgan from 'morgan';
 import { serverEnv } from './server-env';
+import { RunnableWsServer } from './ws/RunnableWsServer';
 
 const app = express();
 const metricsApp = express();
@@ -19,7 +18,7 @@ app.use(
     metricsPath: '/metrics',
     collectDefaultMetrics: true,
     metricsApp,
-  })
+  }),
 );
 
 app.use((req, res, next) => {
@@ -51,31 +50,41 @@ app.use(express.static('public', { maxAge: '1h' }));
 
 app.use(morgan('tiny'));
 
+// Handle Chrome DevTools well-known file
+app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
+
 const MODE = serverEnv.NODE_ENV;
-const BUILD_DIR = path.join(process.cwd(), 'build');
+const BUILD_DIR = path.join(process.cwd(), 'build', 'server');
+const build = require(BUILD_DIR);
 
 app.all(
   '*',
   MODE === 'production'
     ? createRequestHandler({
-        build: require(BUILD_DIR),
-        getLoadContext: () => ({
-          client: runnable,
-          auth: {},
-        }),
+        build: build,
+        getLoadContext: () => {
+          return {
+            client: runnable,
+            auth: {},
+          };
+        },
       })
     : (...args) => {
         purgeRequireCache();
         const requestHandler = createRequestHandler({
-          build: require(BUILD_DIR),
+          build: build,
           mode: MODE,
-          getLoadContext: () => ({
-            client: runnable,
-            auth: {},
-          }),
+          getLoadContext: () => {
+            return {
+              client: runnable,
+              auth: {},
+            };
+          },
         });
         return requestHandler(...args);
-      }
+      },
 );
 
 const { PORT, METRICS_PORT, RUNNABLE_AUTH_SECRET } = serverEnv;
@@ -88,8 +97,6 @@ const runnable = new RunnableWsServer({
 }).listen(server);
 
 server.listen(PORT, () => {
-  // require the built app so we're ready when the first request comes in
-  require(BUILD_DIR);
   console.log(`✅ app ready: http://localhost:${PORT}`);
 });
 
@@ -105,7 +112,6 @@ function purgeRequireCache() {
   // for you by default
   for (const key in require.cache) {
     if (key.startsWith(BUILD_DIR)) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete require.cache[key];
     }
   }

@@ -1,6 +1,5 @@
 import { HStack, Flex, Text } from '@chakra-ui/react';
-import { useNavigation } from '@remix-run/react';
-import { motion } from 'framer-motion';
+import { useNavigation } from 'react-router';
 
 import React from 'react';
 
@@ -10,41 +9,57 @@ interface Props {
   animationKey?: string;
 }
 
-const HEADER_HEIGHT = '60px';
+const HEADER_HEIGHT = '64px';
 
-export const Page: React.FC<React.PropsWithChildren<Props>> = ({ title, children, animationKey }) => {
+export const Page: React.FC<React.PropsWithChildren<Props>> = ({
+  title,
+  children,
+  animationKey,
+}) => {
   const transition = useNavigation();
   const titles = Array.isArray(title) ? title : [title];
   return (
     <Flex flexDirection="column" height="100vh">
-      <HStack
+      <Flex
         backgroundColor="white"
-        px={10}
+        px={8}
         height={HEADER_HEIGHT}
-        boxShadow="md"
-        mb={'1px'}
+        borderBottomWidth="1px"
+        borderBottomColor="gray.200"
         flexShrink={0}
         flexGrow={0}
+        alignItems="center"
       >
-        <HStack gap={2} divider={<span>/</span>}>
-          {titles.map((t) => (
-            <Text key={t} fontWeight={600}>
-              {t}
-            </Text>
+        <HStack gap={2.5}>
+          {titles.map((t, index) => (
+            <React.Fragment key={t}>
+              {index > 0 && (
+                <Text color="gray.400" fontSize="sm" fontWeight="normal">
+                  /
+                </Text>
+              )}
+              <Text
+                fontSize={index === titles.length - 1 ? 'lg' : 'sm'}
+                fontWeight={index === titles.length - 1 ? 'bold' : 'medium'}
+                color={index === titles.length - 1 ? 'gray.900' : 'gray.600'}
+              >
+                {t}
+              </Text>
+            </React.Fragment>
           ))}
         </HStack>
-      </HStack>
-      <Flex flex={1} backgroundColor="gray.50" p={10}>
-        <motion.main
-          key={animationKey}
-          style={{ width: '100%' }}
-          initial={{ x: '-10%', opacity: 0 }}
-          animate={{ x: '0', opacity: 1 }}
-          exit={{ y: '-10%', opacity: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          {transition.state !== 'loading' && children}
-        </motion.main>
+      </Flex>
+      <Flex
+        flex={1}
+        backgroundColor="gray.50"
+        p={8}
+        overflowY="auto"
+        _open={{
+          animation: 'fade-in 200ms ease-out',
+        }}
+        key={animationKey}
+      >
+        {transition.state !== 'loading' && children}
       </Flex>
     </Flex>
   );

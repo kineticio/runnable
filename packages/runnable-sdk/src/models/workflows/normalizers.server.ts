@@ -29,7 +29,15 @@ export const normalizeAsBoolean: Normalizer<boolean> = (value) => {
   if (normalized === 'false') {
     return false;
   }
-  throw new ValidationError('Expected a boolean');
+  if (normalized === 'on') {
+    return true;
+  }
+  if (normalized === 'off') {
+    return false;
+  }
+  throw new ValidationError(
+    'Expected a boolean, but got ' + normalized + `(type: ${typeof normalized})`,
+  );
 };
 
 export const normalizeAsNumber: Normalizer<number> = (value) => {

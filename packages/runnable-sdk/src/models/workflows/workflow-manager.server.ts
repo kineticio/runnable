@@ -13,7 +13,10 @@ export class InMemoryWorkflowManager implements WorkflowManager {
     return this.mapWorkflows.get(workflowId);
   }
 
-  public async startWorkflow(workflowType: RunnableWorkflow, context: RunnableContext): Promise<WorkflowResponse> {
+  public async startWorkflow(
+    workflowType: RunnableWorkflow,
+    context: RunnableContext,
+  ): Promise<WorkflowResponse> {
     // create workflow
     const workflowId = createWorkflowId();
     const workflow = new Workflow(workflowId, workflowType.title, workflowType);
@@ -48,7 +51,10 @@ export class InMemoryWorkflowManager implements WorkflowManager {
     };
   }
 
-  public async continueWorkflow(workflowId: WorkflowId, request: ClientResponse): Promise<WorkflowResponse> {
+  public async continueWorkflow(
+    workflowId: WorkflowId,
+    request: ClientResponse,
+  ): Promise<WorkflowResponse> {
     // get workflow
     const workflow = this.getWorkflow(workflowId);
     assertExists(workflow, `No workflow found with ${workflowId}`);
