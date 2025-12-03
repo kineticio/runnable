@@ -32,7 +32,7 @@
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.14.1",
     "@iconify-json/fa": "^1.2.2",
-    "@iconify/react": "^4.1.1",
+    "@iconify/react": "^6.0.2",
     "@react-router/express": "^7.10.0",
     "@react-router/fs-routes": "^7.10.0",
     "@react-router/node": "^7.10.0",
