@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import { MultiSelect as ChackraMultiSelect } from 'chakra-multiselect';
-import { Box, HTMLChakraProps } from '@chakra-ui/react';
+import { createListCollection } from '@chakra-ui/react';
+import {
+  SelectRoot,
+  SelectTrigger,
+  SelectValueText,
+  SelectContent,
+  SelectItem,
+} from '../ui/select';
 
-interface Props extends HTMLChakraProps<'select'> {
+interface Props {
   placeholder?: string;
   name: string;
   required?: boolean;
@@ -11,30 +17,44 @@ interface Props extends HTMLChakraProps<'select'> {
     value: string;
     label: string;
   }[];
+  size?: 'sm' | 'md' | 'lg';
 }
 
-export const MultiSelect: React.FC<Props> = ({ placeholder, name, options, required, defaultValue, ...rest }) => {
-  const [state, setState] = useState<string[]>(defaultValue || []);
+export const MultiSelect: React.FC<Props> = ({
+  placeholder,
+  name,
+  options,
+  required,
+  defaultValue,
+  size = 'md',
+}) => {
+  // const [state, setState] = useState<string[]>(defaultValue || []);
+
+  const collection = createListCollection({
+    items: options,
+  });
 
   return (
-    <Box backgroundColor="white">
-      <ChackraMultiSelect
-        {...rest}
-        size="md"
-        backgroundColor="white"
-        placeholder={placeholder}
-        required={required}
-        create={false}
-        single={false}
-        options={options}
-        value={state}
-        defaultValue={defaultValue}
-        onChange={(value) => {
-          const newState = Array.isArray(value) ? value : [value];
-          setState(newState as string[]);
-        }}
-      />
-      {state.length > 0 && state.map((item) => <input key={name} type="hidden" name={name} value={item} />)}
-    </Box>
+    <SelectRoot
+      multiple
+      collection={collection}
+      size={size}
+      name={name}
+      // value={state}
+      // onValueChange={(details) => {
+      //   setState(details.value);
+      // }}
+    >
+      <SelectTrigger backgroundColor="white" borderRadius="md">
+        <SelectValueText placeholder={placeholder || 'Select options'} />
+      </SelectTrigger>
+      <SelectContent borderRadius="md" boxShadow="lg">
+        {options.map((option) => (
+          <SelectItem item={option} key={option.value} _hover={{ bg: 'gray.100' }}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </SelectRoot>
   );
 };

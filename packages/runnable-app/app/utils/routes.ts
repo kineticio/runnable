@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/server-runtime';
+import { redirect } from 'react-router';
 
 declare global {
   interface Window {
@@ -7,7 +7,10 @@ declare global {
 }
 
 export function getBaseUrl(): string {
-  const envUrl = typeof window === 'undefined' ? process.env['RUNNABLE_BASE_URL'] : window.ENV?.['RUNNABLE_BASE_URL'];
+  const envUrl =
+    typeof window === 'undefined'
+      ? process.env['RUNNABLE_BASE_URL']
+      : window.ENV?.['RUNNABLE_BASE_URL'];
   const base = envUrl ?? '/admin';
   if (base === '/') {
     return '';

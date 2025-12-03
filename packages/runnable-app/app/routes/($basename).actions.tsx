@@ -1,18 +1,25 @@
-import { Outlet } from '@remix-run/react';
-import type { LoaderFunction, MetaFunction } from '@remix-run/server-runtime';
+import { Outlet } from 'react-router';
+import type {
+  AppLoadContext,
+  LoaderFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from 'react-router';
 
 import { AppContainer } from '../components/main/AppContainer';
-import { authenticator } from '../models/auth.server';
+import { isAuthenticated } from '../models/auth.server';
 import { getUrl } from '../utils/routes';
 
 export const meta: MetaFunction = () => {
-  return {
-    title: 'Runnable',
-  };
+  return [
+    {
+      title: 'Runnable',
+    },
+  ];
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
-  await authenticator.isAuthenticated(request, {
+export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs<AppLoadContext>) => {
+  await isAuthenticated(request, {
     failureRedirect: getUrl('/login'),
   });
   return null;

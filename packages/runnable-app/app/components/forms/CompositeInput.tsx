@@ -10,7 +10,7 @@ interface Props {
 
 export const CompositeFormView: React.FC<Props> = ({ name, form }) => {
   return (
-    <VStack gap={2} alignItems="stretch">
+    <VStack gap={4} alignItems="stretch">
       {Object.entries(form).map(([key, value]) => {
         if (!value) return null;
         return <FormView key={key} name={`${name}.${key}`} view={value} />;

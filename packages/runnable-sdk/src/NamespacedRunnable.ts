@@ -12,7 +12,10 @@ import {
 
 export class NamespacedRunnable implements IRunnableClient {
   public namespace: NamespaceId;
-  constructor(private delegate: IRunnableClient, namespace: NamespaceId) {
+  constructor(
+    private delegate: IRunnableClient,
+    namespace: NamespaceId,
+  ) {
     this.namespace = namespace;
   }
 
@@ -26,7 +29,10 @@ export class NamespacedRunnable implements IRunnableClient {
     };
   }
 
-  async startWorkflow(workflowTypeId: WorkflowTypeId, context: RunnableContext): Promise<WorkflowResponse> {
+  async startWorkflow(
+    workflowTypeId: WorkflowTypeId,
+    context: RunnableContext,
+  ): Promise<WorkflowResponse> {
     const [, id] = parseNamespacedId(workflowTypeId);
     const response = await this.delegate.startWorkflow(id, context);
     return {
@@ -44,7 +50,10 @@ export class NamespacedRunnable implements IRunnableClient {
     };
   }
 
-  async continueWorkflow(workflowId: WorkflowId, payload: { [key: string]: unknown }): Promise<WorkflowResponse> {
+  async continueWorkflow(
+    workflowId: WorkflowId,
+    payload: { [key: string]: unknown },
+  ): Promise<WorkflowResponse> {
     const [, id] = parseNamespacedId(workflowId);
     const response = await this.delegate.continueWorkflow(id, payload);
     return {

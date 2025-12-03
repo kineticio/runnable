@@ -1,37 +1,41 @@
-import { AnimatePresence } from 'framer-motion';
 import React, { useContext, useEffect } from 'react';
 import { withEmotionCache } from '@emotion/react';
-import { Box, Button, ChakraProvider, extendTheme, Heading, Text, VStack } from '@chakra-ui/react';
-import { MultiSelectTheme } from 'chakra-multiselect';
+import { Box, Button, Heading, Text, VStack } from '@chakra-ui/react';
+import { Provider } from './components/ui/provider';
 import {
+  isRouteErrorResponse,
   Link,
   Links,
-  LiveReload,
+  LoaderFunctionArgs,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useCatch,
   useLoaderData,
-} from '@remix-run/react';
-import { MetaFunction, LinksFunction, json } from '@remix-run/node';
+  useRouteError,
+} from 'react-router';
+import { MetaFunction, LinksFunction } from 'react-router';
 
 import { getBaseUrl } from './utils/routes';
 import { ServerStyleContext, ClientStyleContext } from './styles/context';
+import { setRunnableContext } from './api/context';
+import { AppLoadContext } from 'react-router';
 
-export const meta: MetaFunction = () => ({
-  charset: 'utf-8',
-  title: 'Runnable',
-  viewport: 'width=device-width,initial-scale=1',
-});
+export const meta: MetaFunction = () => [
+  { charset: 'utf-8' },
+  { title: 'Runnable' },
+  { name: 'viewport', content: 'width=device-width,initial-scale=1' },
+];
 
-export async function loader() {
-  return json({
+export async function loader(args: LoaderFunctionArgs<AppLoadContext>) {
+  setRunnableContext(args.context);
+
+  return {
     ENV: {
       RUNNABLE_BASE_URL: process.env.RUNNABLE_BASE_URL,
       FLY_ALLOC_ID: process.env.FLY_ALLOC_ID,
     },
-  });
+  };
 }
 
 export const links: LinksFunction = () => {
@@ -51,64 +55,67 @@ interface DocumentProps {
   includeEnv?: boolean;
 }
 
-const theme = extendTheme({
-  components: {
-    MultiSelect: MultiSelectTheme,
+const Document = withEmotionCache(
+  ({ children, head, includeEnv = true }: DocumentProps, emotionCache) => {
+    const serverStyleData = useContext(ServerStyleContext);
+    const clientStyleData = useContext(ClientStyleContext);
+
+    // Only executed on client
+    useEffect(() => {
+      // re-link sheet container
+      emotionCache.sheet.container = document.head;
+      // re-inject tags
+      const tags = emotionCache.sheet.tags;
+      emotionCache.sheet.flush();
+      for (const tag of tags) {
+        (emotionCache.sheet as any)._insertTag(tag);
+      }
+      // reset cache to reapply global styles
+      clientStyleData?.reset();
+    }, []);
+
+    return (
+      <html lang="en">
+        <head>
+          {head}
+          <Meta />
+          <Links />
+          {serverStyleData?.map(({ key, ids, css }) => (
+            <style
+              key={key}
+              data-emotion={`${key} ${ids.join(' ')}`}
+              dangerouslySetInnerHTML={{ __html: css }}
+            />
+          ))}
+        </head>
+        <body>
+          <Provider>{children}</Provider>
+          {includeEnv && <ProvideEnv />}
+          <ScrollRestoration />
+          <Scripts />
+        </body>
+      </html>
+    );
   },
-});
-
-const Document = withEmotionCache(({ children, head, includeEnv = true }: DocumentProps, emotionCache) => {
-  const serverStyleData = useContext(ServerStyleContext);
-  const clientStyleData = useContext(ClientStyleContext);
-
-  // Only executed on client
-  useEffect(() => {
-    // re-link sheet container
-    emotionCache.sheet.container = document.head;
-    // re-inject tags
-    const tags = emotionCache.sheet.tags;
-    emotionCache.sheet.flush();
-    for (const tag of tags) {
-      (emotionCache.sheet as any)._insertTag(tag);
-    }
-    // reset cache to reapply global styles
-    clientStyleData?.reset();
-  }, []);
-
-  return (
-    <html lang="en">
-      <head>
-        {head}
-        <Meta />
-        <Links />
-        {serverStyleData?.map(({ key, ids, css }) => (
-          <style key={key} data-emotion={`${key} ${ids.join(' ')}`} dangerouslySetInnerHTML={{ __html: css }} />
-        ))}
-      </head>
-      <body>
-        <ChakraProvider theme={theme}>{children}</ChakraProvider>
-        {includeEnv && <ProvideEnv />}
-        <ScrollRestoration />
-        <Scripts />
-        {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
-      </body>
-    </html>
-  );
-});
+);
 
 export default function App() {
   return (
     <Document>
-      <AnimatePresence mode="wait">
-        <Outlet />
-      </AnimatePresence>
+      <Outlet />
     </Document>
   );
 }
 
 const ProvideEnv = () => {
   const data = useLoaderData<typeof loader>();
-  return <script dangerouslySetInnerHTML={{ __html: `window.ENV = ${JSON.stringify(data?.ENV)}` }} />;
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `window.ENV = ${JSON.stringify(data?.ENV)}`,
+      }}
+    />
+  );
 };
 
 export function ErrorBoundary({ error }: { error: Error }) {
@@ -128,8 +135,17 @@ export function ErrorBoundary({ error }: { error: Error }) {
 }
 
 export function CatchBoundary() {
-  const caught = useCatch();
+  const caught = useRouteError();
   let message;
+  if (!isRouteErrorResponse(caught)) {
+    return (
+      <div>
+        <h1>Uh oh ...</h1>
+        <p>Something went wrong.</p>
+      </div>
+    );
+  }
+
   switch (caught.status) {
     case 401: {
       message = (
@@ -179,14 +195,13 @@ export function CatchBoundary() {
           </Text>
 
           <Button
-            as={Link}
+            asChild
             colorScheme="purple"
             bgGradient="linear(to-r, purple.400, purple.500, purple.600)"
             color="white"
             variant="solid"
-            to={getBaseUrl()}
           >
-            Go to Home
+            <Link to={getBaseUrl()}>Go to Home</Link>
           </Button>
         </Box>
       );

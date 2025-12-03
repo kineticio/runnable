@@ -11,18 +11,18 @@ title: Actions | Guide
 ```ts
 // user.actions.ts
 const CreateUserAction = (db: DB) => ({
-  title: 'Create User',
-  icon: 'fa6-solid:user-plus',
-  category: 'Users',
+  title: "Create User",
+  icon: "fa6-solid:user-plus",
+  category: "Users",
   execute: async (io) => {
     // ask for the user's name
     const name = await io.input.text({
-      label: 'Name',
+      label: "Name",
     });
 
     // ask for the user's email
     const email = await io.input.text({
-      label: 'Email',
+      label: "Email",
     });
 
     // create the user

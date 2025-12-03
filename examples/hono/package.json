@@ -1,0 +1,25 @@
+{
+  "name": "@runnablejs/example-hono",
+  "version": "0.0.1",
+  "description": "Example Hono application with Runnable",
+  "author": "",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "lint": "oxlint src --fix"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.7",
+    "@runnablejs/hono": "workspace:*",
+    "dotenv": "^16.0.3",
+    "hono": "^4.6.14"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^3.14.0",
+    "typescript": "^5.0.4"
+  }
+}

@@ -56,16 +56,19 @@ pnpm add -D @runnablejs/sdk
 
 ```ts
 // index.ts
-import { userInfo } from 'node:os';
-import { RunnableWs } from '@runnablejs/sdk';
-import { getUsers, getTeams, assignTeam } from './db';
-import { auth } from './auth';
+import { userInfo } from "node:os";
+import { RunnableWs } from "@runnablejs/sdk";
+import { getUsers, getTeams, assignTeam } from "./db";
+import { auth } from "./auth";
 
 new RunnableWs(actions, {
   // Your admin portal. This can be a staging, development, or local URL.
-  runnableHost: 'wss://admin.company-name.com',
+  runnableHost: "wss://admin.company-name.com",
   // Some domain displayed to the user and used to dedupe among multiple instances of the same server.
-  namespace: process.env.NODE_ENV === 'development' ? `${userInfo().username}_local_development` : 'users',
+  namespace:
+    process.env.NODE_ENV === "development"
+      ? `${userInfo().username}_local_development`
+      : "users",
   // Can be a custom logger or defaults to console.
   logger: console,
   // Shared auth token between Runnable client nad Runnable server.
@@ -80,12 +83,12 @@ Create the providers for the `RunnableWorkflows`.
 ```ts
 // actions.provider.ts
 
-import { FactoryProvider, Provider } from '@nestjs/common';
-import { RunnableWorkflows, RunnableAppContext } from '@runnablejs/express';
-import { AppService } from './app.service';
+import { FactoryProvider, Provider } from "@nestjs/common";
+import { RunnableWorkflows, RunnableAppContext } from "@runnablejs/express";
+import { AppService } from "./app.service";
 
 export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
-  provide: 'RUNNABLE_ACTIONS',
+  provide: "RUNNABLE_ACTIONS",
   inject: [DatabaseService],
   useFactory: (database: DatabaseService) => ({
     assign_user_to_team: {
@@ -102,8 +105,8 @@ Create the module for the `Actions`.
 
 ```ts
 // actions.module.ts
-import { Module } from '@nestjs/common';
-import { ActionsProvider } from './actions.provider';
+import { Module } from "@nestjs/common";
+import { ActionsProvider } from "./actions.provider";
 
 @Module({
   imports: [DatabaseModule],
@@ -116,20 +119,23 @@ Start your Next.js application with `Actions`.
 
 ```ts
 // main.ts
-import { installRunnable } from '@runnablejs/express';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { installRunnable } from "@runnablejs/express";
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Setup Runnable
-  const actions = app.get('RUNNABLE_ACTIONS');
+  const actions = app.get("RUNNABLE_ACTIONS");
   const config = new RunnableWs(actions, {
     // Your admin portal. This can be a staging, development, or local URL.
-    runnableHost: 'wss://admin.company-name.com',
+    runnableHost: "wss://admin.company-name.com",
     // Some domain displayed to the user and used to dedupe among multiple instances of the same server.
-    namespace: process.env.NODE_ENV === 'development' ? `${userInfo().username}_local_development` : 'users',
+    namespace:
+      process.env.NODE_ENV === "development"
+        ? `${userInfo().username}_local_development`
+        : "users",
     // Can be a custom logger or defaults to console.
     logger: app.get(Logger),
     // Shared auth token between Runnable client nad Runnable server.

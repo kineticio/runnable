@@ -1,14 +1,24 @@
-/**
- * @jest-environment node
- */
+// @vitest-environment node
 import { createServer } from 'node:http';
-import { AddressInfo } from 'node:net';
-import { NamespaceId, ServerToClientEvents, WorkflowId, WorkflowPrompt, WorkflowTypeId } from '@runnablejs/api';
-import { connect, Socket } from 'socket.io-client';
+import type { AddressInfo } from 'node:net';
+import type {
+  NamespaceId,
+  ServerToClientEvents,
+  WorkflowId,
+  WorkflowPrompt,
+  WorkflowTypeId,
+} from '@runnablejs/api';
+import { connect, type Socket } from 'socket.io-client';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RunnableWsServer } from '../ws/RunnableWsServer';
 
 type NoInfer<T> = [T][T extends any ? 0 : never];
-const prompt: WorkflowPrompt = { $type: 'message', title: 'name?', severity: 'info', message: '' };
+const prompt: WorkflowPrompt = {
+  $type: 'message',
+  title: 'name?',
+  severity: 'info',
+  message: '',
+};
 
 const context = {
   user: {
@@ -29,37 +39,39 @@ describe('my awesome project', () => {
   let userService2: Socket<ServerToClientEvents, ServerToClientEvents>;
   let emailService: Socket<ServerToClientEvents, ServerToClientEvents>;
   const logger = {
-    log: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn(),
-    info: jest.fn(),
-    debug: jest.fn(),
+    log: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
   };
-  const started = jest.fn();
-  const continued = jest.fn();
-  const pickup = jest.fn();
+  const started = vi.fn();
+  const continued = vi.fn();
+  const pickup = vi.fn();
   const httpServer = createServer();
 
-  beforeEach((done) => {
-    io = new RunnableWsServer({ srv: httpServer, logger, secret: '012345' });
-    httpServer.listen(() => {
-      const port = (httpServer.address() as AddressInfo).port;
-      // Connect user service
-      userService = connect(`http://localhost:${port}`, {
-        auth: { namespace: 'user-service', token: '012345' },
-      });
-      userService.on('connect', () => {
-        // Connect email service
-        emailService = connect(`http://localhost:${port}`, {
-          auth: { namespace: 'email-service', token: '012345' },
+  beforeEach(() => {
+    return new Promise<void>((resolve) => {
+      io = new RunnableWsServer({ srv: httpServer, logger, secret: '012345' });
+      httpServer.listen(() => {
+        const port = (httpServer.address() as AddressInfo).port;
+        // Connect user service
+        userService = connect(`http://localhost:${port}`, {
+          auth: { namespace: 'user-service', token: '012345' },
         });
-        emailService.on('connect', () => {
-          // Connect another user service
-          userService2 = connect(`http://localhost:${port}`, {
-            auth: { namespace: 'user-service', token: '012345' },
+        userService.on('connect', () => {
+          // Connect email service
+          emailService = connect(`http://localhost:${port}`, {
+            auth: { namespace: 'email-service', token: '012345' },
           });
-          userService2.on('connect', () => {
-            done();
+          emailService.on('connect', () => {
+            // Connect another user service
+            userService2 = connect(`http://localhost:${port}`, {
+              auth: { namespace: 'user-service', token: '012345' },
+            });
+            userService2.on('connect', () => {
+              resolve();
+            });
           });
         });
       });
@@ -194,7 +206,9 @@ describe('my awesome project', () => {
       continued(workflowId, answer);
       cb(partial({ workflowId: '123', prompt }));
     });
-    const response2 = await io.continueWorkflow(response.workflowId as WorkflowId, { title: 'John' });
+    const response2 = await io.continueWorkflow(response.workflowId as WorkflowId, {
+      title: 'John',
+    });
     expect(continued).toBeCalledTimes(1);
     expect(continued).toBeCalledWith('123', { title: 'John' });
     expect(response2).toMatchInlineSnapshot(`
@@ -228,7 +242,9 @@ describe('my awesome project', () => {
     expect(started).toBeCalledWith('create-user');
 
     // continue the workflow
-    const response2 = await io.continueWorkflow(response.workflowId as WorkflowId, { title: 'John' });
+    const response2 = await io.continueWorkflow(response.workflowId as WorkflowId, {
+      title: 'John',
+    });
     expect(continued).toBeCalledTimes(1);
     expect(continued).toBeCalledWith('123', { title: 'John' });
     expect(response2).toMatchInlineSnapshot(`
@@ -251,8 +267,13 @@ describe('my awesome project', () => {
       cb(
         partial({
           workflowId: '123',
-          prompt: { $type: 'message', title: 'name?', severity: 'info', message: '' },
-        })
+          prompt: {
+            $type: 'message',
+            title: 'name?',
+            severity: 'info',
+            message: '',
+          },
+        }),
       );
     });
     userService2.on('startWorkflow', (type, context, cb) => {
@@ -260,8 +281,13 @@ describe('my awesome project', () => {
       cb(
         partial({
           workflowId: '456',
-          prompt: { $type: 'message', title: 'name?', severity: 'info', message: '' },
-        })
+          prompt: {
+            $type: 'message',
+            title: 'name?',
+            severity: 'info',
+            message: '',
+          },
+        }),
       );
     });
     emailService.on('startWorkflow', (type, context, cb) => {
@@ -269,8 +295,13 @@ describe('my awesome project', () => {
       cb(
         partial({
           workflowId: '789',
-          prompt: { $type: 'message', title: 'name?', severity: 'info', message: '' },
-        })
+          prompt: {
+            $type: 'message',
+            title: 'name?',
+            severity: 'info',
+            message: '',
+          },
+        }),
       );
     });
 
@@ -280,11 +311,13 @@ describe('my awesome project', () => {
     expect(started).toBeCalledWith('create-user');
   });
 
-  afterEach((done) => {
-    io.destroy();
-    userService.removeAllListeners();
-    userService2.removeAllListeners();
-    emailService.removeAllListeners();
-    httpServer.close(done);
+  afterEach(() => {
+    return new Promise<void>((resolve) => {
+      io.destroy();
+      userService.removeAllListeners();
+      userService2.removeAllListeners();
+      emailService.removeAllListeners();
+      httpServer.close(() => resolve());
+    });
   });
 });

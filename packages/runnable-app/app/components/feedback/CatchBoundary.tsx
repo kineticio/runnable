@@ -1,16 +1,32 @@
-import { Alert, AlertIcon, AlertTitle, AlertDescription } from '@chakra-ui/react';
-import { useCatch } from '@remix-run/react';
+import { Alert } from '@chakra-ui/react';
 import React from 'react';
+import { isRouteErrorResponse, useRouteError } from 'react-router';
 
 export const DefaultCatchBoundary: React.FC = () => {
-  const caught = useCatch();
+  const caught = useRouteError();
+  if (!isRouteErrorResponse(caught)) {
+    return (
+      <Alert.Root status="error" colorPalette="red">
+        <Alert.Indicator />
+        <Alert.Content>
+          <Alert.Title>Error</Alert.Title>
+          <Alert.Description>
+            {String(caught instanceof Error ? caught.message : caught)}
+          </Alert.Description>
+        </Alert.Content>
+      </Alert.Root>
+    );
+  }
+
   return (
-    <Alert colorScheme="red">
-      <AlertIcon />
-      <AlertTitle>Error</AlertTitle>
-      <AlertDescription>
-        {caught.status} {caught.data ?? caught.statusText}
-      </AlertDescription>
-    </Alert>
+    <Alert.Root status="error" colorPalette="red">
+      <Alert.Indicator />
+      <Alert.Content>
+        <Alert.Title>Error</Alert.Title>
+        <Alert.Description>
+          {caught.status} {caught.data ?? caught.statusText}
+        </Alert.Description>
+      </Alert.Content>
+    </Alert.Root>
   );
 };

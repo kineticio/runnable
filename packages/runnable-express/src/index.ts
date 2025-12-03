@@ -1,7 +1,7 @@
 import path from 'node:path';
 import type { RunnableAppContext } from '@runnablejs/app';
 
-import { createRequestHandler, RequestHandler } from '@remix-run/express';
+import { createRequestHandler, RequestHandler } from '@react-router/express';
 import express from 'express';
 import resolvePackagePath from 'resolve-package-path';
 import cookieParser from 'cookie-parser';
@@ -22,7 +22,7 @@ export interface ExpressApplication {
 export function installRunnable(
   app: ExpressApplication,
   workflows: RunnableWorkflows,
-  context: RunnableAppContext
+  context: RunnableAppContext,
 ): void {
   const logger = context.logger || console;
 
@@ -42,7 +42,7 @@ export function installRunnable(
     process.env['RUNNABLE_AUTH_PROVIDER_FORM'] = 'true';
   }
 
-  const { publicPath, assetsBuildDirectory } = require('@runnablejs/app/build');
+  const { publicPath, assetsBuildDirectory } = require('@runnablejs/app/build/server');
   const basePath = resolvePackagePath('@runnablejs/app', __dirname);
 
   if (!basePath) {
@@ -52,18 +52,24 @@ export function installRunnable(
 
   app.use(
     publicPath,
-    express.static(path.join(path.dirname(basePath), assetsBuildDirectory), { immutable: true, maxAge: '1y' })
+    express.static(path.join(path.dirname(basePath), assetsBuildDirectory), {
+      immutable: true,
+      maxAge: '1y',
+    }),
   );
 
   // Fly middleware
   app.use(`/${prefix}`, flyHeaderMiddleware());
   app.use(`/${prefix}`, flyRedirectMiddleware(logger));
 
-  const client = new NamespacedRunnable(new Runnable(workflows, { logger: console }), 'main' as NamespaceId);
+  const client = new NamespacedRunnable(
+    new Runnable(workflows, { logger: console }),
+    'main' as NamespaceId,
+  );
 
   app.all(`/${prefix}*`, (req, res, next) => {
     return createRequestHandler({
-      build: require('@runnablejs/app/build'),
+      build: require('@runnablejs/app/build/server'),
       mode: process.env['NODE_ENV'],
       getLoadContext: () => ({
         client,

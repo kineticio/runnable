@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
-import { RunnableWs } from '@runnablejs/sdk';
-import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { RunnableWs } from '@runnablejs/sdk';
 import { AppModule } from './app.module';
 
 async function bootstrap() {

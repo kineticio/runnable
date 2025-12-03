@@ -35,7 +35,7 @@ We are open to add more auth providers - [please file an issue.](https://github.
 The Form provider is currently only support when deploying **Runnable Mini**. It allows you to authenticate users with a simple username and password form. This is useful if your service already has authentication setup in your service.
 
 ```ts
-import { authService, getUser } from './auth';
+import { authService, getUser } from "./auth";
 
 installRunnable(app, actions, {
   auth: {
@@ -50,11 +50,11 @@ installRunnable(app, actions, {
           password: opts.password,
         });
 
-        if (user.role === 'admin') {
+        if (user.role === "admin") {
           return user;
         }
 
-        throw Error('Unauthorized');
+        throw Error("Unauthorized");
       },
     },
   },

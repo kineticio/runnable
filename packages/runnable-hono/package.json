@@ -1,0 +1,53 @@
+{
+  "name": "@runnablejs/hono",
+  "version": "0.4.15",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "demo": "tsx src/dev/dev.ts",
+    "prepublishOnly": "pnpm build",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src --fix",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "devDependencies": {
+    "@hono/node-server": "^1.13.7",
+    "@runnablejs/config": "workspace:*",
+    "@runnablejs/tsconfig": "workspace:*",
+    "@types/node": "^24.10.1",
+    "hono": "^4.6.14",
+    "resolve-package-path": "^4.0.3",
+    "tsx": "^3.14.0",
+    "typescript": "^5.2.2",
+    "vite": "^7.2.6",
+    "vite-plugin-dts": "^4.5.4"
+  },
+  "dependencies": {
+    "@runnablejs/api": "workspace:*",
+    "@runnablejs/app": "workspace:*",
+    "@runnablejs/sdk": "workspace:*",
+    "react-router": "^7.10.0"
+  },
+  "peerDependencies": {
+    "hono": "^4.0.0"
+  }
+}

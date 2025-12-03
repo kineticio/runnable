@@ -1,13 +1,15 @@
 import { User } from '@runnablejs/api';
 import { getUrl } from '../utils/routes';
-import { authenticator } from './auth.server';
+import { isAuthenticated } from './auth.server';
 
 export async function getUser(request: Request): Promise<User | null> {
-  return await authenticator.isAuthenticated(request);
+  return await isAuthenticated(request);
 }
 
 export async function getRequiredUser(request: Request): Promise<User> {
-  return await authenticator.isAuthenticated(request, {
+  const user = await isAuthenticated(request, {
     failureRedirect: getUrl('/login'),
   });
+  // TypeScript knows user is not null here because failureRedirect will throw
+  return user!;
 }

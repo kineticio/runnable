@@ -1,19 +1,6 @@
-import {
-  FormControl,
-  FormLabel,
-  Heading,
-  HStack,
-  Select,
-  Stack,
-  Tag,
-  Text,
-  VStack,
-  Wrap,
-  WrapItem,
-} from '@chakra-ui/react';
-import { Link, useLoaderData, useLocation } from '@remix-run/react';
-import type { LoaderFunction, MetaFunction } from '@remix-run/server-runtime';
-import { json } from '@remix-run/server-runtime';
+import { Heading, HStack, Stack, Text, VStack, Grid, Box, Badge } from '@chakra-ui/react';
+import { Link, useLoaderData, useLocation } from 'react-router';
+import type { AppLoadContext, LoaderFunctionArgs, MetaFunction } from 'react-router';
 import { parseNamespacedId, WorkflowType } from '@runnablejs/api';
 import { useState } from 'react';
 import { Iconify } from '../components/icons/Iconify';
@@ -21,30 +8,40 @@ import { Page } from '../components/layout/Page';
 import { getUrl } from '../utils/routes';
 import { groupBy } from '../utils/objects';
 import { uniq } from '../utils/array';
+import { NativeSelectField, NativeSelectRoot } from '../components/ui/native-select';
 
 type LoaderData = {
   actions: WorkflowType[];
 };
 
-export const loader: LoaderFunction = async ({ context }) => {
-  const actions = await context.client.listWorkflowTypes();
-  return json<LoaderData>({ actions: actions.workflows });
+export const loader = async (args: LoaderFunctionArgs<AppLoadContext>) => {
+  const actions = await args.context.client.listWorkflowTypes();
+  return { actions: actions.workflows };
 };
 
 export const meta: MetaFunction<LoaderData> = () => {
-  return {
-    title: 'Runnable',
-  };
+  return [
+    {
+      title: 'Runnable',
+    },
+  ];
 };
 
 const defaultNamespace = 'All';
 
 export default function ActionsIndexPage() {
   const { actions } = useLoaderData<LoaderData>();
+  const namespaces = uniq(
+    actions.map((action) => parseNamespacedId(action.id)[0]).filter(Boolean),
+  ).sort();
 
   // Namespace filter
-  const [selectedNamespace, setSelectedNamespace] = useState<string>(defaultNamespace);
-  const namespaces = uniq(actions.map((action) => parseNamespacedId(action.id)[0]).filter(Boolean)).sort();
+  const [selectedNamespace, setSelectedNamespace] = useState<string>(() => {
+    if (namespaces.length === 1) {
+      return namespaces[0];
+    }
+    return defaultNamespace;
+  });
 
   // Filter actions by namespace
   const filteredActions =
@@ -60,41 +57,63 @@ export default function ActionsIndexPage() {
 
   return (
     <Page title="Actions" animationKey={useLocation().pathname}>
-      <FormControl width={350} mb={10}>
-        <FormLabel>Namespace</FormLabel>
-        <Select
-          size="md"
-          bg="white"
-          value={selectedNamespace}
-          onChange={(evt) => {
-            setSelectedNamespace(evt.target.value);
-          }}
-        >
-          <option value={defaultNamespace}>All</option>
-          {namespaces.map((ns) => (
-            <option key={ns} value={ns}>
-              {ns}
-            </option>
-          ))}
-        </Select>
-      </FormControl>
+      <VStack gap={6} alignItems="stretch">
+        {/* Stats and Filter Section */}
+        <HStack justifyContent="space-between" alignItems="flex-start">
+          <Box>
+            <Text fontSize="sm" color="gray.600" mb={1}>
+              Total Actions
+            </Text>
+            <Text fontSize="3xl" fontWeight="bold" color="gray.900">
+              {filteredActions.length}
+            </Text>
+          </Box>
 
-      <Stack direction="column" spacing={10}>
-        {sortedCategories.map(([category, actionGroup]) => (
-          <Stack key={category} direction="column">
-            <Heading as="h2" size="lg" color="teal.900">
-              {category}
-            </Heading>
-            <Wrap spacing={4} py={2}>
-              {actionGroup.map((action) => (
-                <WrapItem key={action.id}>
-                  <ActionCard actionId={action.id} action={action} />
-                </WrapItem>
-              ))}
-            </Wrap>
-          </Stack>
-        ))}
-      </Stack>
+          <Box width="240px">
+            <NativeSelectRoot size="sm">
+              <NativeSelectField
+                value={selectedNamespace}
+                onChange={(evt) => setSelectedNamespace(evt.target.value)}
+              >
+                <option value={defaultNamespace}>All Namespaces</option>
+                {namespaces.map((ns) => (
+                  <option key={ns} value={ns}>
+                    {ns}
+                  </option>
+                ))}
+              </NativeSelectField>
+            </NativeSelectRoot>
+          </Box>
+        </HStack>
+
+        {/* Actions Grid */}
+        <Stack direction="column" gap={8}>
+          {sortedCategories.map(([category, actionGroup]) => (
+            <Stack key={category} direction="column" gap={4}>
+              <HStack justifyContent="space-between" alignItems="center">
+                <Heading as="h2" size="md" fontWeight="semibold" color="gray.900">
+                  {category}
+                </Heading>
+                <Badge size="sm" colorPalette="gray">
+                  {actionGroup.length}
+                </Badge>
+              </HStack>
+              <Grid
+                templateColumns={{
+                  base: 'repeat(1, 1fr)',
+                  md: 'repeat(2, 1fr)',
+                  lg: 'repeat(3, 1fr)',
+                }}
+                gap={4}
+              >
+                {actionGroup.map((action) => (
+                  <ActionCard key={action.id} actionId={action.id} action={action} />
+                ))}
+              </Grid>
+            </Stack>
+          ))}
+        </Stack>
+      </VStack>
     </Page>
   );
 }
@@ -108,29 +127,47 @@ function ActionCard({
 }) {
   const [namespace] = parseNamespacedId(actionId);
   return (
-    <VStack
-      as={Link}
-      p={4}
-      alignItems="flex-start"
-      shadow="md"
+    <Box
+      asChild
+      p={5}
       borderWidth="1px"
-      width={350}
-      minHeight={150}
-      sx={{ ':hover': { shadow: 'lg' } }}
-      to={getUrl(`/actions/${actionId}`)}
-      borderRadius="md"
+      borderColor="gray.200"
+      borderRadius="lg"
       backgroundColor="white"
+      transition="all 0.2s"
+      cursor="pointer"
+      _hover={{
+        borderColor: 'gray.300',
+        shadow: 'md',
+        transform: 'translateY(-2px)',
+      }}
     >
-      <HStack spacing={2}>
-        {action.icon ? <Iconify color="teal.700" icon={action.icon} /> : undefined}
-        <Heading color="teal.700" fontSize="xl">
-          {action.title}
-        </Heading>
-      </HStack>
-      <Text my={3}>{action.description}</Text>
-      <Tag size="sm" variant="subtle" colorScheme="cyan">
-        {namespace}
-      </Tag>
-    </VStack>
+      <Link to={getUrl(`/actions/${actionId}`)}>
+        <VStack gap={3} alignItems="flex-start">
+          <HStack gap={3} width="full" justifyContent="space-between">
+            <HStack gap={2.5}>
+              {action.icon && (
+                <Box p={2} borderRadius="md" backgroundColor="blue.50" color="blue.600">
+                  <Iconify fontSize="20" icon={action.icon} />
+                </Box>
+              )}
+              <Heading fontSize="lg" fontWeight="semibold" color="gray.900">
+                {action.title}
+              </Heading>
+            </HStack>
+          </HStack>
+
+          <Text fontSize="sm" color="gray.600" lineHeight="1.6" lineClamp={2}>
+            {action.description || 'No description available'}
+          </Text>
+
+          <HStack mt={1}>
+            <Badge size="sm" colorPalette="blue" variant="subtle">
+              {namespace}
+            </Badge>
+          </HStack>
+        </VStack>
+      </Link>
+    </Box>
   );
 }

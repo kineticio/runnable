@@ -1,4 +1,9 @@
-import { ClientToServerEvents, IRunnableClient, Logger, ServerToClientEvents } from '@runnablejs/api';
+import {
+  ClientToServerEvents,
+  IRunnableClient,
+  Logger,
+  ServerToClientEvents,
+} from '@runnablejs/api';
 import { io, Socket } from 'socket.io-client';
 import { RunnableWorkflows } from './types';
 import { Runnable } from './Runnable';
@@ -62,7 +67,10 @@ export class RunnableWs {
   private socket!: Socket<ServerToClientEvents, ClientToServerEvents>;
   private delegate: IRunnableClient;
 
-  constructor(private workflows: RunnableWorkflows, private options: StartOptions) {
+  constructor(
+    private workflows: RunnableWorkflows,
+    private options: StartOptions,
+  ) {
     this.delegate = new Runnable(this.workflows, {
       logger: this.options.logger ?? console,
     });

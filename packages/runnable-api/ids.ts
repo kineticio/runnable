@@ -2,12 +2,23 @@ export type WorkflowId = string & { readonly brand: unique symbol };
 export type WorkflowTypeId = string & { readonly brand: unique symbol };
 export type NamespaceId = string & { readonly brand: unique symbol };
 export type NamespacedWorkflowId = string & { readonly brand: unique symbol };
-export type NamespacedWorkflowTypeId = string & { readonly brand: unique symbol };
+export type NamespacedWorkflowTypeId = string & {
+  readonly brand: unique symbol;
+};
 
 export function toNamespacedId(namespace: NamespaceId, id: WorkflowId): NamespacedWorkflowId;
-export function toNamespacedId(namespace: NamespaceId, id: WorkflowTypeId): NamespacedWorkflowTypeId;
-export function toNamespacedId<T extends WorkflowTypeId>(namespace: NamespaceId, id: string): NamespacedWorkflowTypeId;
-export function toNamespacedId<T extends WorkflowId>(namespace: NamespaceId, id: string): NamespacedWorkflowId;
+export function toNamespacedId(
+  namespace: NamespaceId,
+  id: WorkflowTypeId,
+): NamespacedWorkflowTypeId;
+export function toNamespacedId<T extends WorkflowTypeId>(
+  namespace: NamespaceId,
+  id: string,
+): NamespacedWorkflowTypeId;
+export function toNamespacedId<T extends WorkflowId>(
+  namespace: NamespaceId,
+  id: string,
+): NamespacedWorkflowId;
 export function toNamespacedId(namespace: NamespaceId, id: string): string {
   return `${namespace}.${id}` as NamespacedWorkflowId;
 }

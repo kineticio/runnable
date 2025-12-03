@@ -1,7 +1,8 @@
 import type { NamespaceId, WorkflowId, WorkflowTypeId } from './ids';
 import type { components } from './schema';
 
-export type WorkflowResponse = components['responses']['WorkflowResponse']['content']['application/json'];
+export type WorkflowResponse =
+  components['responses']['WorkflowResponse']['content']['application/json'];
 export type WorkflowPrompt = components['schemas']['WorkflowPrompt'];
 export type WorkflowPromptFormField = components['schemas']['WorkflowPromptFormField'];
 export type TableCellValue = components['schemas']['TableCell'];
@@ -34,7 +35,10 @@ export interface IRunnableClient {
   /**
    * Start workflow for a given Type ID.
    */
-  startWorkflow(workflowTypeId: WorkflowTypeId, context: RunnableContext): Promise<WorkflowResponse>;
+  startWorkflow(
+    workflowTypeId: WorkflowTypeId,
+    context: RunnableContext,
+  ): Promise<WorkflowResponse>;
   /**
    * Pickup a workflow for ID.
    */
@@ -42,5 +46,8 @@ export interface IRunnableClient {
   /**
    * Continue a workflow for ID, passing a user response to progress the workflow.
    */
-  continueWorkflow(workflowId: WorkflowId, payload: { [key: string]: unknown }): Promise<WorkflowResponse>;
+  continueWorkflow(
+    workflowId: WorkflowId,
+    payload: { [key: string]: unknown },
+  ): Promise<WorkflowResponse>;
 }

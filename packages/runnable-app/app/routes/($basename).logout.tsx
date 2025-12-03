@@ -1,13 +1,13 @@
-import type { ActionArgs, LoaderFunction } from '@remix-run/node';
-import { authenticator } from '../models/auth.server';
+import { ActionFunctionArgs } from 'react-router';
+import { logout } from '../models/auth.server';
 
 import { internalRedirect } from '../utils/internalRedirect';
 import { getUrl } from '../utils/routes';
 
-export async function action({ request }: ActionArgs) {
-  await authenticator.logout(request, { redirectTo: getUrl('/login') });
-}
+export const action = async ({ request }: ActionFunctionArgs) => {
+  return await logout(request, { redirectTo: getUrl('/login') });
+};
 
-export const loader: LoaderFunction = async () => {
+export const loader = async () => {
   return internalRedirect('/');
 };

@@ -1,6 +1,5 @@
-/* eslint-disable no-console */
-import { FactoryProvider } from '@nestjs/common';
-import { RunnableWorkflows } from '@runnablejs/sdk';
+import type { FactoryProvider } from '@nestjs/common';
+import type { RunnableWorkflows } from '@runnablejs/sdk';
 import { AppService } from './app.service';
 
 export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
@@ -110,7 +109,8 @@ export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
       kitchen_sink_inputs: {
         title: 'Kitchen Sink',
         category: 'Inputs',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies',
         icon: 'fa6-solid:utensils',
         execute: async (io, context) => {
           const data = await io.form({
@@ -138,7 +138,10 @@ export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
               getValue: (r) => r,
             }),
             checkbox: io.input.boolean({ label: 'Checkbox' }),
-            checkboxOn: io.input.boolean({ label: 'Checkbox (default on)', defaultValue: true }),
+            checkboxOn: io.input.boolean({
+              label: 'Checkbox (default on)',
+              defaultValue: true,
+            }),
             color: io.input.color({ label: 'Color' }),
             multiCheckbox: io.multiSelect.checkbox({
               label: 'Multi Checkbox',
@@ -150,8 +153,11 @@ export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
           });
 
           const data2 = await io.hstack(
-            io.vstack(io.input.text({ label: 'Text', optional: true }), io.input.number({ label: 'Number' })),
-            io.input.boolean({ label: 'Another Checkbox' })
+            io.vstack(
+              io.input.text({ label: 'Text', optional: true }),
+              io.input.number({ label: 'Number' }),
+            ),
+            io.input.boolean({ label: 'Another Checkbox' }),
           );
 
           const data3 = await io.input.boolean({ label: 'A 3rd Checkbox' });
@@ -169,7 +175,7 @@ export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
               title: 'Data 3',
               message: JSON.stringify(data3, null, 2),
             }),
-            io.input.boolean({ label: 'Should continue', defaultValue: true })
+            io.input.boolean({ label: 'Should continue', defaultValue: true }),
           );
           const shouldContinue = response[3];
           if (!shouldContinue) {
@@ -187,7 +193,11 @@ export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
           });
 
           await io.message.html({
-            dangerouslySetInnerHTML: `<pre style="text-align: left;">${JSON.stringify(data, null, 2)}</pre>`,
+            dangerouslySetInnerHTML: `<pre style="text-align: left;">${JSON.stringify(
+              data,
+              null,
+              2,
+            )}</pre>`,
           });
 
           await io.message.table({
@@ -197,14 +207,31 @@ export const ActionsProvider: FactoryProvider<RunnableWorkflows> = {
               JSON.stringify(value),
               new Date().toString(),
               { $type: 'link', href: 'https://google.com', text: 'Google' },
-              { $type: 'image', src: 'https://picsum.photos/200/300', alt: 'Random image' },
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies'.repeat(2),
+              {
+                $type: 'image',
+                src: 'https://picsum.photos/200/300',
+                alt: 'Random image',
+              },
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies'.repeat(
+                2,
+              ),
               123_456_789,
               null,
               true,
               false,
             ]) as any,
-            headers: ['Key', 'Value', 'Date', 'Link', 'Image', 'Lorem', 'Number', 'Null', 'True', 'False'],
+            headers: [
+              'Key',
+              'Value',
+              'Date',
+              'Link',
+              'Image',
+              'Lorem',
+              'Number',
+              'Null',
+              'True',
+              'False',
+            ],
           });
 
           console.info('data', data);

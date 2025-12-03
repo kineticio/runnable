@@ -18,7 +18,10 @@ export class Runnable implements IRunnableClient {
   private workflowManager = new InMemoryWorkflowManager();
   private workflows: Record<WorkflowTypeId, RunnableWorkflow>;
 
-  constructor(workflows: RunnableWorkflows, private opts: RunnableOptions) {
+  constructor(
+    workflows: RunnableWorkflows,
+    private opts: RunnableOptions,
+  ) {
     this.workflows = workflows;
   }
 
@@ -36,11 +39,16 @@ export class Runnable implements IRunnableClient {
     };
   }
 
-  async startWorkflow(workflowTypeId: WorkflowTypeId, context: RunnableContext): Promise<WorkflowResponse> {
+  async startWorkflow(
+    workflowTypeId: WorkflowTypeId,
+    context: RunnableContext,
+  ): Promise<WorkflowResponse> {
     const workflow = this.workflows[workflowTypeId];
     if (!workflow) {
       throw new Error(
-        `No workflow found with id ${workflowTypeId}, available workflows: ${Object.keys(this.workflows)}`
+        `No workflow found with id ${workflowTypeId}, available workflows: ${Object.keys(
+          this.workflows,
+        )}`,
       );
     }
     return this.workflowManager.startWorkflow(workflow, {
@@ -53,7 +61,12 @@ export class Runnable implements IRunnableClient {
     return this.workflowManager.pickUpWorkflow(workflowId);
   }
 
-  async continueWorkflow(workflowId: WorkflowId, payload: { [key: string]: unknown }): Promise<WorkflowResponse> {
-    return this.workflowManager.continueWorkflow(workflowId, { ioResponse: payload });
+  async continueWorkflow(
+    workflowId: WorkflowId,
+    payload: { [key: string]: unknown },
+  ): Promise<WorkflowResponse> {
+    return this.workflowManager.continueWorkflow(workflowId, {
+      ioResponse: payload,
+    });
   }
 }

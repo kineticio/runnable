@@ -2,7 +2,7 @@
 
 > This is adapted from [Angular's commit convention](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
 
-#### TL;DR:
+#### TL;DR
 
 Messages must be matched by the following regex:
 
@@ -59,7 +59,7 @@ The **header** is mandatory and the **scope** of the header is optional.
 
 ### Revert
 
-If the commit reverts a previous commit, it should begin with `revert: `, followed by the header of the reverted commit. In the body, it should say: `This reverts commit <hash>.`, where the hash is the SHA of the commit being reverted.
+If the commit reverts a previous commit, it should begin with `revert:`, followed by the header of the reverted commit. In the body, it should say: `This reverts commit <hash>.`, where the hash is the SHA of the commit being reverted.
 
 ### Type
 

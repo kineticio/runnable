@@ -1,4 +1,4 @@
-import {
+import type {
   ClientToServerEvents,
   IRunnableClient,
   Logger,
@@ -10,9 +10,14 @@ import {
   WorkflowType,
   WorkflowTypeId,
 } from '@runnablejs/api';
-import { Socket } from 'socket.io';
+import type { Socket } from 'socket.io';
 
-export type ClientSocket = Socket<ServerToClientEvents, ServerToClientEvents, ClientToServerEvents, SocketData>;
+export type ClientSocket = Socket<
+  ServerToClientEvents,
+  ServerToClientEvents,
+  ClientToServerEvents,
+  SocketData
+>;
 
 interface Options {
   socket: ClientSocket;
@@ -33,7 +38,6 @@ export class RunnableWsConnection implements IRunnableClient {
 
   async listWorkflowTypes(): Promise<{ workflows: WorkflowType[] }> {
     const workflows = await (this.socket.timeout(1000) as ClientSocket)
-      // eslint-disable-next-line unicorn/no-useless-undefined
       .emitWithAck('listWorkflowTypes', undefined)
       .catch((error) => {
         this.options.logger.error(`Could not get workflows from socket ${this.socket.id}`, error);
@@ -43,7 +47,10 @@ export class RunnableWsConnection implements IRunnableClient {
     return { workflows };
   }
 
-  startWorkflow(workflowTypeId: WorkflowTypeId, context: RunnableContext): Promise<WorkflowResponse> {
+  startWorkflow(
+    workflowTypeId: WorkflowTypeId,
+    context: RunnableContext,
+  ): Promise<WorkflowResponse> {
     return this.socket.emitWithAck('startWorkflow', workflowTypeId, context);
   }
 
@@ -51,7 +58,10 @@ export class RunnableWsConnection implements IRunnableClient {
     return this.socket.emitWithAck('pickUpWorkflow', workflowId);
   }
 
-  continueWorkflow(workflowId: WorkflowId, response: { [key: string]: unknown }): Promise<WorkflowResponse> {
+  continueWorkflow(
+    workflowId: WorkflowId,
+    response: { [key: string]: unknown },
+  ): Promise<WorkflowResponse> {
     return this.socket.emitWithAck('continueWorkflow', workflowId, response);
   }
 }

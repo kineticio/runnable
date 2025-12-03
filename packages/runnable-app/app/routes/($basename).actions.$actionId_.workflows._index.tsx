@@ -1,17 +1,20 @@
-import { MetaFunction } from '@remix-run/node';
-import { Outlet } from '@remix-run/react';
+import { MetaFunction } from 'react-router';
+import { Outlet } from 'react-router';
 import { WorkflowResponse, WorkflowType } from '@runnablejs/api';
 
 interface LoaderData extends WorkflowResponse {
   action: WorkflowType;
 }
 
-export const meta: MetaFunction<LoaderData> = ({ data }) => {
-  if (!data?.action) return { title: 'Runnable' };
+export const meta: MetaFunction = ({ data }) => {
+  const loaderData = data as LoaderData | undefined;
+  if (!loaderData?.action) return [{ title: 'Runnable' }];
 
-  return {
-    title: `${data.action.title} | Runnable`,
-  };
+  return [
+    {
+      title: `${loaderData.action.title} | Runnable`,
+    },
+  ];
 };
 
 export default function WorkflowDetailsIndex() {

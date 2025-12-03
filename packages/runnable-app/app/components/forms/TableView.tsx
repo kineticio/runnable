@@ -1,4 +1,4 @@
-import { TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody } from '@chakra-ui/react';
+import { Table, Box } from '@chakra-ui/react';
 import { TableCellValue } from '@runnablejs/api';
 import React from 'react';
 import { TableCellComponent } from './TableCell';
@@ -11,33 +11,39 @@ interface Props {
 
 export const TableView: React.FC<Props> = ({ headers, title, rows }) => {
   return (
-    <TableContainer
+    <Box
       overflowX="auto"
       backgroundColor="white"
-      boxShadow="sm"
+      boxShadow="md"
       border="1px solid"
       borderColor="gray.200"
-      borderRadius="md"
+      borderRadius="lg"
     >
-      <Table variant="simple">
-        <TableCaption placement="top">{title}</TableCaption>
-        <Thead>
-          <Tr>
+      <Table.Root variant="outline" size="sm">
+        {title && (
+          <Table.Caption fontSize="md" fontWeight="semibold" mb={2}>
+            {title}
+          </Table.Caption>
+        )}
+        <Table.Header bg="gray.50">
+          <Table.Row>
             {headers.map((header) => (
-              <Th key={header}>{header}</Th>
+              <Table.ColumnHeader key={header} fontWeight="semibold" fontSize="sm">
+                {header}
+              </Table.ColumnHeader>
             ))}
-          </Tr>
-        </Thead>
-        <Tbody>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {rows.map((row, idx) => (
-            <Tr key={idx}>
+            <Table.Row key={idx} _hover={{ bg: 'gray.50' }} transition="background 0.2s">
               {row.map((value, idx2) => (
                 <TableCellComponent key={idx2} value={value} />
               ))}
-            </Tr>
+            </Table.Row>
           ))}
-        </Tbody>
-      </Table>
-    </TableContainer>
+        </Table.Body>
+      </Table.Root>
+    </Box>
   );
 };
