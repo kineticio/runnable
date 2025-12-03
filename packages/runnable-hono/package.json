@@ -30,14 +30,14 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
-    "@hono/node-server": "^1.13.7",
+    "@hono/node-server": "^1.19.6",
     "@runnablejs/config": "workspace:*",
     "@runnablejs/tsconfig": "workspace:*",
     "@types/node": "^24.10.1",
-    "hono": "^4.6.14",
+    "hono": "^4.10.7",
     "resolve-package-path": "^4.0.3",
     "tsx": "^3.14.0",
-    "typescript": "^5.2.2",
+    "typescript": "^5.9.3",
     "vite": "^7.2.6",
     "vite-plugin-dts": "^4.5.4"
   },
