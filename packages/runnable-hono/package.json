@@ -1,6 +1,6 @@
 {
   "name": "@runnablejs/hono",
-  "version": "0.4.15",
+  "version": "0.6.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@runnablejs/monorepo",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "packageManager": "pnpm@10.24.0",
   "description": "Build internal apps with ease",
