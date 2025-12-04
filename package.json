@@ -4,6 +4,24 @@
   "private": true,
   "packageManager": "pnpm@10.24.0",
   "description": "Build internal apps with ease",
+  "license": "MIT",
+  "author": "Kinetic",
+  "homepage": "https://getrunnable.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kineticio/runnable.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kineticio/runnable/issues"
+  },
+  "keywords": [
+    "internal-tools",
+    "admin",
+    "workflows",
+    "nest",
+    "express",
+    "hono"
+  ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "ci": "pnpm install && pnpm typecheck && pnpm lint && pnpm build && pnpm test",
@@ -16,7 +34,7 @@
     "docs:serve": "vitepress serve docs",
     "format": "oxfmt .",
     "lint": "oxlint . --fix",
-    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public"
+    "release": "bumpp package.json packages/*/package.json --commit --push --tag"
   },
   "devDependencies": {
     "bumpp": "^9.11.1",

@@ -1,8 +1,28 @@
 {
   "name": "@runnablejs/app",
   "version": "0.6.0",
+  "description": "Web application for Runnable - Build internal workflows with ease",
   "sideEffects": false,
   "type": "module",
+  "license": "MIT",
+  "author": "Kinetic",
+  "homepage": "https://getrunnable.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kineticio/runnable.git",
+    "directory": "packages/runnable-app"
+  },
+  "bugs": {
+    "url": "https://github.com/kineticio/runnable/issues"
+  },
+  "keywords": [
+    "runnable",
+    "app",
+    "internal-tools",
+    "workflows",
+    "admin",
+    "react-router"
+  ],
   "main": "build/index.js",
   "types": "app/types.ts",
   "files": [

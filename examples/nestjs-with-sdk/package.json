@@ -1,9 +1,19 @@
 {
   "name": "@runnablejs/example-nestjs-with-sdk",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Example NestJS application with Runnable SDK",
+  "author": "Kinetic",
   "private": true,
+  "license": "MIT",
+  "homepage": "https://getrunnable.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kineticio/runnable.git",
+    "directory": "examples/nestjs-with-sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/kineticio/runnable/issues"
+  },
   "scripts": {
     "build": "nest build",
     "start": "nest start",

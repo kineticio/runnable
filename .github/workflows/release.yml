@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write # FOr OIDC token
 
 jobs:
   release:
@@ -17,10 +18,23 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: ⎔ Setup node
         uses: actions/setup-node@v6
         with:
           node-version: 24.11.1
+          registry-url: "https://registry.npmjs.org"
+
+      - name: 📥 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🏗️ Build packages
+        run: pnpm build
+
+      - name: 📤 Publish to npm
+        run: pnpm -r publish --access public --provenance --no-git-checks
 
       - name: 🪵 Generate changelog
         run: npx changelogithub

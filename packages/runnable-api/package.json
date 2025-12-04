@@ -1,7 +1,25 @@
 {
   "name": "@runnablejs/api",
   "version": "0.6.0",
+  "description": "API types and schema for Runnable",
   "sideEffects": false,
+  "license": "MIT",
+  "author": "Kinetic",
+  "homepage": "https://getrunnable.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kineticio/runnable.git",
+    "directory": "packages/runnable-api"
+  },
+  "bugs": {
+    "url": "https://github.com/kineticio/runnable/issues"
+  },
+  "keywords": [
+    "runnable",
+    "api",
+    "types",
+    "schema"
+  ],
   "main": "index.ts",
   "types": "index.ts",
   "files": [
