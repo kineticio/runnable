@@ -30,7 +30,7 @@ jobs:
         uses: styfle/cancel-workflow-action@0.12.1
 
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 📦 Install pnpm
         uses: pnpm/action-setup@v2
@@ -69,7 +69,7 @@ jobs:
         uses: styfle/cancel-workflow-action@0.12.1
 
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 📦 Install pnpm
         uses: pnpm/action-setup@v2
