@@ -1,7 +1,19 @@
 {
   "name": "@runnablejs/config",
   "version": "0.6.0",
+  "description": "Shared configuration for Runnable monorepo",
   "private": true,
+  "license": "MIT",
+  "author": "Kinetic",
+  "homepage": "https://getrunnable.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kineticio/runnable.git",
+    "directory": "packages/config"
+  },
+  "bugs": {
+    "url": "https://github.com/kineticio/runnable/issues"
+  },
   "main": "index.js",
   "files": [
     "vitest.config.base.ts",

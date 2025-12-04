@@ -1,7 +1,19 @@
 {
   "name": "@runnablejs/tsconfig",
   "version": "0.6.0",
+  "description": "Shared TypeScript configuration for Runnable monorepo",
   "private": true,
+  "license": "MIT",
+  "author": "Kinetic",
+  "homepage": "https://getrunnable.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kineticio/runnable.git",
+    "directory": "packages/tsconfig"
+  },
+  "bugs": {
+    "url": "https://github.com/kineticio/runnable/issues"
+  },
   "main": "index.js",
   "files": [
     "base.json",

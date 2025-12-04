@@ -2,8 +2,18 @@
   "name": "@runnablejs/example-hono",
   "version": "0.0.1",
   "description": "Example Hono application with Runnable",
-  "author": "",
+  "author": "Kinetic",
   "private": true,
+  "license": "MIT",
+  "homepage": "https://getrunnable.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kineticio/runnable.git",
+    "directory": "examples/hono"
+  },
+  "bugs": {
+    "url": "https://github.com/kineticio/runnable/issues"
+  },
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/main.ts",
