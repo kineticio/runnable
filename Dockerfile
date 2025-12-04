@@ -4,7 +4,7 @@ FROM node:24-bullseye-slim as base
 # Install openssl for Prisma
 RUN apt-get update && apt-get install -y openssl
 
-# Install PnPm
+# Install pnpm
 RUN npm install -g pnpm
 
 RUN mkdir /app
@@ -12,7 +12,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 ENV NODE_ENV=production
 
