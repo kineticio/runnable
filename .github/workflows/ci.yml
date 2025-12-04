@@ -63,5 +63,11 @@ jobs:
       - name: 📦 Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 🔨 Build, test, typecheck
-        run: pnpm turbo build test typecheck
+      - name: 🔨 Build
+        run: pnpm build
+
+      - name: ʦ Typecheck
+        run: pnpm typecheck
+
+      - name: 🧪 Test
+        run: pnpm test
