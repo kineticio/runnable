@@ -53,7 +53,7 @@
     "@runnablejs/config": "workspace:*",
     "@runnablejs/tsconfig": "workspace:*",
     "@types/node": "^24.10.1",
-    "hono": "^4.10.7",
+    "hono": "^4.11.7",
     "resolve-package-path": "^4.0.3",
     "tsx": "^3.14.0",
     "typescript": "^5.9.3",
