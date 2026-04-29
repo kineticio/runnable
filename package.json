@@ -39,7 +39,7 @@
   "devDependencies": {
     "bumpp": "^9.11.1",
     "cross-env": "^7.0.3",
-    "lint-staged": "^13.3.0",
+    "lint-staged": "^16.4.0",
     "oxfmt": "^0.16.0",
     "oxlint": "^1.31.0",
     "oxlint-tsgolint": "^0.8.3",
