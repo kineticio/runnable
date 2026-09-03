@@ -52,12 +52,12 @@
     "@hono/node-server": "^1.19.6",
     "@runnablejs/config": "workspace:*",
     "@runnablejs/tsconfig": "workspace:*",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.13.3",
     "hono": "^4.10.7",
     "resolve-package-path": "^4.0.3",
     "tsx": "^3.14.0",
     "typescript": "^5.9.3",
-    "vite": "^7.2.6",
+    "vite": "^7.3.6",
     "vite-plugin-dts": "^4.5.4"
   },
   "dependencies": {
